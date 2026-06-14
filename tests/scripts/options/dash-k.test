@@ -1,0 +1,59 @@
+# Converted from dash-k
+description: "Test the make -k (don't stop on error) option."
+details: "The makefile created in this test is a simulation of building a small product. However, the trick to this one is that one of the dependencies of the main target does not exist. Without the -k option, make would fail immediately and not build any part of the target. What we are looking for here, is that make builds the rest of the dependencies even though it knows that at the end it will fail to rebuild the main target."
+
+[setup]
+touch: work/main.c work/defs.h work/command.h work/commands.c work/display.c work/buffer.h work/command.c
+
+[case]
+makefile:
+VPATH = work
+edit:  main.o kbd.o commands.o display.o
+	@echo cc -o edit main.o kbd.o commands.o display.o
+
+main.o : main.c defs.h
+	@echo cc -c main.c
+
+kbd.o : kbd.c defs.h command.h
+	@echo cc -c kbd.c
+
+commands.o : command.c defs.h command.h
+	@echo cc -c commands.c
+
+display.o : display.c defs.h buffer.h
+	@echo cc -c display.c
+options: -k
+answer: "cc -c main.c
+#MAKE#: *** No rule to make target 'kbd.c', needed by 'kbd.o'.
+cc -c commands.c
+cc -c display.c
+#MAKE#: Target 'edit' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+.SUFFIXES:
+
+all: exe1 exe2; @echo making $@
+
+exe1 exe2: lib; @echo cp $^ $@
+
+lib: foo.o; @echo cp $^ $@
+
+foo.o: ; exit 1
+options: -k
+answer: "exit 1
+#MAKE#: *** [t001.mk:9: foo.o] Error 1
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+all: ; @echo hi
+include ifile
+ifile: no-such-file; exit 1
+options: -k
+answer: "#MAKEFILE#:2: ifile: No such file or directory
+#MAKE#: *** No rule to make target 'no-such-file', needed by 'ifile'.
+#MAKEFILE#:2: failed to remake makefile 'ifile'"
+exit_code: 512

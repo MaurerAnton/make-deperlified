@@ -1,0 +1,34 @@
+# Converted from print-targets
+description: "Test the --print-targets option to GNU Make."
+
+[case]
+makefile:
+
+.PHONY: all
+all: ;@:
+
+# "special" target
+.BOGUS: ;@:
+
+# Check various forms of suffix rule
+.SUFFIXES: .q
+.q: ;@:
+.c.o: ;@:
+
+# Not a suffix rule
+.x.z: ;@:
+
+# Verify included files aren't built / don't fail
+
+include badfile
+include goodfile
+
+submake: ; $(MAKE) all
+always: ; +echo always
+goodfile: ; touch goodfile
+options: --print-targets
+answer: "submake
+.x.z
+always
+all
+goodfile"

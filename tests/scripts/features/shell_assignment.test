@@ -1,0 +1,46 @@
+# Converted from shell_assignment
+description: "Test BSD-style shell assignments (VAR != VAL) for variables."
+
+[case]
+makefile:
+
+.POSIX:
+
+demo1!=printf '  1   2 3\n4\n\n5 \n \n 6\n\n\n\n'
+demo2 != printf '7 8\n '
+demo3 != printf '$$(demo2)'
+demo4 != printf ' 2 3 \n'
+demo5 != printf ' 2 3 \n\n'
+all: ; @echo "<$(demo1)> <$(demo2)> <$(demo3)> <$(demo4)> <${demo5}>"
+answer: "<  1   2 3 4  5     6   > <7 8  > <7 8  > < 2 3 > < 2 3  >"
+
+[case]
+makefile:
+
+foo1!=echo bar#baz
+hash != printf '\043'
+foo2!= echo "bar$(hash)baz"
+
+all: ; @echo "<$(foo1)> <$(hash)> <$(foo2)>"
+answer: "<bar> <#> <bar#baz>"
+
+[case]
+makefile:
+
+XYZZY = fiddle-dee-dee
+dollar = $$
+VAR3 != printf '%s' '$(dollar)(XYZZY)'
+
+all: ; @echo "<$(VAR3)>"
+answer: "<fiddle-dee-dee>"
+
+[case]
+makefile:
+
+
+override != echo abc > ,abc ; cat ,abc
+
+all: ; @echo "<$(override)>" ; cat ,abc
+options: override=xyz
+answer: "<xyz>
+abc"

@@ -1,0 +1,22 @@
+# Converted from dircache
+description: "Test the directory cache behavior."
+
+[case]
+makefile:
+
+_orig := $(wildcard ./*)
+$(shell echo > anewfile)
+_new := $(wildcard ./*)
+$(info diff=$(filter-out $(_orig),$(_new)))
+all:;@:
+answer: "diff=./anewfile"
+
+[case]
+makefile:
+
+_orig := $(wildcard ./*)
+$(file >anewfile)
+_new := $(wildcard ./*)
+$(info diff=$(filter-out $(_orig),$(_new)))
+all:;@:
+answer: "diff=./anewfile"

@@ -1,0 +1,270 @@
+# Converted from warn
+description: "Test the --warn option."
+
+[case]
+makefile:
+
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+options: --warn-undefined-variables
+answer: "MF= --warn=undefined-var
+MAKEFLAGS= --warn=undefined-var"
+
+[case]
+makefile:
+
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+options: -R --warn-undefined-variables
+answer: "MF=rR --warn=undefined-var
+MAKEFLAGS=rR --warn=undefined-var"
+
+[case]
+options: --warn=error --warn=warn
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+options: --warn=warn
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+options: --warn
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+options: --warn --warn=error
+answer: "MF= --warn=error
+MAKEFLAGS= --warn=error"
+
+[case]
+options: --warn=ignore --warn=error --warn=ignore --warn=invalid-ref,invalid-var,undefined-var
+answer: "MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
+MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var"
+
+[case]
+options: --warn=invalid-ref:ignore --warn=error --warn=invalid-var:warn,,,,,undefined-var:error,,,,,
+answer: "MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
+MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=error --warn=warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn
+MAKEFLAGS= --warn"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn --warn=error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn=error
+MAKEFLAGS= --warn=error"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=ignore --warn=error --warn=ignore --warn=invalid-ref,invalid-var,undefined-var
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
+MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var"
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=invalid-ref:ignore --warn=error --warn=invalid-var:warn,,,,,undefined-var:error,,,,,
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
+MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error"
+
+[case]
+makefile:
+
+vars := $(.VARIABLES) $(MAKECMDGOALS) $(MAKE_RESTARTS) $(CURDIR)
+vars += $(GNUMAKEFLAGS) $(MAKEFLAGS) $(MFLAGS) $(MAKE_COMMAND) $(MAKE)
+vars += $(MAKEFILE_LIST) $(MAKEOVERRIDES) $(-*-command-variables-*-)
+vars += $(.RECIPEPREFIX) $(.LOADED) $(.FEATURES)
+vars += $(SHELL) $(.SHELLFLAGS) $(MAKE_TERMOUT) $(MAKE_TERMERR)
+vars += $(.DEFAULT) $(.DEFAULT_GOAL) $(-*-eval-flags-*-) $(SUFFIXES)
+vars += $(VPATH) $(GPATH)
+all:;
+options: --warn=undefined-var
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+all:;
+X := $(averyveryveryloooooooooooooooooooooooooooongvariablename)
+options: --warn=undefined-var
+answer: "#MAKEFILE#:3: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+EMPTY =
+EREF = $(EMPTY)
+UREF = $(UNDEFINED)
+
+SEREF := $(EREF)
+SUREF := $(UREF)
+
+all: ; @echo ref $(EREF) $(UREF)
+answer: "ref"
+
+[case]
+options: --warn=undefined-var:ignore
+answer: "ref"
+
+[case]
+options: --warn=undefined-var
+answer: "#MAKEFILE#:7: warning: reference to undefined variable 'UNDEFINED'
+#MAKEFILE#:9: warning: reference to undefined variable 'UNDEFINED'
+ref"
+
+[case]
+options: --warn=undefined-var:error
+answer: "#MAKEFILE#:7: *** reference to undefined variable 'UNDEFINED'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+IREF = $(bad variable)
+SIREF := $(IREF)
+
+define nl
+
+
+endef
+
+all: ; @echo ref $(also$(nl)bad) $(IREF) $(SIREF)
+answer: "#MAKEFILE#:2: warning: invalid variable reference 'bad variable'
+#MAKEFILE#:10: warning: invalid variable reference 'also
+bad'
+#MAKEFILE#:2: warning: invalid variable reference 'bad variable'
+ref"
+
+[case]
+options: --warn=ignore
+answer: "ref"
+
+[case]
+options: --warn=invalid-ref:ignore
+answer: "ref"
+
+[case]
+options: --warn=invalid-ref:error
+answer: "#MAKEFILE#:2: *** invalid variable reference 'bad variable'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+EMPTY =
+SPACE = $(EMPTY) $(EMPTY)
+BAD$(SPACE)VAR = foo
+
+define nl
+
+
+endef
+
+NL$(nl)VAR = bar
+
+define BAD$(SPACE)DEF :=
+foo
+endef
+
+define NL$(nl)DEF :=
+foo
+endef
+
+all: ; @echo ref
+answer: "#MAKEFILE#:4: warning: invalid variable name 'BAD VAR'
+#MAKEFILE#:11: warning: invalid variable name 'NL
+VAR'
+#MAKEFILE#:13: warning: invalid variable name 'BAD DEF'
+#MAKEFILE#:17: warning: invalid variable name 'NL
+DEF'
+ref"
+
+[case]
+options: --warn=ignore
+answer: "ref"
+
+[case]
+options: --warn=invalid-var:ignore
+answer: "ref"
+
+[case]
+options: --warn=invalid-var:error
+answer: "#MAKEFILE#:4: *** invalid variable name 'BAD VAR'.  Stop."
+exit_code: 512
+
+[case]
+options: --warn=no-such-warn
+answer: "#MAKE#: *** unknown warning 'no-such-warn'.  Stop."
+exit_code: 512
+
+[case]
+options: --warn=invalid-var:no-such-action
+answer: "#MAKE#: *** unknown warning action 'no-such-action'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+hello: hello; @:
+answer: "#MAKE#: circular hello <- hello dependency dropped"
+
+[case]
+options: --warn=error
+answer: "#MAKE#: *** circular hello <- hello dependency detected.  Stop."
+exit_code: 512
+
+[case]
+options: --warn=circular-dep:error
+answer: "#MAKE#: *** circular hello <- hello dependency detected.  Stop."
+exit_code: 512
+
+[case]
+options: --warn=warn
+answer: "#MAKE#: circular hello <- hello dependency dropped"
+
+[case]
+options: --warn=circular-dep:warn
+answer: "#MAKE#: circular hello <- hello dependency dropped"
+
+[case]
+options: --warn=ignore
+
+[case]
+options: --warn=circular-dep:ignore

@@ -1,0 +1,13 @@
+# Converted from general
+description: "Test generic option processing."
+
+[case]
+makefile:
+
+foo 1foo: ; @echo $@
+options: -j 1foo
+answer: "1foo"
+
+[case]
+options: -j1foo 2>/dev/null
+exit_code: 512

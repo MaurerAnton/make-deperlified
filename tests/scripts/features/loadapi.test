@@ -1,0 +1,321 @@
+# Converted from loadapi
+description: "Test the shared object load API."
+details: "Verify the different aspects of the shared object API."
+
+[setup]
+touch: testapi.so
+
+[case]
+makefile:
+
+EXPAND = expansion
+all: ; @echo $(test-expand $$(EXPAND))
+load testapi.so
+answer: "expansion"
+
+[case]
+makefile:
+
+load testapi.so
+TEST = bye
+ASSIGN = VAR = $(TEST) $(shell echo there)
+$(test-eval $(value ASSIGN))
+TEST = hi
+all:;@echo '$(VAR)'
+answer: "hi there"
+
+[case]
+makefile:
+
+load testapi.so
+TEST = hi
+all:;@echo '$(test-noexpand $(TEST))'
+answer: "$(TEST)"
+
+[case]
+makefile:
+
+load testapi.so
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+testapi.so
+testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+all:; $(info $(test-expand hello))
+testapi.so: force; @#HELPER# fail 1
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+fail 1
+#MAKE#: *** [#MAKEFILE#:5: testapi.so] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+load testapi.so
+
+all:; $(info $(test-expand hello))
+testapi.so: force; @#HELPER# fail 1
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+#MAKEFILE#:2
+testapi.so
+testapi_gmk_setup
+#MAKEFILE#:2
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+load testapi.so
+load testapi.so
+-load testapi.so
+-load testapi.so
+$(eval load testapi.so)
+$(eval -load testapi.so)
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+testapi.so
+testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+load testapi.so
+load testapi.so
+-load testapi.so
+-load testapi.so
+$(eval load testapi.so)
+$(eval -load testapi.so)
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+load testapi.so
+load testapi.so
+-load testapi.so
+-load testapi.so
+$(eval load testapi.so)
+$(eval -load testapi.so)
+
+all:; $(info $(test-expand hello))
+testapi.so: force; @#HELPER# fail 1
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+fail 1
+#MAKE#: *** [#MAKEFILE#:12: testapi.so] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+load testapi.so
+
+load testapi.so
+load testapi.so
+-load testapi.so
+-load testapi.so
+$(eval load testapi.so)
+$(eval -load testapi.so)
+
+all:; $(info $(test-expand hello))
+testapi.so: force; @#HELPER# fail 1
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+
+load testapi.so
+load testapi.so
+-load testapi.so
+-load testapi.so
+$(eval load testapi.so)
+$(eval -load testapi.so)
+
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+#MAKEFILE#:2
+testapi.so
+testapi_gmk_setup
+#MAKEFILE#:2
+hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+load testapi.so
+all:; $(info $(test-expand hello))
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load ./testapi.so
+all:; $(info $(test-expand hello))
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load #PWD#/testapi.so
+all:; $(info $(test-expand hello))
+answer: "testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load testapi.so(alternative_setup)
+all:; $(info $(test-expand hello))
+answer: "alternative_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load ./testapi.so(alternative_setup)
+all:; $(info $(test-expand hello))
+answer: "alternative_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load #PWD#/testapi.so(alternative_setup)
+all:; $(info $(test-expand hello))
+answer: "alternative_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load testapi.so
+all: bad_preqreq; :
+answer: "testapi_gmk_setup
+#MAKE#: *** No rule to make target 'bad_preqreq', needed by 'all'.  Stop.
+testapi_gmk_unload"
+exit_code: 512
+
+[case]
+makefile:
+
+load testapi.so
+all:; $(info $(test-expand hello))
+testapi.so: testapi.c; "cc"    -shared -fPIC  -o testapi.so testapi.c
+answer: "testapi_gmk_setup
+testapi_gmk_unload
+\"cc\"    -shared -fPIC  -o testapi.so testapi.c
+testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load testapi.so
+all:; $(info $(test-expand hello))
+testapi.so: force; $(info $@)
+force:;
+.PHONY: force
+answer: "testapi_gmk_setup
+testapi_gmk_unload
+testapi.so
+testapi_gmk_setup
+hello
+#MAKE#: 'all' is up to date.
+testapi_gmk_unload"
+
+[case]
+makefile:
+
+load testapi.so
+all:; :
+answer: "#MAKEFILE#:2: testapi.so: cannot open shared object file: No such file or directory
+#MAKEFILE#:2: *** testapi.so: failed to load.  Stop."
+exit_code: 512

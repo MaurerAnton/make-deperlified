@@ -1,0 +1,333 @@
+# Converted from conditionals
+description: "Check GNU Make conditionals."
+details: "Attempt various different flavors of GNU Make conditionals."
+
+[case]
+makefile:
+
+arg1 = first
+arg2 = second
+arg3 = third
+arg4 = cc
+arg5 = second
+
+all:
+ifeq ($(arg1),$(arg2))
+#TAB#@echo arg1 equals arg2
+else
+#TAB#@echo arg1 NOT equal arg2
+endif
+
+ifeq '$(arg2)' "$(arg5)"
+#TAB#@echo arg2 equals arg5
+else
+#TAB#@echo arg2 NOT equal arg5
+endif
+
+ifneq '$(arg3)' '$(arg4)'
+#TAB#@echo arg3 NOT equal arg4
+else
+#TAB#@echo arg3 equal arg4
+endif
+
+ifndef undefined
+#TAB#@echo variable is undefined
+else
+#TAB#@echo variable undefined is defined
+endif
+ifdef arg4
+#TAB#@echo arg4 is defined
+else
+#TAB#@echo arg4 is NOT defined
+endif
+answer: "arg1 NOT equal arg2
+arg2 equals arg5
+arg3 NOT equal arg4
+variable is undefined
+arg4 is defined"
+
+[case]
+makefile:
+
+foo = 1
+
+FOO = foo
+F = f
+
+DEF = no
+DEF2 = no
+
+ifdef $(FOO)
+DEF = yes
+endif
+
+ifdef $(F)oo
+DEF2 = yes
+endif
+
+
+DEF3 = no
+FUNC = $1
+ifdef $(call FUNC,DEF)3
+  DEF3 = yes
+endif
+
+all:; @echo DEF=$(DEF) DEF2=$(DEF2) DEF3=$(DEF3)
+answer: "DEF=yes DEF2=yes DEF3=yes"
+
+[case]
+makefile:
+
+arg1 = first
+arg2 = second
+arg3 = third
+arg4 = cc
+arg5 = fifth
+
+result =
+
+ifeq ($(arg1),$(arg2))
+  result += arg1 equals arg2
+else ifeq '$(arg2)' "$(arg5)"
+  result += arg2 equals arg5
+else ifneq '$(arg3)' '$(arg3)'
+  result += arg3 NOT equal arg4
+else ifndef arg5
+  result += variable is undefined
+else ifdef undefined
+  result += arg4 is defined
+else
+  result += success
+endif
+
+
+all: ; @echo $(result)
+answer: "success"
+
+[case]
+makefile:
+
+arg1 = first
+arg2 = second
+arg3 = third
+arg4 = cc
+arg5 = second
+
+ifeq ($(arg1),$(arg2))
+  $(info failed 1)
+else ifeq '$(arg2)' "$(arg2)"
+  ifdef undefined
+    $(info failed 2)
+  else
+    $(info success)
+  endif
+else ifneq '$(arg3)' '$(arg3)'
+  $(info failed 3)
+else ifdef arg5
+  $(info failed 4)
+else ifdef undefined
+  $(info failed 5)
+else
+  $(info failed 6)
+endif
+
+.PHONY: all
+all: ; @:
+answer: "success"
+
+[case]
+makefile:
+
+ifneq ($(FOO),yes)
+target:
+else
+BAR = bar
+target:
+endif
+#TAB#@echo one
+answer: "one"
+
+[case]
+makefile:
+
+blah=1
+#TAB#ifdef blah
+endif
+all:;
+answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+blah=1
+#TAB#ifndef blah
+endif
+all:;
+answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+blah=1
+#TAB#ifeq (a,b)
+endif
+all:;
+answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+blah=1
+#TAB#ifneq (a,b)
+endif
+all:;
+answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+ifeq (a, b)
+#TAB## noop
+else
+#TAB#ifeq (a, b)
+#TAB##TAB## noop
+#TAB#endif
+endif
+
+all:
+#TAB#@echo foo
+answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:7: warning: conditional directive lines cannot start with TAB
+foo"
+
+[case]
+makefile:
+
+all:
+
+$(info hello)
+ifdef blah
+junk:
+#TAB#else
+else
+endif
+answer: "hello
+#MAKEFILE#:7: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:8: *** only one 'else' per conditional.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+blah=1
+ifdef blah
+else
+#TAB#else
+endif
+all:;
+answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:5: *** only one 'else' per conditional.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+blah=1
+ifdef blah
+else
+#TAB#endif
+endif
+all:;
+answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:6: *** extraneous 'endif'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+blah=1
+ifdef blah
+else
+#TAB#ifdef blah
+endif
+all:;
+answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:8: *** missing 'endif'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+blah=1
+all:;
+foo:
+ifdef blah
+#TAB#ifdef blah
+endif
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+blah=1
+all:;
+foo:
+ifdef blah
+#TAB#endif
+endif
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+blah=1
+all:;
+foo:
+ifdef blah
+#TAB#else
+else
+endif
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+ifeq ($(and a,b),)
+endif
+ifeq (${and a,b},)
+endif
+ifeq (${and $(x),${or $(z),${q}}},)
+endif
+ifeq (${and ),(},)
+endif
+ifeq ($(and },{),)
+endif
+# We can hide the comma in a variable
+C = ,
+ifeq ((and a$Cb),)
+endif
+all:;
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+ifeq ($,,)
+$(info ok)
+endif
+all:;
+answer: "ok
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+ifeq ((and a,b),)
+endif
+all:;
+answer: "#MAKEFILE#:2: extraneous text after 'ifeq' directive
+#MAKE#: 'all' is up to date."

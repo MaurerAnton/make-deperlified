@@ -1,0 +1,53 @@
+# Converted from eval
+description: "Test the --eval option."
+details: "Verify that --eval options take effect, and are passed to sub-makes."
+
+[case]
+makefile:
+
+$(info infile)
+BAR = bar
+all: ; @echo all
+recurse: ; @$(MAKE) -f #MAKEFILE# && echo recurse
+options: --eval=$(info eval) FOO=$(BAR)
+answer: "eval
+infile
+all"
+
+[case]
+options: --no-print-directory --eval=$(info eval) recurse
+answer: "eval
+infile
+eval
+infile
+all
+recurse"
+
+[case]
+makefile:
+
+all: ; @echo "MAKEFLAGS=$$MAKEFLAGS"
+options: --eval=$(info eval)
+answer: "eval
+MAKEFLAGS= --eval=$$(info\ eval)"
+
+[case]
+makefile:
+
+all: ; @echo $@
+-include gen.mk
+gen.mk: ; @echo > $@
+options: --eval=$(info eval)
+answer: "eval
+eval
+all"
+
+[case]
+makefile:
+
+BAR = bar
+all: ; @echo all
+recurse: ; @$(MAKE) -f #MAKEFILE# && echo recurse
+options: -E $(info eval) FOO=$(BAR)
+answer: "eval
+all"

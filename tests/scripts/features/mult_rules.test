@@ -1,0 +1,43 @@
+# Converted from mult_rules
+description: "The following test creates a makefile to test the presence of multiple rules for one target. One file can be the target of several rules if at most one rule has commands; the other rules can only have dependencies."
+details: "The makefile created in this test contains two hardcoded rules for foo.o and bar.o. It then gives another multiple target rule with the same names as above but adding more dependencies. Additionally, another variable extradeps is listed as a dependency but is defined to be null. It can however be defined on the make command line as extradeps=extra.h which adds yet another dependency to the targets."
+
+[setup]
+touch: defs.h test.h config.h extra.h
+
+[case]
+makefile:
+objects = foo.o bar.o
+foo.o : defs.h
+bar.o : defs.h test.h
+extradeps =
+$(objects) : config.h $(extradeps)
+	@echo EXTRA EXTRA
+options: extradeps=extra.h
+answer: "#MAKE#: *** No rule to make target 'extra.h', needed by 'foo.o'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+objects = foo.o bar.o
+foo.o : defs.h
+bar.o : defs.h test.h
+extradeps =
+$(objects) : config.h $(extradeps)
+	@echo EXTRA EXTRA
+options: extradeps=extra.h
+answer: "EXTRA EXTRA"
+
+[case]
+makefile:
+
+vpath hello.c src
+all: hello.c; $(info $@ from $^)
+hello.c: ; $(info 1 $@)
+src/hello.c: ; $(info 2 $@)
+answer: "#MAKEFILE#:4: recipe was specified for file 'hello.c' at #MAKEFILE#:4,
+#MAKEFILE#:4: but 'hello.c' is now considered the same file as 'src/hello.c'
+#MAKEFILE#:4: recipe for 'hello.c' will be ignored in favor of the one for 'src/hello.c'
+2 src/hello.c
+all from src/hello.c
+#MAKE#: 'all' is up to date."

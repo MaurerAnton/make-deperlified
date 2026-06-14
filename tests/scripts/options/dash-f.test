@@ -1,0 +1,43 @@
+# Converted from dash-f
+description: "The following test tests that if you specify greater than one '-f makefilename' on the command line, that make concatenates them. This test creates three makefiles and specifies all of them with the -f option on the command line. To make sure they were concatenated, we then call make with the rules from the concatenated makefiles one at a time. Finally, it calls all three rules in one call to make and checks that the output is in the correct order."
+
+[setup]
+touch: bye.mk
+
+[case]
+makefile:
+all: 
+	@echo This is the output from the original makefile
+options: -f t001.mk -f t001.mk
+answer: "This is the output from the original makefile"
+
+[case]
+makefile:
+all: 
+	@echo This is the output from the original makefile
+options: -f t001.mk -f t001.mk TWO
+answer: "This is the output from makefile 2"
+
+[case]
+makefile:
+all: 
+	@echo This is the output from the original makefile
+options: -f t001.mk -f t001.mk THREE
+answer: "This is the output from makefile 3"
+
+[case]
+makefile:
+all: 
+	@echo This is the output from the original makefile
+options: -f t001.mk -f t001.mk TWO all THREE
+answer: "This is the output from makefile 2
+This is the output from the original makefile
+This is the output from makefile 3"
+
+[case]
+options: -fbye.mk -fR - all
+answer: "#MAKE#: R: No such file or directory
+touch bye.mk.src
+touch bye.mk
+#MAKE#: *** No rule to make target 'R'.  Stop."
+exit_code: 512

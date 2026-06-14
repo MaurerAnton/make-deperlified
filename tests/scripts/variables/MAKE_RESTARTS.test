@@ -1,0 +1,45 @@
+# Converted from MAKE_RESTARTS
+description: "Test the MAKE_RESTARTS variable."
+
+[case]
+makefile:
+
+all: ; @:
+$(info MAKE_RESTARTS=$(MAKE_RESTARTS))
+include foo.x
+foo.x: ; @touch $@
+answer: "MAKE_RESTARTS=
+MAKE_RESTARTS=1"
+
+[case]
+makefile:
+
+all: ; @:
+$(info MAKE_RESTARTS=$(MAKE_RESTARTS))
+include foo.x
+foo.x: ; @echo "include bar.x" > $@
+bar.x: ; @touch $@
+answer: "MAKE_RESTARTS=
+MAKE_RESTARTS=1
+MAKE_RESTARTS=2"
+
+[case]
+makefile:
+
+.RECIPEPREFIX = >
+recurse:
+> @echo recurse MAKE_RESTARTS=$$MAKE_RESTARTS
+> @$(MAKE) -f #MAKEFILE# all
+all: ; @echo all MAKE_RESTARTS=$$MAKE_RESTARTS
+$(info MAKE_RESTARTS=$(MAKE_RESTARTS))
+include foo.x
+foo.x: ; @echo "include bar.x" > $@
+bar.x: ; @touch $@
+answer: "MAKE_RESTARTS=
+MAKE_RESTARTS=1
+MAKE_RESTARTS=2
+recurse MAKE_RESTARTS=
+#MAKE#[1]: Entering directory '#PWD#'
+MAKE_RESTARTS=
+all MAKE_RESTARTS=
+#MAKE#[1]: Leaving directory '#PWD#'"

@@ -1,0 +1,13 @@
+# Converted from FORCE
+description: "The following tests rules without Commands or Dependencies."
+
+[setup]
+touch: clean
+
+[case]
+makefile:
+
+.IGNORE :
+clean: FORCE ; rm -f clean
+FORCE:
+answer: "rm -f clean"

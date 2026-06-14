@@ -1,0 +1,53 @@
+# Converted from temp_stdin
+description: "Test handling of temporary file created from stdin."
+
+[case]
+makefile:
+all:; $(info hello world)
+options: $opts[$i] -f-
+answer: "/uilt for /"
+
+[case]
+makefile:
+all:; $(info world=$(world))
+options: -f-
+answer: "world=1
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+include bye.mk
+all:; $(info hello)
+$(MAKE_RESTARTS)bye.mk: force; touch $@
+force:
+options: -R --debug=b -f-
+answer: "/Re-executing.+?--temp-stdin=\Q$temppath\E/"
+
+[case]
+makefile:
+include bye.mk
+pid := $(shell echo $$PPID)
+all:;
+bye.mk: force; @#HELPER# -q term $(pid) sleep 10
+force:
+options: -f-
+answer: "/#MAKE#: \*\*\* \[#MAKEFILE#:5: bye.mk] Terminated/"
+
+[case]
+makefile:
+
+include bye.mk
+all:; \$(info hello)
+\$(MAKE_RESTARTS)bye.mk: force; touch \$@ && chmod u-x $makecopy
+force:
+options: -f-
+answer: "touch bye.mk && chmod u-x $makecopy
+make: $makecopy: $ERR_nonexe_file"
+exit_code: 32512
+
+[case]
+makefile:
+all:; $(info hello, world)
+options: -f-
+answer: "/cannot store makefile from stdin to a temporary file.  Stop./"
+exit_code: 512

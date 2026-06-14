@@ -1,0 +1,416 @@
+# Converted from targetvars
+description: "Test target-specific variable settings."
+details: "Create a makefile containing various flavors of target-specific variable values, override and non-override, and using various variable expansion rules, semicolon interference, etc."
+
+[setup]
+touch: t1/rules.mk
+
+[case]
+makefile:
+
+export FOO = foo
+export BAR = bar
+one: override FOO = one
+one two: ; @echo $(FOO) $(BAR)
+two: BAR = two
+.RECIPEPREFIX = >
+three: ; BAR=1000
+> @echo $(FOO) $(BAR)
+# Some things that shouldn not be target vars
+funk : override
+funk : override adelic
+adelic override : ; echo $@
+# Test per-target recursive variables
+four:FOO=x
+four:VAR$(FOO)=ok
+four: ; @echo "$(FOO) $(VAR$(FOO)) $(VAR) $(VARx)"
+five:FOO=x
+five six : VAR$(FOO)=good
+five six: ;@echo "$(FOO) $(VAR$(FOO)) $(VAR) $(VARx) $(VARfoo)"
+# Test per-target variable inheritance
+seven: eight
+seven eight: ; @echo $@: $(FOO) $(BAR)
+seven: BAR = seven
+seven: FOO = seven
+eight: BAR = eight
+# Test the export keyword with per-target variables
+nine: ; @echo $(FOO) $(BAR) $$FOO $$BAR
+nine: FOO = wallace
+nine-a: export BAZ = baz
+nine-a: ; @echo $$BAZ
+# Test = escaping
+EQ = =
+ten: one$(EQ)two
+ten: one $(EQ) two
+ten one$(EQ)two $(EQ):;@echo $@
+.PHONY: one two three four five six seven eight nine ten $(EQ) one$(EQ)two
+# Test target-specific vars with pattern/suffix rules
+QVAR = qvar
+RVAR = =
+%.q : ; @echo $(QVAR) $(RVAR)
+foo.q : RVAR += rvar
+# Target-specific vars with multiple LHS pattern rules
+%.r %.s %.t: ; @echo $(QVAR) $(RVAR) $(SVAR) $(TVAR)
+foo.r : RVAR += rvar
+foo.t : TVAR := $(QVAR)
+options: one two three
+answer: "one bar
+foo two
+BAR=1000
+foo bar"
+
+[case]
+options: one two FOO=1 BAR=2
+answer: "one 2
+1 2"
+
+[case]
+options: four
+answer: "x ok  ok"
+
+[case]
+options: seven
+answer: "eight: seven eight
+seven: seven seven"
+
+[case]
+options: nine
+answer: "wallace bar wallace bar"
+
+[case]
+options: nine-a
+answer: "baz"
+
+[case]
+options: ten
+answer: "one=two
+one bar
+=
+foo two
+ten"
+
+[case]
+options: foo.q bar.q
+answer: "qvar = rvar
+qvar ="
+
+[case]
+options: foo.t bar.s
+answer: "qvar = qvar
+qvar ="
+
+[case]
+makefile:
+
+foo: FOO = foo
+bar: BAR = bar
+foo: bar
+bar: baz
+baz: ; @echo $(FOO) $(BAR)
+answer: "foo bar"
+
+[case]
+makefile:
+
+.PHONY: all one
+all: FOO += baz
+all: one; @echo $(FOO)
+
+FOO = bar
+
+one: FOO += biz
+one: FOO += boz
+one: ; @echo $(FOO)
+answer: "bar baz biz boz
+bar baz"
+
+[case]
+options: one
+answer: "bar biz boz"
+
+[case]
+makefile:
+
+foo : FOO = ; ok
+foo : ; @echo "$(FOO)"
+answer: "; ok"
+
+[case]
+makefile:
+
+.PHONY: a
+
+BLAH := foo
+COMMAND = echo $(BLAH)
+
+a: ; @$(COMMAND)
+
+a: BLAH := bar
+a: COMMAND += snafu $(BLAH)
+answer: "bar snafu bar"
+
+[case]
+makefile:
+
+W = bad
+X = bad
+foo: W = ok
+foo:: ; @echo $(W) $(X) $(Y) $(Z)
+foo:: ; @echo $(W) $(X) $(Y) $(Z)
+foo: X = ok
+
+Y = foo
+bar: foo
+bar: Y = bar
+
+Z = nopat
+ifdef PATTERN
+  fo% : Z = pat
+endif
+options: foo
+answer: "ok ok foo nopat
+ok ok foo nopat"
+
+[case]
+options: bar
+answer: "ok ok bar nopat
+ok ok bar nopat"
+
+[case]
+options: foo PATTERN=yes
+answer: "ok ok foo pat
+ok ok foo pat"
+
+[case]
+makefile:
+
+base_metals_fmd_reports.sun5 base_metals_fmd_reports CreateRealPositions        CreateMarginFunds deals_changed_since : BUILD_OBJ=$(shell if test -f               "build_information.generate"   ; then echo "$(OBJ_DIR)/build_information.o"; else echo "no build information"; fi  )
+
+deals_changed_since: ; @echo $(BUILD_OBJ)
+answer: "no build information"
+
+[case]
+makefile:
+
+VPATH = t1
+include rules.mk
+.PHONY: all
+all: foo.x
+foo.x : rules.mk ; @echo MYVAR=$(MYVAR) FOOVAR=$(FOOVAR) ALLVAR=$(ALLVAR)
+all: ALLVAR = xxx
+foo.x: FOOVAR = bar
+rules.mk : MYVAR = foo
+.INTERMEDIATE: foo.x rules.mk
+options: -I t1
+answer: "MYVAR= FOOVAR=bar ALLVAR=xxx"
+
+[case]
+makefile:
+
+VAR := $$FOO
+foo: VAR += BAR
+foo: ; @echo '$(VAR)'
+answer: "$FOO BAR"
+
+[case]
+makefile:
+
+a: override FOO += f1
+a: FOO += f2
+a: ; @echo "$(FOO)"
+answer: "f1"
+
+[case]
+options: FOO=C
+answer: "C f1"
+
+[case]
+makefile:
+
+a: FOO ?= f1
+a: ; @echo "$(FOO)"
+answer: "f1"
+
+[case]
+options: FOO=C
+answer: "C"
+
+[case]
+makefile:
+
+a: A = 'hello;\
+world'
+a: ; @echo $(A)
+answer: "hello; world"
+
+[case]
+makefile:
+
+all: PATH := sd
+all: ; foobar >/dev/null
+answer: "foobar >/dev/null"
+
+[case]
+makefile:
+
+all: PATH := ..
+all: ; foobar
+answer: "foobar
+#MAKE#: foobar: No such file or directory
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+all:; @echo hello=$$hello
+dummy: hello?=world
+answer: "hello=moon"
+
+[case]
+makefile:
+
+all:; @echo hello=$$hello
+hello=sun
+dummy: hello?=world
+answer: "hello=sun"
+
+[case]
+makefile:
+
+unexport hello=sun
+all: base exp
+base exp: ; @echo hello=$$hello
+exp: export hello=world
+answer: "hello=
+hello=world"
+
+[case]
+makefile:
+
+hello=sun
+all: base exp
+base exp: ; @echo hello=$$hello
+exp: unexport hello=world
+answer: "hello=sun
+hello="
+
+[case]
+makefile:
+
+all:; @echo hello=$$hello
+unexport hello=sun
+dummy: hello?=world
+answer: "hello="
+
+[case]
+makefile:
+
+all:; @echo hello=$$hello
+hello=sun
+dummy: unexport hello=world
+answer: "hello=sun"
+
+[case]
+makefile:
+
+all: mid
+mid: base
+
+ifeq ($(midexport),export)
+mid: export hello=mid
+else ifeq ($(midexport),unexport)
+mid: unexport hello=mid
+else
+mid: hello=mid
+endif
+
+ifeq ($(baseexport),export)
+base: export hello=base
+else ifeq ($(baseexport),unexport)
+base: unexport hello=base
+else
+base: hello=base
+endif
+
+all mid base:; @echo $@ make=$(hello) shell=$$hello
+answer: "base make=base shell=
+mid make=mid shell=
+all make= shell="
+
+[case]
+answer: "base make=base shell=base
+mid make=mid shell=mid
+all make=environ shell=environ"
+
+[case]
+options: baseexport=export
+answer: "base make=base shell=base
+mid make=mid shell=mid
+all make=environ shell=environ"
+
+[case]
+options: baseexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=mid
+all make=environ shell=environ"
+
+[case]
+options: midexport=export
+answer: "base make=base shell=base
+mid make=mid shell=mid
+all make=environ shell=environ"
+
+[case]
+options: midexport=export baseexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=mid
+all make=environ shell=environ"
+
+[case]
+options: midexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=
+all make=environ shell=environ"
+
+[case]
+options: midexport=unexport baseexport=export
+answer: "base make=base shell=base
+mid make=mid shell=
+all make=environ shell=environ"
+
+[case]
+options: baseexport=export
+answer: "base make=base shell=base
+mid make=mid shell=
+all make= shell="
+
+[case]
+options: baseexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=
+all make= shell="
+
+[case]
+options: midexport=export
+answer: "base make=base shell=base
+mid make=mid shell=mid
+all make= shell="
+
+[case]
+options: midexport=export baseexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=mid
+all make= shell="
+
+[case]
+options: midexport=unexport
+answer: "base make=base shell=
+mid make=mid shell=
+all make= shell="
+
+[case]
+options: midexport=unexport baseexport=export
+answer: "base make=base shell=base
+mid make=mid shell=
+all make= shell="

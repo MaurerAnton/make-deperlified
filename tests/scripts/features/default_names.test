@@ -1,0 +1,10 @@
+# Converted from default_names
+description: "This script tests to make sure that Make looks for default makefiles in the correct order (GNUmakefile,makefile,Makefile)"
+
+[case]
+makefile:
+FIRST: ; @echo It chose GNUmakefile
+answer: "It chose GNUmakefile"
+
+[case]
+answer: "It chose makefile"

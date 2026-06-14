@@ -1,0 +1,70 @@
+# Converted from DEFAULT_GOAL
+description: "Test the .DEFAULT_GOAL special variable."
+
+[case]
+makefile:
+
+# Basics.
+#
+foo: ; @:
+
+ifneq ($(.DEFAULT_GOAL),foo)
+$(error )
+endif
+
+# Reset to empty.
+#
+.DEFAULT_GOAL :=
+
+bar: ; @:
+
+ifneq ($(.DEFAULT_GOAL),bar)
+$(error )
+endif
+
+# Change to a different goal.
+#
+
+.DEFAULT_GOAL := baz
+
+baz: ; @echo $@
+answer: "baz"
+
+[case]
+makefile:
+
+.DEFAULT_GOAL = foo
+answer: "#MAKE#: *** No rule to make target 'foo'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.DEFAULT_GOAL := foo bar
+answer: "#MAKE#: *** .DEFAULT_GOAL contains more than one target.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+define rule
+foo: ; @echo $$@
+endef
+
+define make-rule
+$(eval $(rule))
+endef
+
+$(call make-rule)
+
+answer: "foo"
+
+[case]
+makefile:
+
+N =
+.DEFAULT_GOAL = $N  $N  # Just whitespace
+
+foo: ; @echo "boo"
+answer: "#MAKE#: *** No targets.  Stop."
+exit_code: 512

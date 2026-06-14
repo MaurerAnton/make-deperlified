@@ -1,0 +1,127 @@
+# Converted from shuffle
+description: "Test the --shuffle option."
+details: "Verify that --shuffle has expected effect on target order and argument order."
+
+[case]
+makefile:
+
+%: ; @echo $@
+all: a b c
+options: --shuffle=reverse
+answer: "c
+b
+a
+all"
+
+[case]
+makefile:
+
+%: ; @echo $@
+all: a b c
+options: --shuffle=none
+answer: "a
+b
+c
+all"
+
+[case]
+makefile:
+
+%: ; @echo $@
+all: a b c
+options: --shuffle=identity
+answer: "a
+b
+c
+all"
+
+[case]
+makefile:
+
+all: foo.o ; @echo $@
+%.o : %.c ; @echo cc -c -o $@ $<
+foo.o : foo.c foo.h bar.h baz.h
+%.h: ; @echo $@
+%.c: ; @echo $@
+options: --shuffle=reverse
+answer: "baz.h
+bar.h
+foo.h
+foo.c
+cc -c -o foo.o foo.c
+all"
+
+[case]
+makefile:
+
+all: foo_ ; @echo $@
+foo%: arg%1 arg%2 arg%3 arg%4 ; @echo bld $@ $< $(word 3,$^) $(word 2,$^) $(word 4,$^)
+
+arg%: ; @echo $@
+options: --shuffle=reverse
+answer: "arg_4
+arg_3
+arg_2
+arg_1
+bld foo_ arg_1 arg_3 arg_2 arg_4
+all"
+
+[case]
+makefile:
+
+all: a_ b_ ; @echo $@
+%_: ; @echo $@
+
+a_: b_
+b_: a_
+options: --shuffle=reverse
+answer: "#MAKE#: circular a_ <- b_ dependency dropped
+a_
+b_
+all"
+
+[case]
+makefile:
+
+all: a_ ; @echo $@
+%_: ; @echo $@
+a_: b_ c_ | d_ e_
+options: --shuffle=reverse
+answer: "e_
+d_
+c_
+b_
+a_
+all"
+
+[case]
+makefile:
+
+%_: ; @echo $@
+options: --shuffle=reverse a_ b_ c_
+answer: "c_
+b_
+a_"
+
+[case]
+makefile:
+
+%_: ; @echo $@
+# disable shuffling
+.NOTPARALLEL:
+options: --shuffle=reverse a_ b_ c_
+answer: "a_
+b_
+c_"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+all: $$(var)
+%_: ; @echo $@
+var = a_ b_ c_
+options: --shuffle=reverse
+answer: "c_
+b_
+a_"

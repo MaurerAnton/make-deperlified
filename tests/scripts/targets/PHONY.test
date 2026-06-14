@@ -1,0 +1,15 @@
+# Converted from PHONY
+description: "The following tests the use of a PHONY target. It makes sure that the rules under a target get executed even if a filename of the same name of the target exists in the directory."
+details: "This makefile in this test declares the target clean to be a PHONY target. We then create a file named \"clean\" in the directory. Although this file exists, the rule under the target clean should still execute because of it's phony status."
+
+[setup]
+touch: EXAMPLE_FILE clean
+
+[case]
+makefile:
+
+.PHONY : clean
+all: ; @echo This makefile did not clean the dir ... good
+clean: ; rm -f EXAMPLE_FILE clean
+options: clean
+answer: "rm -f EXAMPLE_FILE clean"

@@ -1,0 +1,18 @@
+# Converted from addsuffix
+description: "Test the addsuffix function."
+
+[case]
+makefile:
+string := $(addsuffix .c,src/a.b.z.foo hacks)
+one: ; @echo $(string)
+
+two: ; @echo $(addsuffix foo,)
+answer: "src/a.b.z.foo.c hacks.c"
+
+[case]
+makefile:
+string := $(addsuffix .c,src/a.b.z.foo hacks)
+one: ; @echo $(string)
+
+two: ; @echo $(addsuffix foo,)
+options: two

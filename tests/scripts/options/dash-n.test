@@ -1,0 +1,110 @@
+# Converted from dash-n
+description: "Test the -n option."
+details: "Try various uses of -n and ensure they all give the correct results."
+
+[setup]
+touch: orig b a c alpha.p alpha.x alpha.y beta.p beta.x beta.y alpha.q beta.q quark.p quark.x quark.y meson.p meson.x meson.y quark.q meson.q
+
+[case]
+makefile:
+
+final: intermediate ; echo >> $@
+intermediate: orig ; echo >> $@
+answer: "echo >> intermediate
+echo >> final"
+
+[case]
+options: -Worig -n
+answer: "echo >> intermediate
+echo >> final"
+
+[case]
+makefile:
+.SUFFIXES:
+BAR =     # nothing
+FOO = +$(BAR)
+a: b; echo > $@
+b: c; $(FOO)
+answer: "#MAKE#: 'a' is up to date."
+
+[case]
+makefile:
+.SUFFIXES:
+BAR =     # nothing
+FOO = +$(BAR)
+a: b; echo > $@
+b: c; $(FOO)
+options: -n
+answer: "#MAKE#: 'a' is up to date."
+
+[case]
+makefile:
+.SUFFIXES:
+BAR =     # nothing
+FOO = +$(BAR)
+a: b; echo > $@
+b: c; $(FOO)
+options: -t -n
+answer: "touch b
+touch a"
+
+[case]
+makefile:
+inc: ; touch $@
+-include inc
+bar: ; @echo $(strip $(MAKEFLAGS))
+options: -n --no-print-directory
+answer: "#MAKEPATH# -f \"t001.mk\" bar
+touch inc
+echo n --no-print-directory"
+
+[case]
+makefile:
+
+.SUFFIXES:
+.RECIPEPREFIX := >
+
+all: alpha.q beta.q
+
+alpha.p beta.p:
+> touch $@
+
+%.x %.y: %.p
+> touch $*.x $*.y
+
+alpha.q: alpha.x alpha.y beta.y
+> touch $@
+
+beta.q: beta.x beta.y alpha.y
+> touch $@
+options: -n
+answer: "touch alpha.x alpha.y
+touch alpha.q
+touch beta.q"
+
+[case]
+makefile:
+
+.SUFFIXES:
+.RECIPEPREFIX := >
+
+all: quark.q meson.q
+
+quark.p meson.p:
+> touch $@
+
+quark.x quark.y &: quark.p
+> touch quark.x quark.y
+
+meson.x meson.y &: meson.p
+> touch meson.x meson.y
+
+quark.q: quark.x quark.y meson.y
+> touch $@
+
+meson.q: meson.x meson.y quark.y
+> touch $@
+options: -n
+answer: "touch quark.x quark.y
+touch quark.q
+touch meson.q"

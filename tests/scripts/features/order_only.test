@@ -1,0 +1,110 @@
+# Converted from order_only
+description: "Test order-only prerequisites."
+details: "Create makefiles with various combinations of normal and order-only prerequisites and ensure they behave properly. Test the $| variable."
+
+[case]
+makefile:
+
+%r: | baz ; @echo $< $^ $|
+bar: foo
+foo:;@:
+baz:;@:
+answer: "foo foo baz"
+
+[case]
+makefile:
+
+foo: bar | baz
+#TAB#@echo '$$^ = $^'
+#TAB#@echo '$$| = $|'
+#TAB#touch $@
+
+.PHONY: baz
+
+bar baz:
+#TAB#touch $@
+answer: "touch bar
+touch baz
+$^ = bar
+$| = baz
+touch foo"
+
+[case]
+answer: "touch baz"
+
+[case]
+makefile:
+
+foo: bar | baz
+#TAB#@echo '$$^ = $^'
+#TAB#@echo '$$| = $|'
+#TAB#touch $@
+
+foo: baz
+
+.PHONY: baz
+
+bar baz:
+#TAB#touch $@
+answer: "touch bar
+touch baz
+$^ = bar baz
+$| = 
+touch foo"
+
+[case]
+answer: "touch baz
+$^ = bar baz
+$| = 
+touch foo"
+
+[case]
+makefile:
+
+foo:| baz
+#TAB#@echo '$$^ = $^'
+#TAB#@echo '$$| = $|'
+#TAB#touch $@
+
+.PHONY: baz
+
+baz:
+#TAB#touch $@
+answer: "touch baz
+$^ = 
+$| = baz
+touch foo"
+
+[case]
+answer: "touch baz"
+
+[case]
+makefile:
+
+%.w : %.x | baz
+#TAB#@echo '$$^ = $^'
+#TAB#@echo '$$| = $|'
+#TAB#touch $@
+
+all: foo.w
+
+.PHONY: baz
+foo.x baz:
+#TAB#touch $@
+answer: "touch foo.x
+touch baz
+$^ = foo.x
+$| = baz
+touch foo.w"
+
+[case]
+answer: "touch baz"
+
+[case]
+makefile:
+
+%r: | baz ; @echo $< $^ $|
+bar: foo
+foo:;@:
+baz:;@:
+answer: "foo foo baz"

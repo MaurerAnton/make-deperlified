@@ -1,0 +1,2416 @@
+# Converted from MAKEFLAGS
+description: "Test proper behavior of MAKEFLAGS"
+details: "DETAILS"
+
+[case]
+makefile:
+
+all: ; @echo /$(MAKEFLAGS)/
+options: -e -r -R
+answer: "/erR/"
+
+[case]
+makefile:
+
+all: ; @echo /$(MAKEFLAGS)/
+options: --no-print-directory -e -r -R --trace
+answer: "#MAKEFILE#:2: update target 'all' due to: target does not exist
+echo /erR --trace --no-print-directory/
+/erR --trace --no-print-directory/"
+
+[case]
+makefile:
+
+MSG = Fails
+.RECIPEPREFIX = >
+all:
+> @echo '$@: MAKEFLAGS=$(MAKEFLAGS)'
+> @MSG=Works $(MAKE) -e -f #MAKEFILE# jump
+jump:
+> @echo '$@ $(MSG): MAKEFLAGS=$(MAKEFLAGS)'
+> @$(MAKE) -f #MAKEFILE# print
+print:
+> @echo '$@ $(MSG): MAKEFLAGS=$(MAKEFLAGS)'
+.PHONY: all jump print
+options: --no-print-directory
+answer: "all: MAKEFLAGS= --no-print-directory
+jump Works: MAKEFLAGS=e --no-print-directory
+print Works: MAKEFLAGS=e --no-print-directory"
+
+[case]
+makefile:
+
+$(info MAKEFLAGS=$(MAKEFLAGS))
+$(info INCLUDE_DIRS=$(.INCLUDE_DIRS))
+MAKEFLAGS += -Ibar
+$(info MAKEFLAGS=$(MAKEFLAGS))
+$(info INCLUDE_DIRS=$(.INCLUDE_DIRS))
+.PHONY: all
+all: ; @echo 'MAKEFLAGS=$(MAKEFLAGS)' "\$$MAKEFLAGS=$$MAKEFLAGS"
+options: -I- -Ifoo
+answer: "MAKEFLAGS= -I- -Ifoo
+INCLUDE_DIRS=foo
+MAKEFLAGS= -I- -Ifoo -Ibar
+INCLUDE_DIRS=foo bar
+MAKEFLAGS= -I- -Ifoo -Ibar $MAKEFLAGS= -I- -Ifoo -Ibar"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -i
+answer: "/makeflags='Bi'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -k
+answer: "/makeflags='Bk'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -n
+answer: "/makeflags='Bn'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -q
+answer: "/makeflags='Bq'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -r
+answer: "/makeflags='Br'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -s
+answer: "/makeflags='Bs'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -w
+answer: "/makeflags='Bw'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -d
+answer: "/makeflags='Bd'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -L
+answer: "/makeflags='BL'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -i
+answer: "/makeflags='Bi'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -k
+answer: "/makeflags='Bk'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -n
+answer: "/makeflags='Bn'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -q
+answer: "/makeflags='Bq'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -r
+answer: "/makeflags='Br'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -s
+answer: "/makeflags='Bs'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -w
+answer: "/makeflags='Bw'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -d
+answer: "/makeflags='Bd'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -L
+answer: "/makeflags='BL'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -i
+answer: "/makeflags='Bi'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -k
+answer: "/makeflags='Bk'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -n
+answer: "/makeflags='Bn'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -q
+answer: "/makeflags='Bq'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -r
+answer: "/makeflags='Br'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -s
+answer: "/makeflags='Bs'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -w
+answer: "/makeflags='Bw'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -d
+answer: "/makeflags='Bd'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -L
+answer: "/makeflags='BL'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -i
+answer: "/makeflags='Bi'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -k
+answer: "/makeflags='Bk'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -n
+answer: "/makeflags='Bn'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -q
+answer: "/makeflags='Bq'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -r
+answer: "/makeflags='Br'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -s
+answer: "/makeflags='Bs'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -w
+answer: "/makeflags='Bw'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -d
+answer: "/makeflags='Bd'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -L
+answer: "/makeflags='BL'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --no-print-directory
+answer: "/makeflags='B --no-print-directory'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --warn=undefined-var
+answer: "/makeflags='B --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --trace
+answer: "/makeflags='B --trace'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --no-print-directory
+answer: "/makeflags='B --no-print-directory'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --warn=undefined-var
+answer: "/makeflags='B --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --trace
+answer: "/makeflags='B --trace'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --no-print-directory
+answer: "/makeflags='B --no-print-directory'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --warn=undefined-var
+answer: "/makeflags='B --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --trace
+answer: "/makeflags='B --trace'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --no-print-directory
+answer: "/makeflags='B --no-print-directory'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --warn=undefined-var
+answer: "/makeflags='B --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --trace
+answer: "/makeflags='B --trace'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B  -Ilocaltmp
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B  -Onone
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B  --debug=b
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B  -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B  -Ilocaltmp
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B  -Onone
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B  --debug=b
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B  -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B  -Ilocaltmp
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B  -Onone
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B  --debug=b
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B  -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B  -Ilocaltmp
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Ilocaltmp
+answer: "/makeflags='B -Ilocaltmp'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B  -Onone
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone
+answer: "/makeflags='B -Onone'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B  --debug=b
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: --debug=b
+answer: "/makeflags='B --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B  -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -l2.5
+answer: "/makeflags='B -l2.5'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=B -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6 -I2 -I2
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6
+answer: "/makeflags='B -I1 -I2 -I3 -I4 -I5 -I6 -l2.5 -Onone --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=B -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6 -I2 -I2
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6
+answer: "/makeflags='B -I1 -I2 -I3 -I4 -I5 -I6 -l2.5 -Onone --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=B -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6 -I2 -I2
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6
+answer: "/makeflags='B -I1 -I2 -I3 -I4 -I5 -I6 -l2.5 -Onone --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-B -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6 -I2 -I2
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -I1 -Onone --debug=b -l2.5 -I2 -I3 -I4 -I5 -I6
+answer: "/makeflags='B -I1 -I2 -I3 -I4 -I5 -I6 -l2.5 -Onone --debug=b'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=iknqrswd -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrswd -i -n -s -k -Ilocaltmp
+answer: "/makeflags='Bdiknqrsw -Ilocaltmp -l2.5 -Onone --trace --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=iknqrswd -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrswd -i -n -s -k -Ilocaltmp
+answer: "/makeflags='Bdiknqrsw -Ilocaltmp -l2.5 -Onone --trace --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=iknqrswd -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrswd -i -n -s -k -Ilocaltmp
+answer: "/makeflags='Bdiknqrsw -Ilocaltmp -l2.5 -Onone --trace --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-iknqrswd -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5
+all:; $(info makeflags='$(MAKEFLAGS)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrswd -i -n -s -k -Ilocaltmp
+answer: "/makeflags='Bdiknqrsw -Ilocaltmp -l2.5 -Onone --trace --warn=undefined-var'/"
+
+[case]
+makefile:
+
+MAKEFLAGS=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'"
+
+[case]
+makefile:
+
+MAKEFLAGS:=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var'"
+
+[case]
+makefile:
+
+MAKEFLAGS=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp hello=world
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'"
+
+[case]
+makefile:
+
+MAKEFLAGS:=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp hello=world
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp hello=world
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-iknqrsw -Ilocaltmp -Ilocaltmp -Onone -Onone -l2.5 -l2.5 --no-print-directory
+$(info at parse time '$(MAKEFLAGS)')
+XX := $(shell echo "$$MAKEFLAGS")
+all:; $(info at build time makeflags='$(XX)')
+options: -Onone -l2.5 -l2.5 -Onone -Ilocaltmp -iknqrs -i -n -s -k -Ilocaltmp hello=world
+answer: "at parse time 'Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'
+at build time makeflags='Biknqrs -Ilocaltmp -l2.5 -Onone --no-print-directory --warn=undefined-var -- hello=world'"
+
+[case]
+makefile:
+
+all: ; @echo $(MAKEFLAGS)
+options: -e FOO=bar -r -R
+answer: "erR -- FOO=bar"
+
+[case]
+makefile:
+
+all: ; @echo /$(MAKEFLAGS)/
+options: --no-print-directory -e -r -R --trace FOO=bar
+answer: "#MAKEFILE#:2: update target 'all' due to: target does not exist
+echo /erR --trace --no-print-directory -- FOO=bar/
+/erR --trace --no-print-directory -- FOO=bar/"
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+FOO=moon
+hello:=moon
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+override FOO=moon
+override hello:=moon
+export hello
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+override FOO=moon
+override hello:=moon
+export hello
+$(info $(MAKEFLAGS))
+MAKEOVERRIDES=
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: FOO=bar -r -R hello:=world
+answer: "rR -- hello:=world FOO=bar
+rR -- hello:=world FOO=bar
+rR -- 
+rR
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: bye=moon
+answer: "-- bye=moon hello=world
+ -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+MAKEFLAGS?=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -B bye=moon
+answer: "B -- bye=moon hello=world
+B -- bye=moon hello=world
+B -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+MAKEFLAGS=R
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: bye=moon
+answer: "-- bye=moon hello=world
+rR -- bye=moon hello=world
+rR -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+MAKEFLAGS:=R
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: bye=moon
+answer: "-- bye=moon hello=world
+rR -- bye=moon hello=world
+rR -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+MAKEFLAGS:::=R
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: bye=moon
+answer: "-- bye=moon hello=world
+rR -- bye=moon hello=world
+rR -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-R
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: bye=moon
+answer: "-- bye=moon hello=world
+rR -- bye=moon hello=world
+rR -- bye=moon hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: FOO=bar -r -R hello:=world
+answer: "rR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: FOO=bar -r -R hello:=world
+answer: "rR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: FOO=bar -r -R hello:=world
+answer: "rR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: FOO=bar -r -R hello:=world
+answer: "rR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+krR --no-print-directory -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -e FOO=bar -r -R hello:=world
+answer: "erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+erR -- hello:=world FOO=bar
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+v:=$(shell $(MAKE) -C bye --no-print-directory)
+all: ; $(info $(v))
+options: hello=world
+answer: "world #MAKE#[1]: 'all' is up to date.
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+v != $(MAKE) -C bye --no-print-directory
+all: ; $(info $(v))
+options: hello=world
+answer: "world #MAKE#[1]: 'all' is up to date.
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+all:; $(info $(hello))
+options: hello='$(world'
+answer: "#MAKEFILE#:2: *** unterminated variable reference.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+all:; $(info good)
+options: hello='$(world'
+answer: "good
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-print-directory
+answer: "--no-print-directory
+ --no-print-directory
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKE#: 'all' is up to date.
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-print-directory
+answer: "--no-print-directory
+ --no-print-directory
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-print-directory
+answer: "--no-print-directory
+ --no-print-directory
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-print-directory
+answer: "--no-print-directory
+ --no-print-directory
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=-w
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-print-directory
+answer: "--no-print-directory
+ --no-print-directory
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+all:; $(MAKE) -C lib2
+answer: "#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'"
+
+[case]
+makefile:
+
+MAKEFLAGS=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+options: -w
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-print-directory
+$(info $(MAKEFLAGS))
+all:
+	 $(info $(MAKEFLAGS))
+	 $(MAKE) -C lib2
+answer: "#MAKE#: Entering directory '#PWD#'
+w
+w
+#MAKEPATH# -C lib2
+#MAKE#[1]: Entering directory '#PWD#/lib2'
+w
+#MAKE#[1]: 'all' is up to date.
+#MAKE#[1]: Leaving directory '#PWD#/lib2'
+#MAKE#: Leaving directory '#PWD#'"
+
+[case]
+makefile:
+
+.RECIPEPREFIX := >
+$(info $(MAKEFLAGS))
+all: one two
+one:
+> $(info $(MAKEFLAGS))
+> #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+.RECIPEPREFIX := >
+$(info $(MAKEFLAGS))
+all: one two
+one:
+> $(info $(MAKEFLAGS))
+> #HELPER# -q fail 1
+two:; $(info $@)
+options: -k
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+.RECIPEPREFIX := >
+$(info $(MAKEFLAGS))
+all: one two
+one:
+> $(info $(MAKEFLAGS))
+> #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+.RECIPEPREFIX := >
+$(info $(MAKEFLAGS))
+all: one two
+one:
+> $(info $(MAKEFLAGS))
+> #HELPER# -q fail 1
+two:; $(info $@)
+options: -S
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -S
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -S
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -S
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -S
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-k
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "S
+S
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -k
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -k
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -k
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+options: -k
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS+=-S
+$(info $(MAKEFLAGS))
+all: one two
+one:
+	 $(info $(MAKEFLAGS))
+	 #HELPER# -q fail 1
+two:; $(info $@)
+answer: "k
+k
+#HELPER# -q fail 1
+#MAKE#: *** [#MAKEFILE#:7: one] Error 1
+two
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-silent
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -s
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS+=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-silent
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-silent
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-silent
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: --no-silent
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:::=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=-s
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "--no-silent
+ --no-silent
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+MAKEFLAGS=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -s
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -s
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -s
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+options: -s
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--no-silent
+$(info $(MAKEFLAGS))
+all:; $(info $(MAKEFLAGS))
+answer: "s
+s"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--debug=b
+hello:; touch $@
+.PHONY: hello
+options: --debug=j
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=j
+$(info makeflags=$(MAKEFLAGS))
+hello:; touch $@
+.PHONY: hello
+options: --debug=b
+answer: "/makeflags= --debug=b/"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Putting child/"
+
+[case]
+makefile:
+
+MAKEFLAGS=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS:::=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+MAKEFLAGS+=--debug=b
+hello:; touch $@
+.PHONY: hello
+answer: "/Updating makefiles/"
+
+[case]
+makefile:
+
+$(info hello=$(hello))
+all:;
+options: -r MAKEFLAGS=-k hello=world
+answer: "hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info hello=$(hello))
+all:;
+options: -r MAKEFLAGS=-k hello=world MAKEFLAGS=-R
+answer: "hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info hello=$(hello))
+all:;
+options: -r MAKEFLAGS="-R -- hello=world MAKEFLAGS=-k"
+answer: "hello=world
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info hello=$(hello))
+all:;
+options: -r MAKEFLAGS="-R -- hello=world MAKEFLAGS=hello=bye"
+answer: "hello=bye
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info hello=$(hello))
+all:;
+options: -r MAKEFLAGS="-R -- hello=world MAKEFLAGS=-s"
+answer: "hello=world"

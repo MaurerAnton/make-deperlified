@@ -1,0 +1,88 @@
+# Converted from guile
+description: "Test the $(guile ...) function."
+details: "This only works on systems that support it."
+
+[case]
+makefile:
+x:;@echo '$(guile #f)'; \
+    echo '$(guile #t)'; \
+    echo '$(guile #\c)'; \
+    echo '$(guile 1234)'; \
+    echo '$(guile 'foo)'; \
+    echo '$(guile "bar")'; \
+    echo '$(guile (cons 'a 'b))'; \
+    echo '$(guile '(a b (c . d) 1 (2) 3))'
+answer: "#t
+c
+1234
+foo
+bar
+a b
+a b c d 1 2 3"
+
+[case]
+makefile:
+res := $(guile #f) \
+       $(guile #t) \
+       $(guile #\c) \
+       $(guile 1234) \
+       $(guile 'foo) \
+       $(guile "bar") \
+       $(guile (cons 'a 'b)) \
+       $(guile '(a b (c . d) 1 (2) 3))
+x:;@echo '$(res)'
+answer: "#t c 1234 foo bar a b a b c d 1 2 3"
+
+[case]
+makefile:
+VAR = $(guile (gmk-expand "$(shell echo hi)"))
+x:;@echo '$(VAR)'
+answer: "hi"
+
+[case]
+makefile:
+TEST = bye
+EVAL = VAR = $(TEST) $(shell echo there)
+$(guile (gmk-eval "$(value EVAL)"))
+TEST = hi
+x:;@echo '$(VAR)'
+answer: "hi there"
+
+[case]
+makefile:
+$(guile (gmk-eval '(VAR = 1 (2) () 3)))
+x:;@echo '$(VAR)'
+answer: "1 2 3"
+
+[case]
+makefile:
+VALUE = hi $(shell echo there)
+VAR = $(guile (gmk-var "VALUE"))
+x:;@echo '$(VAR)'
+answer: "hi there"
+
+[case]
+makefile:
+VALUE = hi $(shell echo there)
+VAR = $(guile (gmk-var 'VALUE))
+x:;@echo '$(VAR)'
+answer: "hi there"
+
+[case]
+makefile:
+# Define the "fib" function in Guile
+define fib
+;; A procedure for counting the n:th Fibonacci number
+;; See SICP, p. 37
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1))
+                 (fib (- n 2))))))
+endef
+$(guile $(fib))
+
+# Now run it
+x:;@echo $(guile (fib $(FIB)))
+options: FIB=10
+answer: "55"

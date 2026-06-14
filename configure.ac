@@ -48,8 +48,7 @@ AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PROG_CPP
 AC_CHECK_PROG([AR], [ar], [ar], [ar])
-# Perl is needed for the test suite (only)
-AC_CHECK_PROG([PERL], [perl], [perl], [perl])
+# Test suite now uses pure C tools (thelp, run_make_tests) instead of Perl.
 
 # Specialized system macros
 AC_CANONICAL_HOST
@@ -547,7 +546,7 @@ AM_CONDITIONAL([KNOWN_PREFIX],
                      -o "x$prefix" = x/usr/gnu -o "x$prefix" = x/usr])
 
 # Specify what files are to be created.
-AC_CONFIG_FILES([build.cfg tests/config-flags.pm \
+AC_CONFIG_FILES([build.cfg tests/config-flags.h \
                  Makefile lib/Makefile doc/Makefile po/Makefile.in])
 # We don't need this: the standard automake output suffices for POSIX systems.
 #mk/Posix.mk

@@ -1,0 +1,16 @@
+# Converted from MAKEFILES
+description: "Test the MAKEFILES variable."
+
+[case]
+makefile:
+
+all: ; @echo DEFAULT RULE: M2=$(M2) M3=$(M3)
+options: MAKEFILES=t001.mk t001.mk
+answer: "DEFAULT RULE: M2=m2 M3=m3"
+
+[case]
+makefile:
+
+top: ; @echo $@
+options: MAKEFILES=xx-inc.mk
+answer: "top"

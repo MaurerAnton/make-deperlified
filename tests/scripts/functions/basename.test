@@ -1,0 +1,9 @@
+# Converted from basename
+description: "The following test creates a makefile to test the suffix function."
+
+[case]
+makefile:
+string := $(basename src/a.b.z.foo.c src/hacks src.bar/a.b.z.foo.c src.bar/hacks hacks) 
+all: 
+	@echo $(string) 
+answer: "src/a.b.z.foo src/hacks src.bar/a.b.z.foo src.bar/hacks hacks"

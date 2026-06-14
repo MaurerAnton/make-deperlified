@@ -1,0 +1,100 @@
+# Converted from ONESHELL
+description: "Test the behaviour of the .ONESHELL target."
+
+[case]
+makefile:
+
+.ONESHELL:
+all:
+#TAB#a=$$$$
+#TAB#[ 0"$$a" -eq "$$$$" ] || echo fail
+answer: "a=$$
+[ 0\"$a\" -eq \"$$\" ] || echo fail"
+
+[case]
+makefile:
+
+.ONESHELL:
+all:
+#TAB#a=$$$$
+#TAB#@-+    [ 0"$$a" -eq "$$$$" ] || echo fail
+answer: "a=$$
+[ 0\"$a\" -eq \"$$\" ] || echo fail"
+
+[case]
+makefile:
+
+.ONESHELL:
+all:
+#TAB#   @a=$$$$
+#TAB#    [ 0"$$a" -eq "$$$$" ] || echo fail
+
+[case]
+makefile:
+
+.ONESHELL:
+all:
+#TAB#   @a=$$$$
+#TAB#    -@     +[ 0"$$a" -eq "$$$$" ] || echo fail
+
+[case]
+makefile:
+
+.RECIPEPREFIX = >
+.ONESHELL:
+SHELL = #PERL#
+.SHELLFLAGS = -e
+all:
+>#TAB#   @$$a=5
+>#TAB#    +7;
+>#TAB#@y=qw(a b c);
+>print "a = $$a, y = (@y)\n";
+answer: "a = 12, y = (a b c)"
+
+[case]
+makefile:
+
+.ONESHELL:
+SHELL = #PERL#
+.SHELLFLAGS = -e
+all:; @print "it works\n"
+answer: "it works"
+
+[case]
+makefile:
+
+.ONESHELL:
+SHELL = #PERL#
+.SHELLFLAGS = -w -E 'use warnings FATAL => "all";' -E
+all:; @print "it works\n"
+answer: "it works"
+
+[case]
+makefile:
+
+.ONESHELL:
+SHELL = #PERL#
+.SHELLFLAGS =
+all:; @print "it works"
+answer: "Can't open perl script \"print \"it works\"\": No such file or directory
+#MAKE#: *** [#MAKEFILE#:5: all] Error 2"
+exit_code: 512
+
+[case]
+makefile:
+
+.ONESHELL:
+SHELL = #PERL#
+all:; @print "it works"
+answer: "Can't open perl script \"print \"it works\"\": No such file or directory
+#MAKE#: *** [#MAKEFILE#:4: all] Error 2"
+exit_code: 512
+
+[case]
+makefile:
+
+.ONESHELL:
+SHELL = #PERL#
+.SHELLFLAGS = -w -E 'use warnings FATAL => "all";' -E 'my $$foo = "bar";' -E
+all:; @print "it works: $$foo\n"
+answer: "it works: bar"

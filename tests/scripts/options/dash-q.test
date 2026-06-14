@@ -1,0 +1,79 @@
+# Converted from dash-q
+description: "Test the -q option."
+details: "Try various uses of -q and ensure they all give the correct results."
+
+[case]
+makefile:
+
+one:
+two: ;
+three: ; :
+four: ; $(.XY)
+five: ; \
+ $(.XY)
+six: ; \
+ $(.XY)
+	$(.XY)
+seven: ; \
+ $(.XY)
+	: foo
+	$(.XY)
+options: -q one
+
+[case]
+options: -q two
+
+[case]
+options: -q three
+exit_code: 256
+
+[case]
+options: -q four
+
+[case]
+options: -q five
+
+[case]
+options: -q six
+
+[case]
+options: -q seven
+exit_code: 256
+
+[case]
+makefile:
+
+one:: ; @echo one
+one:: ; @echo two
+options: -q
+exit_code: 256
+
+[case]
+makefile:
+
+build-stamp: ; echo $@
+build-arch: build-stamp
+build-x: build-arch
+build-y: build-x
+options: -q build-y
+exit_code: 256
+
+[case]
+makefile:
+
+build-stamp: ; echo $@
+build-arch: build-stamp-2
+build-x: build-arch
+build-y: build-x
+options: -q build-y
+answer: "#MAKE#: *** No rule to make target 'build-stamp-2', needed by 'build-arch'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+foo: bar ; echo foo
+bar: ; @$(MAKE) -f #MAKEFILE# baz
+baz: ; echo baz
+options: -q foo
+exit_code: 256

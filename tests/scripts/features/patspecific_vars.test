@@ -1,0 +1,123 @@
+# Converted from patspecific_vars
+description: "Test pattern-specific variable settings."
+details: "Create a makefile containing various flavors of pattern-specific variable settings, override and non-override, and using various variable expansion rules, semicolon interference, etc."
+
+[case]
+makefile:
+all: one.x two.x three.x
+FOO = foo
+BAR = bar
+BAZ = baz
+one.x: override FOO = one
+%.x: BAR = two
+t%.x: BAR = four
+thr% : override BAZ = three
+one.x two.x three.x: ; @echo $@: $(FOO) $(BAR) $(BAZ)
+four.x: baz ; @echo $@: $(FOO) $(BAR) $(BAZ)
+baz: ; @echo $@: $(FOO) $(BAR) $(BAZ)
+
+# test matching multiple patterns
+a%: AAA = aaa
+%b: BBB = ccc
+a%: BBB += ddd
+%b: AAA ?= xxx
+%b: AAA += bbb
+.PHONY: ab
+ab: ; @echo $(AAA); echo $(BBB)
+answer: "one.x: one two baz
+two.x: foo four baz
+three.x: foo four three"
+
+[case]
+options: BAZ=five
+answer: "one.x: one two five
+two.x: foo four five
+three.x: foo four three"
+
+[case]
+options: four.x
+answer: "baz: foo two baz
+four.x: foo two baz"
+
+[case]
+options: ab
+answer: "aaa bbb
+ccc ddd"
+
+[case]
+makefile:
+
+/%: export foo := foo
+
+/bar:
+#TAB#@echo $(foo) $$foo
+answer: "foo foo"
+
+[case]
+makefile:
+
+.PHONY: all
+
+all: inherit := good $$t
+all: bar baz
+
+b%: pattern := good $$t
+
+global := original $$t
+
+
+# normal target
+#
+ifdef rec
+bar: a = global: $(global) pattern: $(pattern) inherit: $(inherit)
+else
+bar: a := global: $(global) pattern: $(pattern) inherit: $(inherit)
+endif
+
+bar: ; @echo 'normal: $a;'
+
+
+# pattern target
+#
+ifdef rec
+%z: a = global: $(global) pattern: $(pattern) inherit: $(inherit)
+else
+%z: a := global: $(global) pattern: $(pattern) inherit: $(inherit)
+endif
+
+%z: ; @echo 'pattern: $a;'
+
+
+global := new $$t
+answer: "normal: global: original $t pattern:  inherit: ;
+pattern: global: original $t pattern:  inherit: ;"
+
+[case]
+options: rec=1
+answer: "normal: global: new $t pattern: good $t inherit: good $t;
+pattern: global: new $t pattern: good $t inherit: good $t;"
+
+[case]
+makefile:
+
+a%: override FOO += f1
+a%: FOO += f2
+ab: ; @echo "$(FOO)"
+answer: "f1"
+
+[case]
+options: FOO=C
+answer: "C f1"
+
+[case]
+makefile:
+
+%-mt.x: x := two
+%.x: x := one
+
+all: foo.x foo-mt.x
+
+foo.x: ;@echo $x
+foo-mt.x: ;@echo $x
+answer: "one
+two"

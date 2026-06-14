@@ -1,0 +1,9 @@
+# Converted from findstring
+description: "The following test creates a makefile to test the findstring function."
+
+[case]
+makefile:
+string := $(findstring port, reporter)
+all: 
+	@echo $(string) 
+answer: "port"

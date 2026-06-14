@@ -1,0 +1,105 @@
+# Converted from errors
+description: "Test ignored failures in recipe command lines"
+
+[setup]
+touch: ./barfooblatboz
+
+[case]
+makefile:
+
+one:
+	-exit 1
+	exit 0
+two:
+	exit 1
+	exit 0
+options: one
+answer: "exit 1
+#MAKE#: [#MAKEFILE#:3: one] Error 1 (ignored)
+exit 0"
+
+[case]
+options: -i two
+answer: "exit 1
+#MAKE#: [#MAKEFILE#:6: two] Error 1 (ignored)
+exit 0"
+
+[case]
+makefile:
+
+all:
+	@echo hi
+	@echo there
+	@exit 1
+answer: "hi
+there
+#MAKE#: *** [#MAKEFILE#:5: all] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+one: ; -./foobarbazbozblat xx yy
+options: one
+answer: "./foobarbazbozblat xx yy
+#MAKE#: ./foobarbazbozblat: No such file or directory
+#MAKE#: [#MAKEFILE#:2: one] Error 127 (ignored)"
+
+[case]
+makefile:
+
+two: ; ./foobarbazbozblat aa bb
+options: two -i
+answer: "./foobarbazbozblat aa bb
+#MAKE#: ./foobarbazbozblat: No such file or directory
+#MAKE#: [#MAKEFILE#:2: two] Error 127 (ignored)"
+
+[case]
+options: two
+answer: "./foobarbazbozblat aa bb
+#MAKE#: ./foobarbazbozblat: No such file or directory
+#MAKE#: *** [#MAKEFILE#:2: two] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+three:
+	@echo one
+	./foobarbazbozblat qq rr
+options: three
+answer: "one
+./foobarbazbozblat qq rr
+#MAKE#: ./foobarbazbozblat: No such file or directory
+#MAKE#: *** [#MAKEFILE#:4: three] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+    one: ; -./barfooblatboz xx yy
+    two: ; ./barfooblatboz aa bb
+    
+options: one
+answer: "./barfooblatboz xx yy
+#MAKE#: ./barfooblatboz: Permission denied
+#MAKE#: [#MAKEFILE#:2: one] Error 127 (ignored)"
+
+[case]
+makefile:
+
+PATH := .
+all: ; sd
+answer: "sd
+#MAKE#: sd: Permission denied
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+all: ; ./sd
+answer: "./sd
+#MAKE#: ./sd: Permission denied
+#MAKE#: *** [#MAKEFILE#:2: all] Error 127"
+exit_code: 512

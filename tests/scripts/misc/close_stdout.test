@@ -1,0 +1,7 @@
+# Converted from close_stdout
+description: "Make sure make exits with an error if stdout is full."
+
+[case]
+options: -v > /dev/full
+answer: "/^#MAKE#: write error/"
+exit_code: 256

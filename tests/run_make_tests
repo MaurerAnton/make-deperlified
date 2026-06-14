@@ -1,2 +1,10 @@
 #!/bin/sh
-exec perl $0.pl ${1+"$@"}
+# Test driver wrapper for GNU Make test suite.
+# Invokes the C-compiled test runner.
+dir="$(dirname "$0")"
+if [ -x "$dir/run_make_tests.bin" ]; then
+    exec "$dir/run_make_tests.bin" ${1+"$@"}
+else
+    echo "C test driver not built. Run: cd tests && gcc -std=gnu99 -I. -o run_make_tests.bin run_make_tests.c"
+    exit 1
+fi

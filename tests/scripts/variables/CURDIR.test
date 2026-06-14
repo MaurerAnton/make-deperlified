@@ -1,0 +1,9 @@
+# Converted from CURDIR
+description: "This tests the CURDIR variable."
+details: "Echo CURDIR both with and without -C. Also ensure overrides work."
+
+[case]
+makefile:
+
+all: ; @echo $(CURDIR)
+answer: "#PWD#"

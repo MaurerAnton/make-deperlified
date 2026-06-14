@@ -1,0 +1,48 @@
+# Converted from symlinks
+description: "Test the -L option."
+details: "Verify that symlink handling with and without -L works properly."
+
+[setup]
+touch: dep targ
+
+[case]
+makefile:
+targ: sym ; @echo make $@ from $<
+answer: "#MAKE#: 'targ' is up to date."
+
+[case]
+options: -L
+answer: "make targ from sym"
+
+[case]
+answer: "make targ from sym"
+
+[case]
+options: -L
+answer: "make targ from sym"
+
+[case]
+answer: "#MAKE#: 'targ' is up to date."
+
+[case]
+options: -L
+answer: "#MAKE#: 'targ' is up to date."
+
+[case]
+answer: "#MAKE#: 'targ' is up to date."
+
+[case]
+options: -L
+answer: "make targ from sym"
+
+[case]
+makefile:
+targ: sym ; @echo make $@ from $<
+answer: "#MAKE#: *** No rule to make target 'sym', needed by 'targ'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+targ: sym ; @echo make $@ from $<
+options: -L
+answer: "make targ from sym"

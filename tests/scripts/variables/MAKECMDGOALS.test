@@ -1,0 +1,20 @@
+# Converted from MAKECMDGOALS
+description: "Test the MAKECMDGOALS variable."
+details: "We construct a makefile with various targets, all of which print out $(MAKECMDGOALS), then call it different ways."
+
+[case]
+makefile:
+
+.DEFAULT all:
+#TAB#@echo $(MAKECMDGOALS)
+
+[case]
+options: all
+answer: "all"
+
+[case]
+options: foo bar baz yaz
+answer: "foo bar baz yaz
+foo bar baz yaz
+foo bar baz yaz
+foo bar baz yaz"

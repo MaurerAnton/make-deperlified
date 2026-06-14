@@ -1,0 +1,23 @@
+# Converted from IGNORE
+description: "Test the behaviour of the .IGNORE target."
+
+[case]
+makefile:
+
+all: ; @#HELPER# -q fail 1
+answer: "#MAKE#: *** [#MAKEFILE#:2: all] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+.IGNORE:
+all: ; @#HELPER# -q fail 1
+answer: "#MAKE#: [#MAKEFILE#:3: all] Error 1 (ignored)"
+
+[case]
+makefile:
+
+.IGNORE: all
+all: ; @#HELPER# -q fail 1
+answer: "#MAKE#: [#MAKEFILE#:3: all] Error 1 (ignored)"

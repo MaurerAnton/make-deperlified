@@ -1,0 +1,20 @@
+# Converted from MAKE
+description: "Test proper behavior of the MAKE variable"
+details: "DETAILS"
+
+[case]
+makefile:
+
+TMP  := $(MAKE)
+MAKE := $(subst X=$(X),,$(MAKE))
+all:
+#TAB#@echo $(TMP)
+#TAB#$(MAKE) -f #MAKEFILE# foo
+
+foo:
+#TAB#@echo $(MAKE)
+answer: "#MAKEPATH#
+#MAKEPATH# -f #MAKEFILE# foo
+#MAKE#[1]: Entering directory '#PWD#'
+#MAKEPATH#
+#MAKE#[1]: Leaving directory '#PWD#'"

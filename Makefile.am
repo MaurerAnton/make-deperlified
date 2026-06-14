@@ -114,10 +114,10 @@ mk_FILES =	Basic.mk mk/msdosdjgpp.mk mk/VMS.mk mk/Windows32.mk
 m4_FILES =	m4/gnulib-cache.m4
 
 test_FILES =	tests/run_make_tests tests/run_make_tests.bat \
-		tests/run_make_tests.pl tests/test_driver.pl \
-		tests/config-flags.pm.in tests/config_flags_pm.com \
+		tests/run_make_tests.c tests/thelp.c \
+		tests/config-flags.h.in tests/config_flags_pm.com \
 		tests/config-flags.pm.W32 \
-		tests/mkshadow tests/thelp.pl tests/guile.supp tests/README
+		tests/mkshadow tests/guile.supp tests/README
 # test/scripts are added via dist-hook below.
 
 EXTRA_DIST =	ChangeLog INSTALL README build.sh build.cfg.in $(man_MANS) \
@@ -162,7 +162,7 @@ check-local: check-regression
 
 # > check-regression
 #
-# Look for the make test suite, and run it if found and we can find perl.
+# Build and run the C test suite tools.
 #
 MAKETESTFLAGS =
 
@@ -185,29 +185,34 @@ rand_value = c = "abcdefghijklmnopqrstuvwxyz0123456789"
 rand_char  = substr(c,int(rand()*36),1)
 rand_string = $(AWK) 'BEGIN{srand(); $(rand_value); print $(rand_char) "" $(rand_char) "" $(rand_char) "" $(rand_char);}'
 
-check-regression: tests/config-flags.pm
+check-regression: tests/config-flags.h tests/run_make_tests$(EXEEXT) tests/thelp$(EXEEXT)
 	$(AM_V_at) rm -f $(testfiles)
-	$(AM_V_at) if test -f '$(top_srcdir)/tests/run_make_tests.pl'; then \
-	  ulimit -n 128; \
-	  if $(PERL) -v >/dev/null 2>&1; then \
-	    echo "cd tests && $(PERL) $(PERLFLAGS) $(abs_top_srcdir)/tests/run_make_tests.pl -make $(GMK_OUTDIR)/make$(EXEEXT) $(MAKETESTFLAGS)"; \
-	    (cd tests && $(PERL) $(PERLFLAGS) '$(abs_top_srcdir)/tests/run_make_tests.pl' -make '$(GMK_OUTDIR)/make$(EXEEXT)' $(MAKETESTFLAGS); echo $$? >.test-result) 2>&1 | tee $(testlog); \
-	    export TAR_OPTIONS='$(filter-out --sort%,$(TAR_OPTIONS))'; \
-	    er=$$(cat $(testresult)); if test "$$er" -ne 0; then \
-	      dirnm="$(errorpre)-$$($(rand_string))"; fnm="$$dirnm.tar.gz"; \
-	      rm -rf "$$dirnm"; mkdir "$$dirnm"; \
-	      $(AMTAR) chf - $(errordetails) | (cd "$$dirnm"; $(AMTAR) xf -); \
-	      $(AMTAR) chf - "$$dirnm" | eval GZIP= gzip $(GZIP_ENV) -c >"$$fnm"; \
-	      echo "*** Testing FAILED!  Details: $$fnm"; \
-	      echo '*** Please report to <$(PACKAGE_BUGREPORT)>'; echo; \
-	      exit $$er; \
-	    fi; \
-	  else \
-	    echo "Can't find a working Perl ($(PERL)); the test suite requires Perl."; \
-	  fi; \
-	else \
-	  echo "Can't find the $(PACKAGE_NAME) test suite ($(top_srcdir)/tests)."; \
-	fi
+	$(AM_V_at) ulimit -n 128; \
+	  echo "cd tests && ./run_make_tests$(EXEEXT) -make $(GMK_OUTDIR)/make$(EXEEXT) $(MAKETESTFLAGS)"; \
+	  (cd tests && ./run_make_tests$(EXEEXT) -make '$(GMK_OUTDIR)/make$(EXEEXT)' $(MAKETESTFLAGS); echo $$? >.test-result) 2>&1 | tee $(testlog); \
+	  export TAR_OPTIONS='$(filter-out --sort%,$(TAR_OPTIONS))'; \
+	  er=$$(cat $(testresult)); if test "$$er" -ne 0; then \
+	    dirnm="$(errorpre)-$$($(rand_string))"; fnm="$$dirnm.tar.gz"; \
+	    rm -rf "$$dirnm"; mkdir "$$dirnm"; \
+	    $(AMTAR) chf - $(errordetails) | (cd "$$dirnm"; $(AMTAR) xf -); \
+	    $(AMTAR) chf - "$$dirnm" | eval GZIP= gzip $(GZIP_ENV) -c >"$$fnm"; \
+	    echo "*** Testing FAILED!  Details: $$fnm"; \
+	    echo '*** Please report to <$(PACKAGE_BUGREPORT)>'; echo; \
+	    exit $$er; \
+	  fi
+
+# Build the test helper and driver from C sources
+tests/thelp$(EXEEXT): tests/thelp.c
+	$(AM_V_CC)$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $<
+
+tests/run_make_tests$(EXEEXT): tests/run_make_tests.c tests/config-flags.h
+	$(AM_V_CC)$(CC) $(CFLAGS) $(CPPFLAGS) -I$(builddir)/tests -o $@ $<
+
+# config-flags.h is generated from config-flags.h.in by config.status
+tests/config-flags.h: stamp-h2
+stamp-h2: $(srcdir)/tests/config-flags.h.in config.status
+	@rm -f stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status tests/config-flags.h
 
 
 # --------------- Maintainer's Section

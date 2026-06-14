@@ -1,0 +1,41 @@
+# Converted from SILENT
+description: "Test the special target .SILENT."
+
+[case]
+makefile:
+
+.PHONY: M a b
+M: a b
+.SILENT : b
+a b: ; echo $@
+answer: "echo a
+a
+b"
+
+[case]
+makefile:
+
+.PHONY: M a b
+M: a b
+.SILENT:
+a b: ; echo $@
+answer: "a
+b"
+
+[case]
+makefile:
+
+.PHONY: M r a b
+r: a b ; @$(MAKE) -f #MAKEFILE# M V=x
+a b: ; echo $@
+
+V =
+$V.SILENT:
+M: a b
+options: --no-print-directory
+answer: "a
+b
+echo a
+a
+echo b
+b"

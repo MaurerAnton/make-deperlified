@@ -1,0 +1,65 @@
+# Converted from dash-B
+description: "Test make -B (always remake) option."
+details: "Construct a simple makefile that builds a target. Invoke make once, so it builds everything. Invoke it again and verify that nothing is built. Then invoke it with -B and verify that everything is built again."
+
+[setup]
+touch: bar.x foo blah.x x.b x.a
+
+[case]
+makefile:
+
+.SUFFIXES:
+
+.PHONY: all
+all: foo
+
+foo: bar.x
+#TAB#@echo cp $< $@
+#TAB#@echo "" > $@
+answer: "cp bar.x foo"
+
+[case]
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+options: -B
+answer: "cp bar.x foo"
+
+[case]
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+options: -B
+answer: "cp bar.x foo"
+
+[case]
+makefile:
+
+all: ; @:
+$(info MAKE_RESTARTS=$(MAKE_RESTARTS))
+include foo.x
+foo.x: ; @touch $@
+options: -B
+answer: "MAKE_RESTARTS=
+MAKE_RESTARTS=1"
+
+[case]
+makefile:
+
+all: blah.x ; @echo $@
+$(info MAKE_RESTARTS=$(MAKE_RESTARTS))
+include foo.x
+foo.x: ; @touch $@
+blah.x: ; @echo $@
+options: -B
+answer: "MAKE_RESTARTS=
+MAKE_RESTARTS=1
+blah.x
+all"
+
+[case]
+makefile:
+
+x.a: x.b ; @echo $?
+options: -B
+answer: "x.b"

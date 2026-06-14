@@ -1,0 +1,115 @@
+# Converted from load
+description: "Test the load operator."
+details: "Test dynamic loading of modules."
+
+[setup]
+touch: testload.so testload.c
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load testload.so
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+options: --warn-undefined-variables
+answer: "pre= post=testload.so implicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load ./testload.so(explicit_setup)
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+answer: "pre= post=testload.so explicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load ./testload.so
+load testload.so(explicit_setup)
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+answer: "pre= post=testload.so implicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load ./testload.so
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+testload.so: testload.c ; @echo "rebuilding $@"; "cc"   -fPIC  -shared -o testload.so testload.c
+answer: "rebuilding testload.so
+pre= post=testload.so implicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+-load ./testload.so(explicit_setup)
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+%.so: %.c ; @echo "rebuilding $@"; "cc"   -fPIC  -shared -o testload.so testload.c
+answer: "rebuilding testload.so
+pre= post=testload.so explicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load testload.so
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+options: --warn-undefined-variables
+answer: "pre= post=testload.so implicit"
+
+[case]
+makefile:
+
+PRE := $(.LOADED)
+load ./testload.so
+POST := $(.LOADED)
+all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
+testload.so: testload.c ; @echo "rebuilding $@"; "cc"   -fPIC  -shared -o testload.so testload.c
+answer: "pre= post=testload.so implicit"
+
+[case]
+makefile:
+
+load: ; @echo $@
+-load&: ; @echo $@
+answer: "load"
+
+[case]
+makefile:
+
+load : ; @echo $@
+-load &: ; echo $@
+answer: "load"
+
+[case]
+makefile:
+
+load = @echo $@
+all: ; $(load)
+load |: ; echo $@
+answer: "all"
+
+[case]
+makefile:
+
+#TAB#load ./testload.so
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: load lines cannot start with TAB
+hi"
+
+[case]
+makefile:
+
+#TAB#-load ./testload.so
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: -load lines cannot start with TAB
+hi"

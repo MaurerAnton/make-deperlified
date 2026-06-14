@@ -1,0 +1,123 @@
+# Converted from automatic
+description: "Test automatic variable setting."
+
+[setup]
+touch: foo.x baz.z foo
+
+[case]
+makefile:
+
+.SUFFIXES:
+.SUFFIXES: .x .y .z
+$(dir)/foo.x : baz.z $(dir)/bar.y baz.z
+#TAB#@echo '$$@ = $@, $$(@D) = $(@D), $$(@F) = $(@F)'
+#TAB#@echo '$$* = $*, $$(*D) = $(*D), $$(*F) = $(*F)'
+#TAB#@echo '$$< = $<, $$(<D) = $(<D), $$(<F) = $(<F)'
+#TAB#@echo '$$^ = $^, $$(^D) = $(^D), $$(^F) = $(^F)'
+#TAB#@echo '$$+ = $+, $$(+D) = $(+D), $$(+F) = $(+F)'
+#TAB#@echo '$$? = $?, $$(?D) = $(?D), $$(?F) = $(?F)'
+#TAB#touch $@
+
+$(dir)/bar.y baz.z : ; touch $@
+options: dir=../tests
+answer: "touch ../tests/bar.y
+$@ = ../tests/foo.x, $(@D) = ../tests, $(@F) = foo.x
+$* = ../tests/foo, $(*D) = ../tests, $(*F) = foo
+$< = baz.z, $(<D) = ., $(<F) = baz.z
+$^ = baz.z ../tests/bar.y, $(^D) = . ../tests, $(^F) = baz.z bar.y
+$+ = baz.z ../tests/bar.y baz.z, $(+D) = . ../tests ., $(+F) = baz.z bar.y baz.z
+$? = ../tests/bar.y, $(?D) = ../tests, $(?F) = bar.y
+touch ../tests/foo.x"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+.SUFFIXES:
+.DEFAULT: ; @echo '$@'
+
+$(dir)/foo $(dir)/bar: $@.x $$@.x $$$@.x $$$$@.x $$(@D).x $$(@F).x
+
+$(dir)/x.z $(dir)/y.z: $(dir)/%.z : $@.% $$@.% $$$@.% $$$$@.% $$(@D).% $$(@F).%
+
+$(dir)/biz: $$(@).x $${@}.x $${@D}.x $${@F}.x
+options: dir=../tests ../tests/foo ../tests/bar
+answer: ".x
+../tests/foo.x
+x
+$@.x
+../tests.x
+foo.x
+../tests/bar.x
+bar.x"
+
+[case]
+options: dir=../tests ../tests/x.z ../tests/y.z
+answer: ".x
+../tests/x.z.x
+x
+$@.x
+../tests.x
+x.z.x
+.y
+../tests/y.z.y
+y
+$@.y
+../tests.y
+y.z.y"
+
+[case]
+options: dir=../tests ../tests/biz
+answer: "../tests/biz.x
+../tests.x
+biz.x"
+
+[case]
+makefile:
+
+.SUFFIXES: .b .src
+
+mbr.b: mbr.src
+#TAB#@echo $*
+
+mbr.src: ; @:
+answer: "mbr"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+.SUFFIXES: .b .src
+
+p:=mbr.src
+mbr.b: $$p
+#TAB#@echo $*
+
+mbr.src: ; @:
+answer: "mbr"
+
+[case]
+makefile:
+
+mbr.b: mbr.src
+#TAB#@echo star=$*
+
+mbr.src: ; @:
+answer: "star="
+
+[case]
+makefile:
+
+foo: bar ; @echo "\$$? = $?"
+bar: ;
+answer: "$? = bar"
+
+[case]
+makefile:
+
+all : A B
+all : ; @echo $@ -- $^ -- $<
+all : C D
+all : E F
+A B C D E F G H : ; @:
+answer: "all -- A B C D E F -- A"

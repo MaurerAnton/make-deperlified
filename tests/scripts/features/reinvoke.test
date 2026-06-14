@@ -1,0 +1,119 @@
+# Converted from reinvoke
+description: "Test GNU Make's auto-reinvocation feature."
+details: "If the makefile or one it includes can be rebuilt then it is, and make is reinvoked. We create a rule to rebuild the makefile from a temp file, then touch the temp file to make it newer than the makefile."
+
+[setup]
+touch: incl.mk incl-1.mk Makefile b a c hello.td
+
+[case]
+makefile:
+
+all: ; @echo running rules.
+
+#MAKEFILE# incl.mk: incl-1.mk ; @echo rebuilding $@; echo >> $@
+
+include incl.mk
+answer: "rebuilding incl.mk
+running rules."
+
+[case]
+answer: "rebuilding #MAKEFILE#
+running rules."
+
+[case]
+makefile:
+
+all: ; @echo hello
+
+a : b ; echo >> $@
+
+b : c ; test -f $@ || echo >> $@
+
+c: ; echo >> $@
+
+include $(F)
+options: F=a
+answer: "test -f b || echo >> b
+hello"
+
+[case]
+options: F=b
+answer: "test -f b || echo >> b
+hello"
+
+[case]
+makefile:
+
+ifdef RECURSE
+-include foo30723
+endif
+recurse: ; @$(MAKE) -f $(MAKEFILE_LIST) RECURSE=1 test
+test: ; @echo F.O=$(F.O)
+foo30723: ; @touch $@
+options: --no-print-directory F.O=bar
+answer: "F.O=bar"
+
+[case]
+makefile:
+
+all: ; @echo RESTARTS=$(MAKE_RESTARTS)
+
+m1.d: ; @echo $@; touch $@
+
+m2.d: m1.d ; @test -f $< || { echo $@; touch $@; }
+
+include m1.d
+-include m2.d
+answer: "m1.d
+RESTARTS=1"
+
+[case]
+makefile:
+
+all: ; @echo RESTARTS=$(MAKE_RESTARTS)
+
+m1.d: ; @echo $@; touch $@
+
+m2.d: m1.d ; @test -f $< || { echo $@; touch $@; }
+
+include m1.d m2.d
+answer: "m1.d
+RESTARTS=1"
+
+[case]
+makefile:
+
+hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
+hello.d:
+include hello.d
+answer: "RESTARTS=
+#MAKE#: 'hello.o' is up to date."
+
+[case]
+makefile:
+
+hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
+hello.d:; $(info $@)
+include hello.d
+answer: "hello.d
+RESTARTS=
+#MAKE#: 'hello.o' is up to date."
+
+[case]
+makefile:
+
+hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
+hello.d: hello.td
+include hello.d
+answer: "RESTARTS=
+#MAKE#: 'hello.o' is up to date."
+
+[case]
+makefile:
+
+hello.o: hello.d; $(info $@)
+hello.d: hello.td; $(info $@)
+include hello.d
+answer: "hello.d
+hello.o
+#MAKE#: 'hello.o' is up to date."

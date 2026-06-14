@@ -1,0 +1,6 @@
+# Converted from dash-l
+description: "Test load balancing (-l) option."
+details: "\"\ This test creates a makefile where all depends on three rules which contain the same body. Each rule checks for the existence of a temporary file"
+
+[case]
+options: $mkoptions

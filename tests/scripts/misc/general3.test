@@ -1,0 +1,323 @@
+# Converted from general3
+description: "This tests random features of the parser that need to be supported, and which have either broken at some point in the past or seem likely to break."
+
+[case]
+makefile:
+
+# We want to allow both empty commands _and_ commands that resolve to empty.
+EMPTY =
+
+.PHONY: all a1 a2 a3 a4
+all: a1 a2 a3 a4
+
+a1:;
+a2:
+#TAB#
+a3:;$(EMPTY)
+a4:
+#TAB#$(EMPTY)
+
+# Non-empty lines that expand to nothing should also be ignored.
+STR =     # Some spaces
+TAB =   #TAB#  # A TAB and some spaces
+
+$(STR)
+
+$(STR) $(TAB)
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+all:;@echo FOO = $(FOO)
+FOO = foo
+answer: "FOO = foo"
+
+[case]
+makefile:
+
+$(if true,$(info true; true))
+all: ; @:
+answer: "true; true"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo foo\
+bar
+#TAB#@echo foo\
+#TAB#bar
+#TAB#@echo foo\
+    bar
+#TAB#@echo foo\
+#TAB#    bar
+#TAB#@echo foo \
+bar
+#TAB#@echo foo \
+#TAB#bar
+#TAB#@echo foo \
+    bar
+#TAB#@echo foo \
+#TAB#    bar
+answer: "foobar
+foobar
+foo bar
+foo bar
+foo bar
+foo bar
+foo bar
+foo bar"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo 'foo\
+bar'
+#TAB#@echo 'foo\
+#TAB#bar'
+#TAB#@echo 'foo\
+    bar'
+#TAB#@echo 'foo\
+#TAB#    bar'
+#TAB#@echo 'foo \
+bar'
+#TAB#@echo 'foo \
+#TAB#bar'
+#TAB#@echo 'foo \
+    bar'
+#TAB#@echo 'foo \
+#TAB#    bar'
+answer: "foo\
+bar
+foo\
+bar
+foo\
+    bar
+foo\
+    bar
+foo \
+bar
+foo \
+bar
+foo \
+    bar
+foo \
+    bar"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo "foo\
+bar"
+#TAB#@echo "foo\
+#TAB#bar"
+#TAB#@echo "foo\
+    bar"
+#TAB#@echo "foo\
+#TAB#    bar"
+#TAB#@echo "foo \
+bar"
+#TAB#@echo "foo \
+#TAB#bar"
+#TAB#@echo "foo \
+    bar"
+#TAB#@echo "foo \
+#TAB#    bar"
+answer: "foobar
+foobar
+foo    bar
+foo    bar
+foo bar
+foo bar
+foo     bar
+foo     bar"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo hi; echo foo\
+bar
+#TAB#@echo hi; echo foo\
+#TAB#bar
+#TAB#@echo hi; echo foo\
+ bar
+#TAB#@echo hi; echo foo\
+#TAB# bar
+#TAB#@echo hi; echo foo \
+bar
+#TAB#@echo hi; echo foo \
+#TAB#bar
+#TAB#@echo hi; echo foo \
+ bar
+#TAB#@echo hi; echo foo \
+#TAB# bar
+answer: "hi
+foobar
+hi
+foobar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo foo\
+bar; echo hi
+#TAB#@echo foo\
+#TAB#bar; echo hi
+#TAB#@echo foo\
+ bar; echo hi
+#TAB#@echo foo\
+#TAB# bar; echo hi
+#TAB#@echo foo \
+bar; echo hi
+#TAB#@echo foo \
+#TAB#bar; echo hi
+#TAB#@echo foo \
+ bar; echo hi
+#TAB#@echo foo \
+#TAB# bar; echo hi
+answer: "foobar
+hi
+foobar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo bar
+hi"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo hi; echo 'foo\
+bar'
+#TAB#@echo hi; echo 'foo\
+#TAB#bar'
+#TAB#@echo hi; echo 'foo\
+    bar'
+#TAB#@echo hi; echo 'foo\
+#TAB#    bar'
+#TAB#@echo hi; echo 'foo \
+bar'
+#TAB#@echo hi; echo 'foo \
+#TAB#bar'
+#TAB#@echo hi; echo 'foo \
+    bar'
+#TAB#@echo hi; echo 'foo \
+#TAB#    bar'
+answer: "hi
+foo\
+bar
+hi
+foo\
+bar
+hi
+foo\
+    bar
+hi
+foo\
+    bar
+hi
+foo \
+bar
+hi
+foo \
+bar
+hi
+foo \
+    bar
+hi
+foo \
+    bar"
+
+[case]
+makefile:
+
+all:
+#TAB#@echo hi; echo "foo\
+bar"
+#TAB#@echo hi; echo "foo\
+#TAB#bar"
+#TAB#@echo hi; echo "foo\
+    bar"
+#TAB#@echo hi; echo "foo\
+#TAB#    bar"
+#TAB#@echo hi; echo "foo \
+bar"
+#TAB#@echo hi; echo "foo \
+#TAB#bar"
+#TAB#@echo hi; echo "foo \
+    bar"
+#TAB#@echo hi; echo "foo \
+#TAB#    bar"
+answer: "hi
+foobar
+hi
+foobar
+hi
+foo    bar
+hi
+foo    bar
+hi
+foo bar
+hi
+foo bar
+hi
+foo     bar
+hi
+foo     bar"
+
+[case]
+makefile:
+x:;@-exit 1
+answer: "#MAKE#: [#MAKEFILE#:1: x] Error 1 (ignored)"
+
+[case]
+makefile:
+
+    slow: SHELL := echo
+    slow: .SHELLFLAGS := hoho
+    slow:; @foo bar
+    
+answer: "hoho foo bar"
+
+[case]
+makefile:
+
+    slow: SHELL := echo hi
+    slow: .SHELLFLAGS := ho ho
+    slow:; @foo bar
+    
+answer: "hi ho ho foo bar"
+
+[case]
+makefile:
+
+    slow: SHELL := echo hi
+    slow: .SHELLFLAGS := 'ho;ho'
+    slow:; @foo bar
+    
+answer: "hi ho;ho foo bar"

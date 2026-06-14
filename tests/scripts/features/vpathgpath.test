@@ -1,0 +1,31 @@
+# Converted from vpathgpath
+description: "Tests VPATH+/GPATH functionality."
+
+[setup]
+touch: work/foo.d work/bar.d work/foo.c work/bar.c foo.b bar.d
+
+[case]
+makefile:
+VPATH = work/
+
+GPATH = $(VPATH)
+
+.SUFFIXES: .a .b .c .d
+.PHONY: general rename notarget intermediate
+
+%.a:
+%.b:
+%.c:
+%.d:
+
+%.a : %.b ; cat $^ > $@
+%.b : %.c ; cat $^ > $@
+%.c :: %.d ; cat $^ > $@
+
+# General testing info:
+
+general: foo.b
+foo.b: foo.c bar.c
+
+options: general
+answer: "#MAKE#: Nothing to be done for 'general'."

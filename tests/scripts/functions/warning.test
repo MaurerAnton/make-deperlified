@@ -1,0 +1,63 @@
+# Converted from warning
+description: "The following test creates a makefile to test the warning function."
+
+[case]
+makefile:
+ifdef WARNING1
+$(warning warning is $(WARNING1))
+endif
+
+ifdef WARNING2
+$(warning warning is $(WARNING2))
+endif
+
+ifdef WARNING3
+all: some; @echo hi $(warning warning is $(WARNING3))
+endif
+
+ifdef WARNING4
+all: some; @echo hi
+#TAB#@echo there $(warning warning is $(WARNING4))
+endif
+
+some: ; @echo Some stuff
+options: WARNING1=yes
+answer: "#MAKEFILE#:2: warning is yes
+Some stuff"
+
+[case]
+options: WARNING2=no
+answer: "#MAKEFILE#:6: warning is no
+Some stuff"
+
+[case]
+options: WARNING3=maybe
+answer: "Some stuff
+#MAKEFILE#:10: warning is maybe
+hi"
+
+[case]
+options: WARNING4=definitely
+answer: "Some stuff
+#MAKEFILE#:15: warning is definitely
+hi
+there"
+
+[case]
+makefile:
+
+all: one two
+#TAB#$(warning in $@ line 3)
+#TAB#@true
+#TAB#$(warning in $@ line 5)
+
+one two:
+#TAB#$(warning in $@ line 8)
+#TAB#@true
+#TAB#$(warning in $@ line 10)
+answer: "#MAKEFILE#:8: in one line 8
+#MAKEFILE#:10: in one line 10
+#MAKEFILE#:8: in two line 8
+#MAKEFILE#:10: in two line 10
+#MAKEFILE#:3: in all line 3
+#MAKEFILE#:5: in all line 5"

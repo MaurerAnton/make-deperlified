@@ -1,0 +1,81 @@
+# Converted from escape
+description: "Test various types of escaping in makefiles."
+details: "Make sure that escaping of ':' works in target names. Make sure escaping of whitespace works in target names. Make sure that escaping of '#' works. Make sure that backslash before non-special characters are kept."
+
+[case]
+makefile:
+
+ifdef NOESC
+path = pre:
+endif
+ifdef ONEESC
+path = pre\:
+endif
+ifdef TWOESC
+path = pre\\:
+endif
+
+$(path)foo : ; @echo "touch ($@)"
+
+foo\ bar: ; @echo "touch ($@)"
+
+sharp: foo\#bar.ext
+foo\#bar.ext: ; @echo "foo#bar.ext = ($@)"
+answer: "touch (foo)"
+
+[case]
+options: NOESC=1
+answer: "#MAKEFILE#:12: *** target pattern contains no '%'.  Stop."
+exit_code: 512
+
+[case]
+options: ONEESC=1
+answer: "touch (pre:foo)"
+
+[case]
+options: TWOESC=1
+answer: "#MAKEFILE#:12: *** target pattern contains no '%'.  Stop."
+exit_code: 512
+
+[case]
+options: foo bar
+answer: "touch (foo bar)"
+
+[case]
+options: sharp
+answer: "foo#bar.ext = (foo#bar.ext)"
+
+[case]
+makefile:
+
+foo: foo\:bar foo\\\:bar foo\\\\\:bar
+foo foo\:bar foo\\\:bar foo\\\\\:bar: ; : '$@'
+answer: ": 'foo:bar'
+: 'foo\:bar'
+: 'foo\\:bar'
+: 'foo'"
+
+[case]
+makefile:
+
+all: ..\foo
+.DEFAULT: ; : '$@'
+answer: ": '..\foo'"
+
+[case]
+makefile:
+
+self = $1
+foo := $(call self,#foo#)#foo
+bar := $(call self,\#bar\#)#bar
+all:;@echo '$(foo) $(bar)'
+answer: "#foo# \#bar\#"
+
+[case]
+makefile:
+
+C = \#
+self = $1
+foo := $(call self,$Cfoo$C)#foo
+all:;@echo '$(foo)'
+answer: "#foo#"

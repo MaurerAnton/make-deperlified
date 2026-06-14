@@ -1,0 +1,330 @@
+# Converted from define
+description: "Test define/endef variable assignments."
+
+[case]
+makefile:
+
+define multi
+@echo hi
+echo there
+endef
+
+all: ; $(multi)
+answer: "hi
+echo there
+there"
+
+[case]
+makefile:
+
+FOO = foo
+
+define multi =
+echo hi
+@echo $(FOO)
+endef # this is the end
+
+define simple :=
+@echo $(FOO)
+endef
+
+define posix ::=
+@echo $(FOO)
+endef
+
+append = @echo a
+
+define append +=
+
+@echo b
+endef
+
+define cond ?= # this is a conditional
+@echo first
+endef
+
+define cond ?=
+@echo second
+endef
+
+FOO = there
+
+all: ; $(multi)
+#TAB#$(simple)
+#TAB#$(posix)
+#TAB#$(append)
+#TAB#$(cond)
+answer: "echo hi
+hi
+there
+foo
+foo
+a
+b
+first"
+
+[case]
+makefile:
+
+FOO = foo
+
+define multi=
+echo hi
+@echo $(FOO)
+endef # this is the end
+
+define simple:=
+@echo $(FOO)
+endef
+
+define posix::=
+@echo $(FOO)
+endef
+
+define posixbsd:::=
+@echo '$(FOO)$$bar'
+endef
+
+append = @echo a
+
+define append+=
+
+@echo b
+endef
+
+define cond?= # this is a conditional
+@echo first
+endef
+
+define cond?=
+@echo second
+endef
+
+FOO = there
+
+all: ; $(multi)
+#TAB#$(simple)
+#TAB#$(posix)
+#TAB#$(posixbsd)
+#TAB#$(append)
+#TAB#$(cond)
+answer: "echo hi
+hi
+there
+foo
+foo
+foo$bar
+a
+b
+first"
+
+[case]
+makefile:
+
+FOO = foo
+NAME = def
+def =
+ifdef BOGUS
+ define  $(subst e,e,$(NAME))     =
+  ifeq (1,1)
+   FOO = bar
+  endif
+ endef
+endif
+
+$(eval $(def))
+all: ; @echo $(FOO)
+options: BOGUS=1
+answer: "bar"
+
+[case]
+answer: "foo"
+
+[case]
+makefile:
+
+define outer
+ define inner
+  A = B
+ endef
+endef
+
+$(eval $(outer))
+
+outer: ; @echo $(inner)
+answer: "A = B"
+
+[case]
+makefile:
+
+NAME =
+define $(NAME)  =
+ouch
+endef
+all: ; @echo ouch
+answer: "#MAKEFILE#:3: *** empty variable name.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+NAME =
+define NAME = $(NAME)
+ouch
+endef
+all: ; @echo ok
+answer: "#MAKEFILE#:3: extraneous text after 'define' directive
+ok"
+
+[case]
+makefile:
+
+NAME =
+define NAME =
+ouch
+endef $(NAME)
+all: ; @echo ok
+answer: "#MAKEFILE#:5: extraneous text after 'endef' directive
+ok"
+
+[case]
+makefile:
+
+NAME =
+all: ; @echo ok
+define NAME =
+ouch
+endef$(NAME)
+answer: "#MAKEFILE#:4: *** missing 'endef', unterminated 'define'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+define FOO
+$(V1)echo hello
+$(V2)echo world
+endef
+all: ; @$(FOO)
+answer: "hello
+world"
+
+[case]
+options: V1=@ V2=@
+answer: "hello
+world"
+
+[case]
+makefile:
+
+define FOO
+$(V1)echo hello
+$(V2)echo world
+endef
+all: ; $(FOO)
+options: V1=@
+answer: "hello
+echo world
+world"
+
+[case]
+options: V2=@
+answer: "echo hello
+hello
+world"
+
+[case]
+options: V1=@ V2=@
+answer: "hello
+world"
+
+[case]
+makefile:
+
+define FOO
+@echo hello
+echo world
+endef
+define BAR
+echo hello
+echo world
+endef
+
+all: foo bar
+foo: ; $(FOO)
+bar: ; @$(BAR)
+answer: "hello
+echo world
+world
+hello
+world"
+
+[case]
+makefile:
+
+define = define
+
+$(define) : ;@echo $@
+
+%:define
+
+all: define foo
+
+%.x : define
+
+foo:;
+answer: "define"
+
+[case]
+makefile:
+
+#TAB#define foo
+  @echo foo
+endef
+
+all:;$(foo)
+answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
+foo"
+
+[case]
+makefile:
+
+foo = echo foo
+
+define bar
+#TAB#define foo
+#TAB#  echo bar
+#TAB#endef
+endef
+
+all:;@$(foo)
+answer: "foo"
+
+[case]
+makefile:
+
+foo = echo foo
+
+define bar
+#TAB#define foo
+#TAB#  echo bar
+#TAB#endef
+endef
+
+$(eval $(bar))
+
+all:;@echo foo
+answer: "#MAKEFILE#:10: warning: directive lines cannot start with TAB
+#MAKEFILE#:10: *** missing 'endef', unterminated 'define'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+define foo
+  @echo foo
+#TAB#endef
+
+all:;$(foo)
+answer: "#MAKEFILE#:2: *** missing 'endef', unterminated 'define'.  Stop."
+exit_code: 512

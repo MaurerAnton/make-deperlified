@@ -1,0 +1,9 @@
+# Converted from quoting
+description: "The following test creates a makefile to test using quotes within makefiles."
+
+[case]
+makefile:
+TEXFONTS = NICEFONT
+DEFINES = -DDEFAULT_TFM_PATH=\".:$(TEXFONTS)\"
+test: ; @"echo" 'DEFINES = $(DEFINES)'
+answer: "DEFINES = -DDEFAULT_TFM_PATH=\\".:NICEFONT\\""

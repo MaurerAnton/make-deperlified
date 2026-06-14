@@ -1,0 +1,107 @@
+# Converted from eval
+description: "Test the eval function."
+details: "This is a test of the eval function in GNU Make. This function will evaluate inline makefile syntax and incorporate the results into its internal database."
+
+[case]
+makefile:
+define Y
+  all:: ; @echo $AA
+  A = B
+endef
+
+X = $(eval $(value Y))
+
+$(eval $(shell echo A = A))
+$(eval $(Y))
+$(eval A = C)
+$(eval $(X))
+answer: "AA
+BA"
+
+[case]
+makefile:
+VARS = A B
+
+VARSET = $(1) = $(2)
+
+$(foreach v,$(VARS),$(eval $(call VARSET,$v,$v)))
+
+all: ; @echo A = $(A) B = $(B)
+answer: "A = A B = B"
+
+[case]
+makefile:
+FOO = foo
+
+all:: ; @echo it
+
+define Y
+  all:: ; @echo worked
+endef
+
+ifdef BAR
+$(eval $(Y))
+endif
+
+answer: "it"
+
+[case]
+makefile:
+FOO = foo
+
+all:: ; @echo it
+
+define Y
+  all:: ; @echo worked
+endef
+
+ifdef BAR
+$(eval $(Y))
+endif
+
+options: BAR=1
+answer: "it
+worked"
+
+[case]
+makefile:
+..9 := 0 1 2 3 4 5 6 7 8 9
+rev=$(eval res:=)$(foreach word,$1,$(eval res:=${word} ${res}))${res}
+a:=$(call rev,${..9})
+all: ; @echo '[$(a)]'
+
+answer: "[         9 8 7 6 5 4 3 2 1 0 ]"
+
+[case]
+makefile:
+EVAR = $(eval FOBAR = 1)
+all: ; @echo "OK"
+
+answer: "OK"
+
+[case]
+makefile:
+
+define FOO
+all: ; @echo hello \
+world
+endef
+$(eval $(FOO))
+answer: "hello world"
+
+[case]
+makefile:
+
+define FOO
+all: ; @echo 'he\llo'
+#TAB#@echo world
+endef
+$(eval $(FOO))
+answer: "he\llo
+world"
+
+[case]
+makefile:
+deps: ; $(eval deps: foo)
+answer: "#MAKEFILE#:1: *** prerequisites cannot be defined in recipes.  Stop."
+exit_code: 512

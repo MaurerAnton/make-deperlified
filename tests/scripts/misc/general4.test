@@ -1,0 +1,108 @@
+# Converted from general4
+description: "This tests random features of make's algorithms, often somewhat obscure, which have either broken at some point in the past or seem likely to break."
+
+[setup]
+touch: foo.c
+
+[case]
+makefile:
+
+# Make sure that subdirectories built as prerequisites are actually handled
+# properly.
+
+all: dir/subdir/file.a
+
+dir/subdir: ; @echo mkdir -p dir/subdir
+
+dir/subdir/file.b: dir/subdir ; @echo touch dir/subdir/file.b
+
+dir/subdir/%.a: dir/subdir/%.b ; @echo cp $< $@
+answer: "mkdir -p dir/subdir
+touch dir/subdir/file.b
+cp dir/subdir/file.b dir/subdir/file.a"
+
+[case]
+makefile:
+foo: foo.o
+options: CC="@echo cc" OUTPUT_OPTION=
+answer: "cc -c foo.c
+cc foo.o -o foo"
+
+[case]
+makefile:
+
+%.foo : baz$$bar ; @echo 'done $<'
+%.foo : bar$$baz ; @echo 'done $<'
+test.foo:
+baz$$bar bar$$baz: ; @echo '$@'
+answer: "baz$bar
+done baz$bar"
+
+[case]
+makefile:
+
+%.foo : %$$bar ; @echo 'done $<'
+test.foo:
+test$$bar: ; @echo '$@'
+answer: "test$bar
+done test$bar"
+
+[case]
+makefile:
+
+
+all: dir/subdir/file.$$a
+
+dir/subdir: ; @echo mkdir -p '$@'
+
+dir/subdir/file.$$b: dir/subdir ; @echo touch '$@'
+
+dir/subdir/%.$$a: dir/subdir/%.$$b ; @echo 'cp $< $@'
+answer: "mkdir -p dir/subdir
+touch dir/subdir/file.$b
+cp dir/subdir/file.$b dir/subdir/file.$a"
+
+[case]
+makefile:
+
+all:
+   
+
+    \
+   \
+     \
+all: ; @echo hi
+answer: "hi"
+
+[case]
+makefile:
+
+PATH := sd
+all: ; foobar >/dev/null
+answer: "foobar >/dev/null"
+
+[case]
+makefile:
+
+PATH := ..
+all: ; foobar
+answer: "foobar
+#MAKE#: foobar: No such file or directory
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+PATH := ..
+all: ; foobar
+answer: "foobar
+#MAKE#: foobar: No such file or directory
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+exit_code: 512
+
+[case]
+makefile:
+
+a: ; @echo hi
+answer: "hi"

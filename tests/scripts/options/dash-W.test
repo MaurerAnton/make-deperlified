@@ -1,0 +1,67 @@
+# Converted from dash-W
+description: "Test make -W (what if) option."
+
+[setup]
+touch: a.x foo.x x-dir/x y
+
+[case]
+makefile:
+
+a.x: b.x
+a.x b.x: ; echo >> $@
+answer: "echo >> b.x
+echo >> a.x"
+
+[case]
+answer: "#MAKE#: 'a.x' is up to date."
+
+[case]
+options: -W b.x
+answer: "echo >> a.x"
+
+[case]
+answer: "#MAKE#: 'a.x' is up to date."
+
+[case]
+options: -W b.x
+answer: "echo >> a.x"
+
+[case]
+makefile:
+
+all: baz.x ; @:
+include foo.x
+foo.x: bar.x
+#TAB#@echo "\$$(info restarts=\$$(MAKE_RESTARTS))" > $@
+#TAB#@echo "touch $@"
+bar.x: ; echo >> $@
+baz.x: bar.x ; @echo "touch $@"
+answer: "echo >> bar.x
+touch foo.x
+restarts=1
+touch baz.x"
+
+[case]
+options: -W bar.x
+answer: "restarts=
+touch foo.x
+restarts=1
+touch baz.x"
+
+[case]
+makefile:
+
+y: x ; @echo cp $< $@
+options: -W x-dir/x VPATH=x-dir
+answer: "cp x-dir/x y"
+
+[case]
+makefile:
+
+y: x ; @echo cp $< $@
+options: -W ./x-dir/x VPATH=x-dir
+answer: "cp x-dir/x y"
+
+[case]
+options: -W x-dir/x VPATH=./x-dir
+answer: "cp ./x-dir/x y"

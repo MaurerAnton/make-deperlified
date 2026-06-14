@@ -1,0 +1,193 @@
+# Converted from double_colon
+description: "Test handling of double-colon rules."
+details: "We test these features: - Multiple commands for the same (double-colon) target - Different prerequisites for targets: only out-of-date ones are rebuilt. - Double-colon targets that aren't the goal target. Then we do the same thing for parallel builds: double-colon targets should always be built serially."
+
+[setup]
+touch: f2.h foo f1.h one two hello.z
+
+[case]
+makefile:
+
+all: baz
+
+foo:: f1.h ; @echo foo FIRST
+foo:: f2.h ; @echo foo SECOND
+
+bar:: ; @echo aaa; sleep 1; echo aaa done
+bar:: ; @echo bbb
+
+baz:: ; @echo aaa
+baz:: ; @echo bbb
+
+biz:: ; @echo aaa
+biz:: two ; @echo bbb
+
+two: ; @echo two
+
+f1.h f2.h: ; @echo $@
+
+d :: ; @echo ok
+d :: d ; @echo oops
+options: all
+answer: "aaa
+bbb"
+
+[case]
+options: -j10 all
+answer: "aaa
+bbb"
+
+[case]
+options: bar
+answer: "aaa
+aaa done
+bbb"
+
+[case]
+options: -j10 bar
+answer: "aaa
+aaa done
+bbb"
+
+[case]
+options: foo
+answer: "f1.h
+foo FIRST"
+
+[case]
+options: -j10 foo
+answer: "f1.h
+foo FIRST"
+
+[case]
+options: foo
+answer: "f2.h
+foo SECOND"
+
+[case]
+options: -j10 foo
+answer: "f2.h
+foo SECOND"
+
+[case]
+options: d
+answer: "ok
+#MAKE#: circular d <- d dependency dropped
+oops"
+
+[case]
+makefile:
+
+.RECIPEPREFIX = >
+.PHONY: all
+all: result
+
+result:: one
+> @echo $^ >>$@
+> @echo $^
+
+result:: two
+> @echo $^ >>$@
+> @echo $^
+
+answer: "one
+two"
+
+[case]
+makefile:
+
+a\ xb :: ; @echo one
+a\ xb :: ; @echo two
+answer: "one
+two"
+
+[case]
+makefile:
+
+.RECIPEPREFIX = >
+result :: 01
+> @echo update
+> @touch $@
+result :: 02
+> @echo update
+> @touch $@
+result :: 03
+> @echo update
+> @touch $@
+result :: 04
+> @echo update
+> @touch $@
+result :: 05
+> @echo update
+> @touch $@
+01 02 03 04 05:
+> @touch 01 02 03 04 05
+options: -j10 result
+answer: "update
+update
+update
+update
+update"
+
+[case]
+makefile:
+
+root: all ; echo root
+all:: ; echo all_one
+all:: 3 ; echo all_two
+%: ; sleep $*
+options: -rs -j2 1 2 root
+answer: "all_one
+all_two
+root"
+
+[case]
+makefile:
+
+all:: ; @echo one
+
+all:: joe ; @echo four
+
+joe: FORCE ; touch joe-is-forced
+
+FORCE:
+options: -j5
+answer: "one
+touch joe-is-forced
+four"
+
+[case]
+makefile:
+
+all: hello.z
+%.z:: test.x ; touch $@
+%.x: ;
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+all: hello.z
+%.z:: %.x; touch $@
+%.x: ; touch $@
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+all: hello.z
+%.z:: %.x; touch $@
+%.x: ;
+unrelated: hello.x
+answer: "#MAKE#: *** No rule to make target 'hello.x', needed by 'hello.z'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+hello.x::; @#HELPER# -q wait bye.x out $@
+bye.x::; @#HELPER# sleep 1 file $@
+options: -j2 hello.x bye.x
+answer: "sleep 1
+file bye.x
+hello.x"

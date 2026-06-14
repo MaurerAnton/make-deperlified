@@ -1,0 +1,61 @@
+# Converted from SHELL
+description: "Test proper handling of SHELL."
+
+[case]
+makefile:
+all:;@echo "$(SHELL)"
+answer: "$mshell"
+
+[case]
+makefile:
+"SHELL := $altshell\n".'
+all:;@echo "$(SHELL) $$SHELL"
+'
+answer: "$altshell $mshell"
+
+[case]
+makefile:
+"export SHELL := $altshell\n".'
+all:;@echo "$(SHELL) $$SHELL"
+'
+answer: "$altshell $altshell"
+
+[case]
+makefile:
+"all: SHELL := $altshell\n".'
+all:;@echo "$(SHELL) $$SHELL"
+'
+answer: "$altshell $mshell"
+
+[case]
+makefile:
+"
+SHELL := $altshell2
+one: two
+two: export SHELL := $altshell\n".'
+one two:;@echo "$@: $(SHELL) $$SHELL"
+'
+answer: "two: $altshell $altshell
+one: $altshell2 $mshell"
+
+[case]
+makefile:
+q
+.SHELLFLAGS = $flags
+all: ; \@$script
+answer: "$out"
+
+[case]
+makefile:
+q
+.SHELLFLAGS = $flags
+all: ; \@$script
+answer: "$out"
+
+[case]
+makefile:
+q
+.SHELLFLAGS = $flags
+all: ; \@$script
+answer: "${out}#MAKE#: *** [#MAKEFILE#:3: all] Error 1"
+exit_code: 512

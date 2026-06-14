@@ -1,0 +1,8 @@
+# Converted from dash-d
+description: "Test make -d option."
+
+[case]
+makefile:
+all: ; :
+options: -d --trace
+answer: "/GNU Make/"

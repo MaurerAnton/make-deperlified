@@ -1,0 +1,7 @@
+# Converted from utf8
+description: "Test support for UTF-8."
+
+[case]
+makefile:
+﻿all: ; @echo $@
+answer: "all"

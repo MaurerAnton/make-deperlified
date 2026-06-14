@@ -1,0 +1,62 @@
+# Converted from INCLUDE_DIRS
+description: "Test the .INCLUDE_DIRS special variable."
+
+[case]
+makefile:
+
+ifeq ($(.INCLUDE_DIRS),)
+$(warning .INCLUDE_DIRS is empty)
+endif
+
+.PHONY: all
+all:;@:
+
+[case]
+makefile:
+
+ifeq ($(dir),)
+$(warning dir is empty)
+endif
+
+ifeq ($(filter $(dir),$(.INCLUDE_DIRS)),)
+$(warning .INCLUDE_DIRS does not contain $(dir): $(.INCLUDE_DIRS))
+endif
+
+.PHONY: all
+all:;@:
+options: -I../tests dir=../tests
+
+[case]
+makefile:
+
+ifneq ($(.INCLUDE_DIRS),)
+$(warning Mismatched $(.INCLUDE_DIRS) != )
+endif
+all:;@:
+
+[case]
+makefile:
+
+ifneq ($(.INCLUDE_DIRS),)
+$(warning Mismatched $(.INCLUDE_DIRS) != )
+endif
+all:;@:
+options: -I-
+
+[case]
+makefile:
+
+ifneq ($(.INCLUDE_DIRS),somedir)
+$(warning Mismatched '$(.INCLUDE_DIRS)' != 'somedir')
+endif
+all:;@:
+options: -I somedir
+
+[case]
+makefile:
+
+ifneq ($(.INCLUDE_DIRS),somedir)
+$(warning Mismatched $(.INCLUDE_DIRS) != somedir)
+endif
+all:;@:
+options: -I - -I somedir

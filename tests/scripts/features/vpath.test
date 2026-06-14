@@ -1,0 +1,77 @@
+# Converted from vpath
+description: "Test vpath for particular classes of filenames."
+
+[setup]
+touch: work/main.c work/defs.h work/kbd.c work/command.h work/commands.c work/display.c work/buffer.h work/insert.c work/command.c a1/lib1.a a1/libc.a b1/lib1.so a2/lib2.a b2/lib2.so lib3.a b3/lib3.so
+
+[case]
+makefile:
+
+vpath %.c foo
+vpath %.c work
+vpath %.h work
+objects = main.o kbd.o commands.o display.o insert.o
+edit: $(objects) ; @echo cc -o $@ $^
+main.o : main.c defs.h ; @echo cc -c $(firstword $^)
+kbd.o : kbd.c defs.h command.h ; @echo cc -c kbd.c
+commands.o : command.c defs.h command.h ; @echo cc -c commands.c
+display.o : display.c defs.h buffer.h ; @echo cc -c display.c
+insert.o : insert.c defs.h buffer.h ; @echo cc -c insert.c
+answer: "cc -c work/main.c
+cc -c kbd.c
+cc -c commands.c
+cc -c display.c
+cc -c insert.c
+cc -o edit main.o kbd.o commands.o display.o insert.o"
+
+[case]
+makefile:
+
+vpath %.te vpath-d/
+.SECONDARY:
+default: vpath-d/a vpath-d/b
+vpath-d/a: fail.te
+vpath-d/b : fail.te
+vpath-d/fail.te:
+answer: "#MAKE#: Nothing to be done for 'default'."
+
+[case]
+makefile:
+
+VPATH = work:#PWD#
+vpath %.c foo
+vpath %.c work
+vpath %.c #PWD#
+vpath %.h work
+vpath %.c
+vpath
+all: ; @echo ALL IS WELL
+answer: "ALL IS WELL"
+
+[case]
+makefile:
+
+vpath %.h b3
+vpath %.a a1
+vpath %.so b1
+vpath % a2 b2
+vpath % b3
+all: -l1 -lc -l2 -l3; @echo $^
+answer: "a1/lib1.a a1/libc.a a2/lib2.a lib3.a"
+
+[case]
+makefile:
+
+VPATH = vpa
+%.x: ; @echo pattern $@
+vpa/foo.x: ; @echo vpath $@
+options: foo.x
+answer: "vpath vpa/foo.x"
+
+[case]
+makefile:
+
+#TAB#vpath %.h b3
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: vpath directive lines cannot start with TAB
+hi"

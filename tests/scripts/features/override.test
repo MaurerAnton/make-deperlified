@@ -1,0 +1,62 @@
+# Converted from override
+description: "Test the override directive on variable assignments."
+
+[case]
+makefile:
+
+X = start
+override recur = $(X)
+override simple := $(X)
+X = end
+all: ; @echo "$(recur) $(simple)"
+options: recur=I simple=J
+answer: "end start"
+
+[case]
+makefile:
+
+X += X1
+override X += X2
+override Y += Y1
+Y += Y2
+all: ; @echo "$(X) $(Y)"
+answer: "X1 X2 Y1"
+
+[case]
+options: X=C Y=C
+answer: "C X2 C Y1"
+
+[case]
+makefile:
+
+override define foo
+@echo First comes the definition.
+@echo Then comes the override.
+endef
+all: ; $(foo)
+options: foo=Hello
+answer: "First comes the definition.
+Then comes the override."
+
+[case]
+makefile:
+
+#TAB#override FOO = bar
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi"
+
+[case]
+makefile:
+
+#TAB#override#TAB#export FOO = bar
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi"
+
+[case]
+makefile:
+
+    override#TAB#export FOO = bar
+all:;@echo hi
+answer: "hi"

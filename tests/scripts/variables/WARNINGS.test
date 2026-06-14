@@ -1,0 +1,219 @@
+# Converted from WARNINGS
+description: "Test the .WARNINGS variable."
+
+[case]
+makefile:
+
+.WARNINGS = error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF=
+MAKEFLAGS="
+
+[case]
+makefile:
+
+.WARNINGS = error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF=
+MAKEFLAGS="
+
+[case]
+makefile:
+
+.WARNINGS = error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF=
+MAKEFLAGS="
+
+[case]
+makefile:
+
+.WARNINGS = error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF=
+MAKEFLAGS="
+
+[case]
+makefile:
+
+.WARNINGS = error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer: "MF=
+MAKEFLAGS="
+
+[case]
+makefile:
+
+.WARNINGS = undefined-var
+vars := $(.VARIABLES) $(MAKECMDGOALS) $(MAKE_RESTARTS) $(CURDIR)
+vars += $(GNUMAKEFLAGS) $(MAKEFLAGS) $(MFLAGS) $(MAKE_COMMAND) $(MAKE)
+vars += $(MAKEFILE_LIST) $(MAKEOVERRIDES) $(-*-command-variables-*-)
+vars += $(.RECIPEPREFIX) $(.LOADED) $(.FEATURES)
+vars += $(SHELL) $(.SHELLFLAGS) $(MAKE_TERMOUT) $(MAKE_TERMERR)
+vars += $(.DEFAULT) $(.DEFAULT_GOAL) $(-*-eval-flags-*-) $(SUFFIXES)
+vars += $(VPATH) $(GPATH)
+all:;
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+.WARNINGS = undefined-var
+all:;
+X := $(averyveryveryloooooooooooooooooooooooooooongvariablename)
+answer: "#MAKEFILE#:4: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+.WARNINGS := $(warnval)
+EMPTY =
+EREF = $(EMPTY)
+UREF = $(UNDEFINED)
+
+SEREF := $(EREF)
+SUREF := $(UREF)
+
+all: ; @echo ref $(EREF) $(UREF)
+answer: "ref"
+
+[case]
+options: warnval=undefined-var:ignore
+answer: "ref"
+
+[case]
+options: warnval=undefined-var
+answer: "#MAKEFILE#:8: warning: reference to undefined variable 'UNDEFINED'
+#MAKEFILE#:10: warning: reference to undefined variable 'UNDEFINED'
+ref"
+
+[case]
+options: warnval=undefined-var:error
+answer: "#MAKEFILE#:8: *** reference to undefined variable 'UNDEFINED'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.WARNINGS = $(warnval)
+IREF = $(bad variable)
+SIREF := $(IREF)
+
+define nl
+
+
+endef
+
+all: ; @echo ref $(also$(nl)bad) $(IREF) $(SIREF)
+answer: "#MAKEFILE#:3: warning: invalid variable reference 'bad variable'
+#MAKEFILE#:11: warning: invalid variable reference 'also
+bad'
+#MAKEFILE#:3: warning: invalid variable reference 'bad variable'
+ref"
+
+[case]
+options: warnval=ignore
+answer: "ref"
+
+[case]
+options: warnval=invalid-ref:ignore
+answer: "ref"
+
+[case]
+options: warnval=invalid-ref:error
+answer: "#MAKEFILE#:3: *** invalid variable reference 'bad variable'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.WARNINGS = $(warnval)
+EMPTY =
+SPACE = $(EMPTY) $(EMPTY)
+BAD$(SPACE)VAR = foo
+
+define nl
+
+
+endef
+
+NL$(nl)VAR = bar
+
+define BAD$(SPACE)DEF :=
+foo
+endef
+
+define NL$(nl)DEF :=
+foo
+endef
+
+all: ; @echo ref
+answer: "#MAKEFILE#:5: warning: invalid variable name 'BAD VAR'
+#MAKEFILE#:12: warning: invalid variable name 'NL
+VAR'
+#MAKEFILE#:14: warning: invalid variable name 'BAD DEF'
+#MAKEFILE#:18: warning: invalid variable name 'NL
+DEF'
+ref"
+
+[case]
+options: warnval=ignore
+answer: "ref"
+
+[case]
+options: warnval=invalid-var:ignore
+answer: "ref"
+
+[case]
+options: warnval=invalid-var:error
+answer: "#MAKEFILE#:5: *** invalid variable name 'BAD VAR'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.WARNINGS = no-such-warn
+all:;
+answer: "#MAKEFILE#:2: unknown warning 'no-such-warn': ignored
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+.WARNINGS = invalid-var:no-such-action
+all:;
+answer: "#MAKEFILE#:2: unknown warning action 'no-such-action': ignored
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+hello: hello; @:
+answer: "#MAKE#: circular hello <- hello dependency dropped"
+
+[case]
+makefile:
+
+.WARNINGS = circular-dep:error
+hello: hello; @:
+answer: "#MAKE#: *** circular hello <- hello dependency detected.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.WARNINGS = circular-dep:warn
+hello: hello; @:
+answer: "#MAKE#: circular hello <- hello dependency dropped"
+
+[case]
+makefile:
+
+.WARNINGS = circular-dep:ignore
+hello: hello; @:

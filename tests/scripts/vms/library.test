@@ -1,0 +1,23 @@
+# Converted from library
+description: "Test GNU Make's VMS Library management features."
+details: "\ This only works on VMS systems."
+
+[case]
+makefile:
+$mk_string
+answer: "$answer"
+
+[case]
+makefile:
+$mk_string
+answer: "$answer"
+
+[case]
+makefile:
+$mk_string
+answer: "$answer"
+
+[case]
+makefile:
+$mk_string
+answer: "$answer"

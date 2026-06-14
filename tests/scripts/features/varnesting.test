@@ -1,0 +1,20 @@
+# Converted from varnesting
+description: "Test recursive variables"
+
+[case]
+makefile:
+
+x = variable1
+variable2 := Hello
+y = $(subst 1,2,$(x))
+z = y
+a := $($($(z)))
+all: ; @echo $(a)
+answer: "Hello"
+
+[case]
+makefile:
+
+VARIABLE = $(eval VARIABLE := echo hi)$(VARIABLE)
+wololo: ; @$(VARIABLE)
+answer: "hi"

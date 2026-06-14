@@ -1,0 +1,179 @@
+# Converted from SECONDARY
+description: "Test the behaviour of the .SECONDARY target."
+details: "Test the behavior of the .SECONDARY special target. Create a makefile where a file would not normally be considered intermediate, then specify it as .SECONDARY. Build and note that it's not automatically deleted. Delete the file. Rebuild to ensure that it's not created if it doesn't exist but doesn't need to be built. Change the original and ensure that the secondary file and the ultimate target are both rebuilt, and that the secondary file is not deleted. Try this with implicit rules and explicit rules: both should work."
+
+[setup]
+touch: foo.f foo.d foo.c source final version2 1.a 2.a test.0 test.3
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.d
+answer: "cp foo.f foo.e
+cp foo.e foo.d"
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.d
+answer: "#MAKE#: 'foo.d' is up to date."
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.d
+answer: "cp foo.f foo.e
+cp foo.e foo.d"
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.c
+answer: "cp foo.e foo.c"
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.c
+answer: "#MAKE#: 'foo.c' is up to date."
+
+[case]
+makefile:
+
+.SECONDARY: foo.e
+
+# Implicit rule test
+%.d : %.e ; cp $< $@
+%.e : %.f ; cp $< $@
+
+foo.d: foo.e
+
+# Explicit rule test
+foo.c: foo.e ; cp $< $@
+options: foo.c
+answer: "cp foo.f foo.e
+cp foo.e foo.c"
+
+[case]
+makefile:
+.SECONDARY:
+
+final: intermediate
+intermediate: source
+
+final intermediate source: ; echo $< > $@
+answer: "#MAKE#: 'final' is up to date."
+
+[case]
+makefile:
+
+.PHONY: version
+.SECONDARY:
+version2: version ; @echo GOOD
+all: version2
+options: all
+answer: "GOOD"
+
+[case]
+makefile:
+
+%.c : %.b ; cp $< $@
+%.b : %.a ; cp $< $@
+all : 1.c 2.c
+2.a: 1.c
+options: -rR -j
+answer: "cp 1.a 1.b
+cp 1.b 1.c
+cp 2.a 2.b
+cp 2.b 2.c
+rm 2.b 1.b"
+
+[case]
+makefile:
+
+.SECONDARY : test.1 test.2 test.3
+
+test : test.4
+
+%.4 : %.int %.3 ; touch $@
+
+%.int : %.3 %.2 ; touch $@
+
+%.3 : | %.2 ; touch $@
+
+%.2 : %.1 ; touch $@
+
+%.1 : %.0 ; touch $@
+options: -rR -j 2
+answer: "touch test.1
+touch test.2
+touch test.3
+touch test.int
+touch test.4
+rm test.int"
+
+[case]
+options: -rR -j 2
+answer: "touch test.1
+touch test.2
+touch test.int
+touch test.4
+rm test.int"
+
+[case]
+options: -rR -j 2
+answer: "touch test.1
+touch test.2
+touch test.int
+touch test.4
+rm test.int"

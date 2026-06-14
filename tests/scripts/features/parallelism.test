@@ -1,0 +1,238 @@
+# Converted from parallelism
+description: "Test parallelism (-j) option."
+
+[setup]
+touch: target file2 file4 file1
+
+[case]
+makefile:
+
+all : def_1 def_2 def_3
+def_1 : ; @#HELPER# file ONE wait THREE out TWO
+def_2 : ; @#HELPER# wait FOUR file THREE
+def_3 : ; @#HELPER# wait ONE file FOUR
+options: -j4
+answer: "file ONE
+wait ONE
+file FOUR
+wait FOUR
+file THREE
+wait THREE
+TWO"
+
+[case]
+makefile:
+
+MAKEFLAGS += -j4
+all : def_1 def_2 def_3
+def_1 : ; @#HELPER# file ONE wait THREE out TWO
+def_2 : ; @#HELPER# wait FOUR file THREE
+def_3 : ; @#HELPER# wait ONE file FOUR
+answer: "file ONE
+wait ONE
+file FOUR
+wait FOUR
+file THREE
+wait THREE
+TWO"
+
+[case]
+makefile:
+
+MAKEFLAGS += -j2
+all : def_1 def_2 def_3
+def_1 : ; @#HELPER# file ONE wait THREE out TWO
+def_2 : ; @#HELPER# wait FOUR file THREE
+def_3 : ; @#HELPER# wait ONE file FOUR
+options: -j4
+answer: "file ONE
+wait ONE
+file FOUR
+wait FOUR
+file THREE
+wait THREE
+TWO"
+
+[case]
+makefile:
+
+all: 1 2; @#HELPER# out success
+-include 1.inc 2.inc
+.RECIPEPREFIX := >
+1.inc:
+> @#HELPER# file ONE.inc wait THREE.inc file TWO.inc
+> @echo '1: ; @#HELPER# file ONE wait THREE file TWO' > $@
+2.inc:
+> @#HELPER# wait ONE.inc file THREE.inc
+> @echo '2: ; @#HELPER# wait ONE file THREE' > $@
+options: -j4
+answer: "file ONE.inc
+wait ONE.inc
+file THREE.inc
+wait THREE.inc
+file TWO.inc
+file ONE
+wait ONE
+file THREE
+wait THREE
+file TWO
+success"
+
+[case]
+makefile:
+
+recurse: ; @$(MAKE) --no-print-directory -f #MAKEFILE# INC=yes all
+all: 1 2; @#HELPER# out success
+
+INC = no
+ifeq ($(INC),yes)
+-include 1.inc 2.inc
+endif
+
+1.inc: ; @#HELPER# file ONE.inc wait THREE.inc file TWO.inc; echo '1: ; @#HELPER# file ONE wait THREE file TWO' > $@
+2.inc: ; @#HELPER# wait ONE.inc file THREE.inc; echo '2: ; @#HELPER# wait ONE file THREE' > $@
+options: -j4
+answer: "file ONE.inc
+wait ONE.inc
+file THREE.inc
+wait THREE.inc
+file TWO.inc
+file ONE
+wait ONE
+file THREE
+wait THREE
+file TWO
+success"
+
+[case]
+makefile:
+
+export HI = $(shell $($@.CMD))
+first.CMD = #HELPER# out hi
+second.CMD = #HELPER# sleep 4
+
+.PHONY: all first second
+all: first second
+
+first second: ; @#HELPER# out $@ sleep 1 out $@
+options: -j2
+answer: "first
+sleep 1
+first
+second
+sleep 1
+second"
+
+[case]
+makefile:
+
+.PHONY: all fail.1 fail.2 fail.3 ok
+all: fail.1 ok fail.2 fail.3
+
+fail.1: ; @#HELPER# -q sleep 1 out $@ file fail.1 fail 1
+fail.2: ; @#HELPER# -q sleep 2 out $@ wait fail.1 file fail.2 fail 1
+fail.3: ; @#HELPER# -q sleep 3 out $@ wait fail.2 file fail.3 fail 1
+
+ok: ; @#HELPER# -q sleep 4 wait fail.3 out OK
+options: -rR -j5
+answer: "fail.1
+#MAKE#: *** [#MAKEFILE#:5: fail.1] Error 1
+#MAKE#: *** Waiting for unfinished jobs....
+fail.2
+#MAKE#: *** [#MAKEFILE#:6: fail.2] Error 1
+fail.3
+#MAKE#: *** [#MAKEFILE#:7: fail.3] Error 1
+OK"
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: all
+all:; @:
+
+-include foo.d
+
+foo.d: comp ; @#HELPER# out $@
+
+comp: mod_a.o mod_b.o; @:
+
+mod_a.o mod_b.o: ; @#HELPER# fail 1
+options: -j2
+answer: "fail 1
+fail 1"
+
+[case]
+makefile:
+target: intermed ; #HELPER# file $@
+
+.INTERMEDIATE: intermed
+intermed: | phony ; #HELPER# file $@
+
+.PHONY: phony
+phony: ; : phony
+options: -rR -j
+answer: ": phony"
+
+[case]
+makefile:
+
+things = thing1 thing2
+all: $(things)
+thing1:; @#HELPER# wait thing2start file $@start wait thing2end out $@end
+thing2:; @#HELPER# file $@start wait thing1start file $@end
+-include inc.mk
+inc.mk: ; @touch $@
+answer: "file thing2start
+wait thing2start
+file thing1start
+wait thing1start
+file thing2end
+wait thing2end
+thing1end"
+
+[case]
+makefile:
+
+.INTERMEDIATE: file3
+file4: file3 ; @mv -f $< $@
+file3: file2 ; touch $@
+file2: file1 ; @touch $@
+options: --no-print-directory -j2
+answer: "touch file3"
+
+[case]
+makefile:
+
+all: one two
+one: ;@ #HELPER# wait TWO file ONE
+two: ;@ #HELPER# file TWO
+include fff1.mk
+fff1.mk: ; touch $@
+options: -j2
+answer: "touch fff1.mk
+file TWO
+wait TWO
+file ONE"
+
+[case]
+makefile:
+
+all: ; @$(MAKE) -f #MAKEFILE# recurse
+
+recurse: one two ; @#HELPER# out $@
+one: ;@ #HELPER# wait TWO file ONE
+two: ;@ #HELPER# file TWO
+
+mkinclude: ; touch fff1.mk
+
+ifeq ($(MAKECMDGOALS),recurse)
+include fff1.mk
+fff1.mk: ; @$(MAKE) -f #MAKEFILE# mkinclude
+endif
+options: --no-print-directory -j2
+answer: "touch fff1.mk
+file TWO
+wait TWO
+file ONE
+recurse"

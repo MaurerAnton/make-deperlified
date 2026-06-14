@@ -1,0 +1,11 @@
+# Converted from utf8
+description: "Test utf8 handling."
+
+[case]
+makefile:
+
+▪ := hello
+$(info $(▪))
+all:
+answer: "hello
+#MAKE#: Nothing to be done for 'all'."

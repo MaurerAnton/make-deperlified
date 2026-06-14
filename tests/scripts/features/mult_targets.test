@@ -1,0 +1,20 @@
+# Converted from mult_targets
+description: "The following test creates a makefile to test that a rule with multiple targets is equivalent to writing many rules, each with one target, and all identical aside from that."
+details: "A makefile is created with one rule and two targets. Make is called twice, once for each target, and the output which contains the target name with $@ is looked at for the changes. This test also tests the substitute function by replacing the word output with nothing in the target name giving either an output of \"I am little\" or \"I am big\""
+
+[setup]
+touch: test.h
+
+[case]
+makefile:
+bigoutput littleoutput: test.h
+	@echo I am $(subst output,,$@)
+options: bigoutput
+answer: "I am big"
+
+[case]
+makefile:
+bigoutput littleoutput: test.h
+	@echo I am $(subst output,,$@)
+options: littleoutput
+answer: "I am little"

@@ -1,0 +1,186 @@
+# Converted from grouped_targets
+description: "This test is about grouped multiple targets indicated by &:"
+details: "Here we test for requirements like - if multiple such targets are updated, the recipe is run once - parsing issues related to the &: syntax itself"
+
+[setup]
+touch: hello.z hello.q gta gtb pre
+
+[case]
+makefile:
+
+.PHONY: all
+&:;
+all: ;@printf ''
+
+[case]
+makefile:
+
+foo&:;@echo foo
+options: foo
+answer: "foo"
+
+[case]
+makefile:
+
+.PHONY: t1 t2 t3 t4 g1 g2 g3 g4
+t1 t2 t3 t4: ; @echo $@
+g1 g2 g3 g4 &: ; @echo $@
+options: t1 t2 t3 t4 g1 g2 g3 g4
+answer: "t1
+t2
+t3
+t4
+g1
+#MAKE#: Nothing to be done for 'g2'.
+#MAKE#: Nothing to be done for 'g3'.
+#MAKE#: Nothing to be done for 'g4'."
+
+[case]
+makefile:
+
+.PHONY: m1 t1 t2 t3 t4 g1 g2 g3 g4
+m1: t1 t2 t3 t4 g4 g3 g2 g1
+t1 t2 t3 t4: ; @echo $@
+g1 g2 g3 g4&: ; @echo $@
+answer: "t1
+t2
+t3
+t4
+g4"
+
+[case]
+makefile:
+
+.PHONY: M a b
+M: a b
+a:
+a b&: ; @echo Y
+b:
+answer: "Y"
+
+[case]
+makefile:
+
+.PHONY: M a b
+M: a b
+a b&:
+answer: "#MAKEFILE#:4: *** grouped targets must provide a recipe.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: M
+M: a.q b.q
+a.% b.%&: ; @echo Y
+answer: "Y"
+
+[case]
+makefile:
+
+.PHONY: M a b c d e f g h
+M: a b
+a b c&:: ; @echo X
+c d e&:: ; @echo Y
+f g h&:: ; @echo Z
+answer: "X"
+
+[case]
+makefile:
+
+.PHONY: M a b c d e f g h
+M: c
+a b c&:: ; @echo X
+c d e&:: ; @echo Y
+f g h&:: ; @echo Z
+answer: "X
+Y"
+
+[case]
+makefile:
+
+.PHONY: M a b c d e f g h
+M: a b c d e
+a b c&:: ; @echo X
+c d e&:: ; @echo Y
+f g h&:: ; @echo Z
+answer: "X
+Y"
+
+[case]
+makefile:
+
+.PHONY: M a b c d e f g h
+M: d e
+a b c&:: ; @echo X
+c d e&:: ; @echo Y
+f g h&:: ; @echo Z
+answer: "Y"
+
+[case]
+makefile:
+
+.PHONY: M a b c d e f g h
+M: f g h
+a b c&:: ; @echo X
+c d e&:: ; @echo Y
+f g h&:: ; @echo Z
+answer: "Z"
+
+[case]
+makefile:
+
+all: hello.z
+%.z %.q: %.x ; touch $*.z $*.q
+%.x: ;
+answer: "#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+all: hello.z
+%.z %.q: %.x test.x ; @echo $*.z $*.q
+%.x: ;
+answer: "hello.z hello.q"
+
+[case]
+makefile:
+
+all: hello.z
+%.z %.q: %.x; @echo $*.z $*.q
+%.x: ;
+unrelated: hello.x
+answer: "hello.z hello.q"
+
+[case]
+makefile:
+
+gta gtb &: ; touch gta gtb
+options: gta
+answer: "touch gta gtb"
+
+[case]
+makefile:
+
+x1 x2: ; touch $@
+
+x1: gta
+x2: gtb
+
+gta gtb &: ; touch gta gtb
+options: x1 x2
+answer: "touch gta gtb
+touch x1
+touch x2"
+
+[case]
+options: x1 x2
+answer: "#MAKE#: 'x1' is up to date.
+#MAKE#: 'x2' is up to date."
+
+[case]
+makefile:
+
+gta gtb &: pre ; touch gta gtb
+options: gta
+answer: "touch gta gtb"

@@ -1,0 +1,49 @@
+# Converted from dash-I
+description: "The following test creates a makefile to test the -I option."
+details: "This test tests the -I option by including a filename in another directory and giving make that directory name under -I in the command line. Without this option, the make would fail to find the included file. It also checks to make sure that the -I option gets passed to recursive makes."
+
+[case]
+makefile:
+
+main_makefile := $(firstword $(MAKEFILE_LIST))
+all:
+	@echo There should be no errors for this makefile
+include ifile.mk
+answer: "#MAKEFILE#:5: ifile.mk: No such file or directory
+#MAKE#: *** No rule to make target 'ifile.mk'.  Stop."
+exit_code: 512
+
+[case]
+options: -I idir all
+answer: "There should be no errors for this makefile"
+
+[case]
+options: -I idir ANOTHER
+answer: "This is another included makefile"
+
+[case]
+options: -I idir recurse
+answer: "#MAKE#[1]: Entering directory '#PWD#'
+This is another included makefile
+#MAKE#[1]: Leaving directory '#PWD#'"
+
+[case]
+options: -I idir -I- all
+answer: "#MAKEFILE#:5: ifile.mk: No such file or directory
+#MAKE#: *** No rule to make target 'ifile.mk'.  Stop."
+exit_code: 512
+
+[case]
+options: -I idir2 -I idir ANOTHER
+answer: "ifile.mk:1: *** missing separator.  Stop."
+exit_code: 512
+
+[case]
+options: -I idir2 -I - -I idir ANOTHER
+answer: "This is another included makefile"
+
+[case]
+options: -I idir2 -I - -I idir recurse
+answer: "#MAKE#[1]: Entering directory '#PWD#'
+This is another included makefile
+#MAKE#[1]: Leaving directory '#PWD#'"

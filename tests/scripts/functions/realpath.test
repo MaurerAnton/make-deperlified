@@ -1,0 +1,72 @@
+# Converted from realpath
+description: "Test the realpath functions."
+
+[case]
+makefile:
+
+ifneq ($(realpath .),$(CURDIR))
+  $(warning $(realpath .) != $(CURDIR))
+endif
+
+ifneq ($(realpath ./),$(CURDIR))
+  $(warning $(realpath ./) != $(CURDIR))
+endif
+
+ifneq ($(realpath .///),$(CURDIR))
+  $(warning $(realpath .///) != $(CURDIR))
+endif
+
+.PHONY: all
+all: ; @:
+
+[case]
+makefile:
+
+ifneq ($(realpath /.),)
+  $(warning $(realpath /.) != )
+endif
+
+ifneq ($(realpath /./),)
+  $(warning $(realpath /./) != )
+endif
+
+ifneq ($(realpath /.///),)
+  $(warning $(realpath /.///) != )
+endif
+
+ifneq ($(realpath /..),)
+  $(warning $(realpath /..) != )
+endif
+
+ifneq ($(realpath /../),)
+  $(warning $(realpath /../) != )
+endif
+
+ifneq ($(realpath /..///),)
+  $(warning $(realpath /..///) != )
+endif
+
+ifneq ($(realpath . /..),$(CURDIR) )
+  $(warning $(realpath . /..) != $(CURDIR) )
+endif
+
+.PHONY: all
+all: ; @:
+
+[case]
+makefile:
+
+ifneq ($(realpath ///),)
+  $(warning $(realpath ///) != )
+endif
+
+ifneq ($(realpath ///.),)
+  $(warning $(realpath ///.) != )
+endif
+
+ifneq ($(realpath ///..),)
+  $(warning $(realpath ///..) != )
+endif
+
+.PHONY: all
+all: ; @:

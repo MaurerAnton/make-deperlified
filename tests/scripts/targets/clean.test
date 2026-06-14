@@ -1,0 +1,20 @@
+# Converted from clean
+description: "The following test creates a makefile to delete a file in the directory. It tests to see if make will NOT execute the command unless the rule is given in the make command line."
+
+[setup]
+touch: EXAMPLE_FILE
+
+[case]
+makefile:
+
+all: ; @echo This makefile did not clean the dir... good
+clean: ; rm -f EXAMPLE_FILE
+answer: "This makefile did not clean the dir... good"
+
+[case]
+makefile:
+
+all: ; @echo This makefile did not clean the dir... good
+clean: ; rm -f EXAMPLE_FILE
+options: clean
+answer: "rm -f EXAMPLE_FILE"

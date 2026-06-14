@@ -1,0 +1,8 @@
+# Converted from fopen-fail
+description: "Make sure make exits with an error if fopen fails."
+
+[case]
+makefile:
+
+include $(lastword $(MAKEFILE_LIST))
+exit_code: 512

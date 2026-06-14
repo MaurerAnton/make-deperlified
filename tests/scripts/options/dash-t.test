@@ -1,0 +1,29 @@
+# Converted from dash-t
+description: "Test the -t option."
+details: "Look out for regressions of prior bugs related to -t."
+
+[setup]
+touch: orig1-a orig2-b interm-a interm-b final-a final-b orig2-a orig1-b
+
+[case]
+makefile:
+final-a: interm-a ; echo >> $@
+final-b: interm-b ; echo >> $@
+interm-a:: orig1-a ; echo >> $@
+interm-a:: orig2-a ; echo >> $@
+interm-b:: orig1-b ; echo >> $@
+interm-b:: orig2-b ; echo >> $@
+options: -t final-a final-b
+answer: "touch interm-a
+touch final-a
+touch interm-b
+touch final-b"
+
+[case]
+makefile:
+
+PHOOEY: xxx
+xxx: ; @:
+
+options: -t
+answer: "touch xxx"

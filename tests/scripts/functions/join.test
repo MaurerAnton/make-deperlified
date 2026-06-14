@@ -1,0 +1,9 @@
+# Converted from join
+description: "The following test creates a makefile to test the join function."
+
+[case]
+makefile:
+string := $(join a b c,foo      hacks .pl1) 
+all: 
+	@echo $(string) 
+answer: "afoo bhacks c.pl1"

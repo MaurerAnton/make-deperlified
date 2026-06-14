@@ -1,0 +1,129 @@
+# Converted from POSIX
+description: "Test the behaviour of the .POSIX target."
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @#HELPER# -q fail 1; #HELPER# out hello
+answer: "#MAKE#: *** [#MAKEFILE#:3: all] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @-#HELPER# -q fail 1; #HELPER# out hello
+.SHELLFLAGS = -c
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @-#HELPER# -q fail 1; #HELPER# out hello
+all: .SHELLFLAGS = -c
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @-#HELPER# -q fail 1; #HELPER# out hello
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @#HELPER# -q fail 1; #HELPER# out hello
+options: -i
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+.IGNORE:
+all: ; @#HELPER# -q fail 1; #HELPER# out hello
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+.IGNORE: all
+all: ; @#HELPER# -q fail 1; #HELPER# out hello
+answer: "hello"
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @-#HELPER# -q fail 1; #HELPER# out hello
+.SHELLFLAGS = -ec
+answer: "#MAKE#: [#MAKEFILE#:3: all] Error 1 (ignored)"
+
+[case]
+makefile:
+
+.POSIX:
+all: ; @-#HELPER# -q fail 1; #HELPER# out hello
+all: .SHELLFLAGS = -ec
+answer: "#MAKE#: [#MAKEFILE#:3: all] Error 1 (ignored)"
+
+[case]
+makefile:
+
+.SHELLFLAGS = -xc
+.POSIX:
+all: ; @#HELPER# -q fail 1; true
+answer: "sh: строка 1: : command not found"
+
+[case]
+makefile:
+
+.POSIX:
+all:
+	@echo 'AR=$(AR)'
+	@echo 'ARFLAGS=$(ARFLAGS)'
+	@echo 'CC=$(CC)'
+	@echo 'CFLAGS=$(CFLAGS)'
+	@echo 'FC=$(FC)'
+	@echo 'FFLAGS=$(FFLAGS)'
+	@echo 'LDFLAGS=$(LDFLAGS)'
+	@echo 'LEX=$(LEX)'
+	@echo 'LFLAGS=$(LFLAGS)'
+	@echo 'SCCSFLAGS=$(SCCSFLAGS)'
+	@echo 'SCCSGETFLAGS=$(SCCSGETFLAGS)'
+	@echo 'YACC=$(YACC)'
+	@echo 'YFLAGS=$(YFLAGS)'
+
+answer: "AR=ar
+ARFLAGS=-rv
+CC=c99
+CFLAGS=-O1
+FC=fort77
+FFLAGS=-O1
+LDFLAGS=
+LEX=lex
+LFLAGS=
+SCCSFLAGS=
+SCCSGETFLAGS=-s
+YACC=yacc
+YFLAGS="
+
+[case]
+answer: "AR=xx-AR
+ARFLAGS=xx-ARFLAGS
+CC=xx-CC
+CFLAGS=xx-CFLAGS
+FC=xx-FC
+FFLAGS=xx-FFLAGS
+LDFLAGS=xx-LDFLAGS
+LEX=xx-LEX
+LFLAGS=xx-LFLAGS
+SCCSFLAGS=xx-SCCSFLAGS
+SCCSGETFLAGS=xx-SCCSGETFLAGS
+YACC=xx-YACC
+YFLAGS=xx-YFLAGS"

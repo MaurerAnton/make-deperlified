@@ -1,0 +1,214 @@
+# Converted from EXTRA_PREREQS
+description: "Test the .EXTRA_PREREQS special variable."
+
+[setup]
+touch: hi tick tack
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = tick tack
+.PHONY: all
+all: ; @echo ${.EXTRA_PREREQS}/$@/$</$^/$?/$+/$|/$*/
+tick tack: ; @echo $@
+answer: "tick
+tack
+tick tack/all///////"
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = tick tack
+a%: ; @echo ${.EXTRA_PREREQS}/$@/$</$^/$?/$+/$|/$*/
+tick tack: ; @echo $@
+options: all
+answer: "tick
+tack
+tick tack/all//////ll/"
+
+[case]
+makefile:
+
+.PHONY: all
+all: ; @echo ${.EXTRA_PREREQS}/$@/$</$^/$?/$+/$|/$*/
+all: .EXTRA_PREREQS = tick tack
+tick tack: ; @echo $@
+answer: "tick
+tack
+tick tack/all///////"
+
+[case]
+makefile:
+
+DEPENDENCY_ONLY_PREREQUISITES = ho hey
+OTHER_PREREQUISITES := foo bar baz
+target: .EXTRA_PREREQS := hi ${DEPENDENCY_ONLY_PREREQUISITES}
+target: ${OTHER_PREREQUISITES} ; @echo ${.EXTRA_PREREQS} $^
+.PHONY: target ${DEPENDENCY_ONLY_PREREQUISITES} ${OTHER_PREREQUISITES}
+${DEPENDENCY_ONLY_PREREQUISITES} ${OTHER_PREREQUISITES}: ; @echo $@
+answer: "foo
+bar
+baz
+ho
+hey
+hi ho hey foo bar baz"
+
+[case]
+makefile:
+
+all: target.dst
+DEPENDENCY_ONLY_PREREQUISITES = ho hey
+target.dst: .EXTRA_PREREQS := hi ${DEPENDENCY_ONLY_PREREQUISITES}
+%.dst: %.src ; @echo ${.EXTRA_PREREQS} $^
+.PHONY: ${DEPENDENCY_ONLY_PREREQUISITES} target.src
+${DEPENDENCY_ONLY_PREREQUISITES} target.src: ; @echo $@
+answer: "target.src
+ho
+hey
+hi ho hey target.src"
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = hi ho hey
+OTHER_PREREQUISITES := foo bar baz
+target: ${OTHER_PREREQUISITES} ; @echo ${.EXTRA_PREREQS} $^
+.PHONY: target ${.EXTRA_PREREQS} ${OTHER_PREREQUISITES}
+${.EXTRA_PREREQS} ${OTHER_PREREQUISITES}: ; @echo $@
+answer: "hi
+ho
+hey
+foo
+bar
+baz
+hi ho hey foo bar baz"
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = tick tack
+DEPENDENCY_ONLY_PREREQUISITES = ho hey
+OTHER_PREREQUISITES := foo bar baz
+target: .EXTRA_PREREQS := hi ${DEPENDENCY_ONLY_PREREQUISITES}
+target: ${OTHER_PREREQUISITES} ; @echo ${.EXTRA_PREREQS} $^
+.PHONY: target ${DEPENDENCY_ONLY_PREREQUISITES} ${OTHER_PREREQUISITES} ${.EXTRA_PREREQS}
+${DEPENDENCY_ONLY_PREREQUISITES} ${OTHER_PREREQUISITES} ${.EXTRA_PREREQS}: ; @echo $@
+answer: "tick
+tack
+foo
+bar
+baz
+ho
+hey
+hi ho hey foo bar baz"
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = tick tack
+.PHONY: all
+all: ; @echo ${.EXTRA_PREREQS} $^
+answer: "#MAKE#: *** No rule to make target 'tick', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = tick tack
+.PHONY: all
+all: ; @echo ${.EXTRA_PREREQS} $^
+options: -k
+answer: "#MAKE#: *** No rule to make target 'tick', needed by 'all'.
+#MAKE#: *** No rule to make target 'tack', needed by 'all'.
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+all: .EXTRA_PREREQS = tick tack
+.PHONY: all
+all: ; @echo ${.EXTRA_PREREQS} $^
+options: -k
+answer: "#MAKE#: *** No rule to make target 'tick', needed by 'all'.
+#MAKE#: *** No rule to make target 'tack', needed by 'all'.
+#MAKE#: Target 'all' not remade because of errors."
+exit_code: 512
+
+[case]
+makefile:
+
+.EXTRA_PREREQS = *ck
+.PHONY: all tick tack
+all: ; @echo ${.EXTRA_PREREQS} $^
+tick tack: ; @echo $@
+answer: "tack
+tick
+tack tick"
+
+[case]
+makefile:
+
+.PHONY: all tick tack
+all: ; @echo ${.EXTRA_PREREQS} $^
+all: .EXTRA_PREREQS = *ck
+tick tack: ; @echo $@
+answer: "tack
+tick
+tack tick"
+
+[case]
+makefile:
+
+.PHONY: tick tack
+a%: ; @echo ${.EXTRA_PREREQS} $^
+.EXTRA_PREREQS = *ck
+tick tack: ; @echo $@
+options: all
+answer: "tack
+tick
+tack tick"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+extradep:=tick tack
+.EXTRA_PREREQS=$$(extradep)
+%.x:; @echo $@
+options: hello.x
+answer: "hello.x"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+all: hello.x;
+extradep=tick tack
+hello.x: .EXTRA_PREREQS=$$(extradep)
+%.x:; @echo $@
+tick tack:; @echo $@
+answer: "tick
+tack
+hello.x"
+
+[case]
+makefile:
+
+.SECONDEXPANSION:
+all: hello.x world.x
+hello.x world.x: .EXTRA_PREREQS=$$@.d
+%.x:; @echo $@
+%.d:; @echo $@
+answer: "hello.x.d
+hello.x
+world.x.d
+world.x"
+
+[case]
+makefile:
+
+all: .EXTRA_PREREQS :=  file1 file2 file3 file4 file5 file6 file7 file8 file9 file10 file11 file12 file13 file14 file15 file16 file17 file18 file19 file20 file21 file22 file23 file24 file25 file26 file27 file28 file29 file30 file31 file32 file33 file34 file35 file36 file37 file38 file39 file40 file41 file42 file43 file44 file45 file46 file47 file48 file49 file50 file51 file52 file53 file54 file55 file56 file57 file58 file59 file60 file61 file62 file63 file64 file65 file66 file67 file68 file69 file70 file71 file72 file73 file74 file75 file76 file77 file78 file79 file80 file81 file82 file83 file84 file85 file86 file87 file88 file89 file90 file91 file92 file93 file94 file95 file96 file97 file98 file99 file100 file101 file102 file103 file104 file105 file106 file107 file108 file109 file110 file111 file112 file113 file114 file115 file116 file117 file118 file119 file120 file121 file122 file123 file124 file125 file126 file127 file128 file129 file130 file131 file132 file133 file134 file135 file136 file137 file138 file139 file140 file141 file142 file143 file144 file145 file146 file147 file148 file149 file150 file151 file152 file153 file154 file155 file156 file157 file158 file159 file160 file161 file162 file163 file164 file165 file166 file167 file168 file169 file170 file171 file172 file173 file174 file175 file176 file177 file178 file179 file180 file181 file182 file183 file184 file185 file186 file187 file188 file189 file190 file191 file192 file193 file194 file195 file196 file197 file198 file199 file200 file201 file202 file203 file204 file205 file206 file207 file208 file209 file210 file211 file212 file213 file214 file215 file216 file217 file218 file219 file220 file221 file222 file223 file224 file225 file226 file227 file228 file229 file230 file231 file232 file233 file234 file235 file236 file237 file238 file239 file240 file241 file242 file243 file244 file245 file246 file247 file248 file249 file250 file251 file252 file253 file254 file255 file256 file257 file258 file259 file260 file261 file262 file263 file264 file265 file266 file267 file268 file269 file270 file271 file272 file273 file274 file275 file276 file277 file278 file279 file280 file281 file282 file283 file284 file285 file286 file287 file288 file289 file290 file291 file292 file293 file294 file295 file296 file297 file298 file299 file300 file301 file302 file303 file304 file305 file306 file307 file308 file309 file310 file311 file312 file313 file314 file315 file316 file317 file318 file319 file320 file321 file322 file323 file324 file325 file326 file327 file328 file329 file330 file331 file332 file333 file334 file335 file336 file337 file338 file339 file340 file341 file342 file343 file344 file345 file346 file347 file348 file349 file350 file351 file352 file353 file354 file355 file356 file357 file358 file359 file360 file361 file362 file363 file364 file365 file366 file367 file368 file369 file370 file371 file372 file373 file374 file375 file376 file377 file378 file379 file380 file381 file382 file383 file384 file385 file386 file387 file388 file389 file390 file391 file392 file393 file394 file395 file396 file397 file398 file399 file400 file401 file402 file403 file404 file405 file406 file407 file408 file409 file410 file411 file412 file413 file414 file415 file416 file417 file418 file419 file420 file421 file422 file423 file424 file425 file426 file427 file428 file429 file430 file431 file432 file433 file434 file435 file436 file437 file438 file439 file440 file441 file442 file443 file444 file445 file446 file447 file448 file449 file450 file451 file452 file453 file454 file455 file456 file457 file458 file459 file460 file461 file462 file463 file464 file465 file466 file467 file468 file469 file470 file471 file472 file473 file474 file475 file476 file477 file478 file479 file480 file481 file482 file483 file484 file485 file486 file487 file488 file489 file490 file491 file492 file493 file494 file495 file496 file497 file498 file499 file500 file501 file502 file503 file504 file505 file506 file507 file508 file509 file510 file511 file512 file513 file514 file515 file516 file517 file518 file519 file520 file521 file522 file523 file524 file525 file526 file527 file528 file529 file530 file531 file532 file533 file534 file535 file536 file537 file538 file539 file540 file541 file542 file543 file544 file545 file546 file547 file548 file549 file550 file551 file552 file553 file554 file555 file556 file557 file558 file559 file560 file561 file562 file563 file564 file565 file566 file567 file568 file569 file570 file571 file572 file573 file574 file575 file576 file577 file578 file579 file580 file581 file582 file583 file584 file585 file586 file587 file588 file589 file590 file591 file592 file593 file594 file595 file596 file597 file598 file599 file600 file601 file602 file603 file604 file605 file606 file607 file608 file609 file610 file611 file612 file613 file614 file615 file616 file617 file618 file619 file620 file621 file622 file623 file624 file625 file626 file627 file628 file629 file630 file631 file632 file633 file634 file635 file636 file637 file638 file639 file640 file641 file642 file643 file644 file645 file646 file647 file648 file649 file650 file651 file652 file653 file654 file655 file656 file657 file658 file659 file660 file661 file662 file663 file664 file665 file666 file667 file668 file669 file670 file671 file672 file673 file674 file675 file676 file677 file678 file679 file680 file681 file682 file683 file684 file685 file686 file687 file688 file689 file690 file691 file692 file693 file694 file695 file696 file697 file698 file699 file700 file701 file702 file703 file704 file705 file706 file707 file708 file709 file710 file711 file712 file713 file714 file715 file716 file717 file718 file719 file720 file721 file722 file723 file724 file725 file726 file727 file728 file729 file730 file731 file732 file733 file734 file735 file736 file737 file738 file739 file740 file741 file742 file743 file744 file745 file746 file747 file748 file749 file750 file751 file752 file753 file754 file755 file756 file757 file758 file759 file760 file761 file762 file763 file764 file765 file766 file767 file768 file769 file770 file771 file772 file773 file774 file775 file776 file777 file778 file779 file780 file781 file782 file783 file784 file785 file786 file787 file788 file789 file790 file791 file792 file793 file794 file795 file796 file797 file798 file799 file800 file801 file802 file803 file804 file805 file806 file807 file808 file809 file810 file811 file812 file813 file814 file815 file816 file817 file818 file819 file820 file821 file822 file823 file824 file825 file826 file827 file828 file829 file830 file831 file832 file833 file834 file835 file836 file837 file838 file839 file840 file841 file842 file843 file844 file845 file846 file847 file848 file849 file850 file851 file852 file853 file854 file855 file856 file857 file858 file859 file860 file861 file862 file863 file864 file865 file866 file867 file868 file869 file870 file871 file872 file873 file874 file875 file876 file877 file878 file879 file880 file881 file882 file883 file884 file885 file886 file887 file888 file889 file890 file891 file892 file893 file894 file895 file896 file897 file898 file899 file900 file901 file902 file903 file904 file905 file906 file907 file908 file909 file910 file911 file912 file913 file914 file915 file916 file917 file918 file919 file920 file921 file922 file923 file924 file925 file926 file927 file928 file929 file930 file931 file932 file933 file934 file935 file936 file937 file938 file939 file940 file941 file942 file943 file944 file945 file946 file947 file948 file949 file950 file951 file952 file953 file954 file955 file956 file957 file958 file959 file960 file961 file962 file963 file964 file965 file966 file967 file968 file969 file970 file971 file972 file973 file974 file975 file976 file977 file978 file979 file980 file981 file982 file983 file984 file985 file986 file987 file988 file989 file990 file991 file992 file993 file994 file995 file996 file997 file998 file999 file1000
+all:;
+file%:;
+answer: "#MAKE#: 'all' is up to date."

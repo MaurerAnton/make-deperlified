@@ -1,0 +1,9 @@
+# Converted from notdir
+description: "The following test creates a makefile to test the notdir function."
+
+[case]
+makefile:
+string := $(notdir /src/foo.c hacks) 
+all: 
+	@echo $(string) 
+answer: "foo.c hacks"

@@ -1,0 +1,11 @@
+# Converted from MAKELEVEL
+description: "The following test creates a makefile to test makelevels in Make. It prints $(MAKELEVEL) and then prints the environment variable MAKELEVEL"
+
+[case]
+makefile:
+all:
+	@echo MAKELEVEL is $(MAKELEVEL)
+	echo $$MAKELEVEL
+answer: "MAKELEVEL is 0
+echo $MAKELEVEL
+1"

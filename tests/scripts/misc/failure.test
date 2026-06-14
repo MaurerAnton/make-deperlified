@@ -1,0 +1,80 @@
+# Converted from failure
+description: "Test miscellaneous failures."
+
+[case]
+makefile:
+
+$x.
+answer: "#MAKEFILE#:2: *** missing separator.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+foo:
+        bar
+answer: "#MAKEFILE#:3: *** missing separator (did you mean TAB instead of 8 spaces?).  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.RECIPEPREFIX = :
+foo:
+        bar
+answer: "#MAKEFILE#:4: *** missing separator.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifeq(foo,bar)
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** missing separator (ifeq/ifneq must be followed by whitespace).  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifeq
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** invalid syntax in conditional.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifeq blah
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** invalid syntax in conditional.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifneq(foo,bar)
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** missing separator (ifeq/ifneq must be followed by whitespace).  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifneq
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** invalid syntax in conditional.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+ifneq blah
+$(error ouch)
+endif
+answer: "#MAKEFILE#:2: *** invalid syntax in conditional.  Stop."
+exit_code: 512

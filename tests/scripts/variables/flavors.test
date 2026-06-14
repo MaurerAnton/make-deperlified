@@ -1,0 +1,198 @@
+# Converted from flavors
+description: "Test various flavors of make variable setting."
+
+[case]
+makefile:
+
+ugh = Goodbye
+foo = $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Hello"
+
+[case]
+makefile:
+
+bar = Goodbye
+foo := $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Goodbye"
+
+[case]
+makefile:
+
+foo = Hello
+ugh = Goodbye
+foo += $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Hello Hello"
+
+[case]
+makefile:
+
+foo := Hello
+ugh = Goodbye
+bar = ${ugh}
+foo += $(bar)
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Hello Goodbye"
+
+[case]
+makefile:
+
+foo = Hello
+ugh = Goodbye
+bar = ${ugh}
+foo ?= $(bar)
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Hello"
+
+[case]
+makefile:
+
+ugh = Goodbye
+bar = ${ugh}
+foo ?= $(bar)
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Hello"
+
+[case]
+makefile:
+
+bar = Goodbye
+foo ::= $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Goodbye"
+
+[case]
+makefile:
+
+bar = Goodbye
+foo::=$(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Goodbye"
+
+[case]
+makefile:
+
+recur =
+recur += foo
+simple :=
+simple += bar
+recur_empty = foo
+recur_empty +=
+simple_empty := bar
+simple_empty +=
+empty_recur =
+empty_recur +=
+empty_simple :=
+empty_simple +=
+
+all: ; @: $(info recur=/$(recur)/ simple=/$(simple)/ recure=/$(recur_empty)/ simplee=/$(simple_empty)/ erecur=/$(empty_recur)/ esimple=/$(empty_simple)/)
+answer: "recur=/foo/ simple=/bar/ recure=/foo/ simplee=/bar/ erecur=// esimple=//"
+
+[case]
+makefile:
+
+recur = $\
+  zero  $\
+  one$$\
+  two$$$\
+  three
+simple := $\
+  four  $\
+  five$$\
+  six$$$\
+  seven
+
+all: d$\
+     e$\
+     p; @:
+
+.PHONY: dep
+dep: ; @: $(info recur=/$(recur)/ simple=/$(simple)/)
+answer: "recur=/zeroone$ two$three/ simple=/fourfive$ six$seven/"
+
+[case]
+makefile:
+
+.POSIX:
+recur = $\
+  zero  $\
+  one$$\
+  two$$$\
+  three
+simple := $\
+  four  $\
+  five$$\
+  six$$$\
+  seven
+
+all: d$\
+     e$\
+     p; @:
+
+.PHONY: dep
+dep: ; @: $(info recur=/$(recur)/ simple=/$(simple)/)
+answer: "recur=/zero  one$ two$three/ simple=/four  five$ six$seven/"
+
+[case]
+makefile:
+
+bar = Goodbye
+foo :::= $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Goodbye"
+
+[case]
+makefile:
+
+bar = Goodbye
+foo:::=$(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo $(foo)
+answer: "Goodbye"
+
+[case]
+makefile:
+
+bar = Good$$bye
+foo :::= $(bar) $$what
+bar = ${ugh}
+ugh = Hello
+all: ; @echo '$(foo)'
+answer: "Good$bye $what"
+
+[case]
+makefile:
+
+bar = Good$$bye
+foo :::= $(bar)
+foo += $$what $(bar)
+bar = ${ugh}
+ugh = Hello
+all: ; @echo '$(foo)'
+answer: "Good$bye $what Hello"
+
+[case]
+makefile:
+
+bar = Good$$bye
+all: foo :::= $(bar)
+all: ; @echo '$(foo)'
+answer: "Good$bye"

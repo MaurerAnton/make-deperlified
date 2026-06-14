@@ -1,0 +1,132 @@
+# Converted from conditional
+description: "Test various flavors of conditional variable setting."
+
+[case]
+makefile:
+
+x = bar
+y = baz
+foo ?= $(x)
+biz?=$(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=10 biz=20"
+
+[case]
+makefile:
+
+foo=1
+biz=2
+x = bar
+y = baz
+foo ?= $(x)
+biz?=$(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=1 biz=2"
+
+[case]
+makefile:
+
+x = bar
+y = baz
+foo ?:= $(x)
+biz?:=$(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=bar biz=baz"
+
+[case]
+makefile:
+
+foo=1
+biz=2
+x = bar
+y = baz
+foo ?:= $(x)$(info expanded)
+biz?:=$(y)$(info expanded)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=1 biz=2"
+
+[case]
+makefile:
+
+x = bar
+y = baz
+foo ?::= $(x)
+biz?::=$(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=bar biz=baz"
+
+[case]
+makefile:
+
+foo=1
+biz=2
+x = bar
+y = baz
+foo ?::= $(x)$(info expanded)
+biz?::=$(y)$(info expanded)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=1 biz=2"
+
+[case]
+makefile:
+
+x = bar
+y = baz
+foo ?:::= $(x)
+biz?:::=$(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=bar biz=baz"
+
+[case]
+makefile:
+
+foo=1
+biz=2
+x = bar
+y = baz
+foo ?:::= $(x)$(info expanded)
+biz?:::=$(y)$(info expanded)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=1 biz=2"
+
+[case]
+makefile:
+
+x = bar
+y = baz
+foo ?!= echo $(x)
+biz?!=echo $(y)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=bar biz=baz"
+
+[case]
+makefile:
+
+foo=1
+biz=2
+x = bar
+y = baz
+foo ?!= echo $(x)$(info expanded)
+biz?!=echo $(y)$(info expanded)
+x = 10
+y = 20
+all:;@: $(info foo=$(foo) biz=$(biz))
+answer: "foo=1 biz=2"

@@ -1,0 +1,13 @@
+# Converted from value
+description: "Test the value function."
+details: "This is a test of the value function in GNU Make. This function will evaluate to the value of the named variable with no further expansion performed on it."
+
+[case]
+makefile:
+export FOO = foo
+
+recurse = FOO = $FOO
+static := FOO = $(value FOO)
+
+all: ; @echo $(recurse) $(value recurse) $(static) $(value static)
+answer: "FOO = OO FOO = foo FOO = foo FOO = foo"

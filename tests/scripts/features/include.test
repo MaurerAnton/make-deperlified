@@ -1,0 +1,424 @@
+# Converted from include
+description: "Test various forms of the GNU Make 'include' command."
+details: "Test include, -include, sinclude and various regressions involving them. Test extra whitespace at the end of the include, multiple -includes and sincludes (should not give an error) and make sure that errors are reported for targets that were also -included."
+
+[setup]
+touch: hellod/inc1 hellod/inc2 inc1.mk hello.mk test.foo test.x test inc.mk
+
+[case]
+makefile:
+#Extra space at the end of the following file name
+include incl.mk    
+all: ; @echo There should be no errors for this makefile.
+
+-include nonexistent.mk
+-include nonexistent.mk
+sinclude nonexistent.mk
+sinclude nonexistent-2.mk
+-include makeit.mk
+sinclude makeit.mk
+
+error: makeit.mk
+options: all
+answer: "There should be no errors for this makefile."
+
+[case]
+options: ANOTHER
+answer: "This is another included makefile"
+
+[case]
+makefile:
+
+-include foo.mk
+error: foo.mk ; @echo $@
+answer: "#MAKE#: *** No rule to make target 'foo.mk', needed by 'error'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+-include foo.mk
+error: foo.mk ; @echo $@
+options: -Ihellod
+answer: "#MAKE#: *** No rule to make target 'foo.mk', needed by 'error'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+bar.mk: foo := baz
+-include bar.mk
+hello: ; @echo hello
+answer: "hello"
+
+[case]
+makefile:
+
+.PHONY: all
+all: ; @:
+
+-include foo
+
+foo: bar; @:
+
+[case]
+makefile:
+
+.PHONY: all
+all:; @:
+
+-include foo
+
+foo: bar; @:
+
+bar:; @exit 1
+
+[case]
+makefile:
+
+.PHONY: all
+all:; @:
+include
+-include
+sinclude
+
+[case]
+makefile:
+
+-include foo
+
+all: bar
+
+foo: baz
+bar: baz
+answer: "#MAKE#: *** No rule to make target 'baz', needed by 'bar'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+-include foo
+
+all: bar
+
+foo: baz
+bar: baz
+baz: end
+answer: "#MAKE#: *** No rule to make target 'end', needed by 'baz'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: default
+default:; @echo DONE
+
+inc1:; echo > $@
+include inc1
+include inc2
+inc2:; echo > $@
+answer: "echo > inc1
+echo > inc2
+DONE"
+
+[case]
+makefile:
+
+.PHONY: default
+default:; @echo DONE
+
+inc1:; echo > $@
+include inc1
+include inc2
+inc2:; echo > $@
+options: -Ihellod
+answer: "echo > inc1
+echo > inc2
+DONE"
+
+[case]
+makefile:
+
+.PHONY: default
+default:; @echo DONE
+
+inc1:; echo > $@
+include inc1
+include inc2
+inc2:; echo > $@
+options: -Ihellod
+answer: "DONE"
+
+[case]
+answer: "#MAKE#: *** No targets.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+include inc1.mk
+answer: "#MAKE#: *** No targets.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+default:; @echo DEFAULT
+include inc1
+inc1:; echo > $@
+include inc1
+answer: "echo > inc1
+DEFAULT"
+
+[case]
+makefile:
+
+include bar
+-include foo
+
+all:
+
+foo: baz
+bar: baz
+baz: end
+answer: "#MAKEFILE#:2: bar: No such file or directory
+#MAKE#: *** No rule to make target 'end', needed by 'baz'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: default
+default:; @echo DONE
+
+inc1:; echo > $@
+include inc1
+include inc2
+answer: "echo > inc1
+#MAKEFILE#:7: inc2: No such file or directory
+#MAKE#: *** No rule to make target 'inc2'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+default:; @echo DEFAULT
+include inc1
+inc1: foo; echo > $@
+foo:; exit 1
+answer: "exit 1
+#MAKEFILE#:3: inc1: No such file or directory
+#MAKE#: *** [#MAKEFILE#:5: foo] Error 1"
+exit_code: 512
+
+[case]
+makefile:
+
+default:; @echo DEFAULT
+include inc1
+inc1: foo; echo > $@
+answer: "#MAKEFILE#:3: inc1: No such file or directory
+#MAKE#: *** No rule to make target 'foo', needed by 'inc1'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+include hello.mk
+hello.mk:: ; echo 'FOO=bar' > $@
+answer: "#MAKEFILE#:4: hello.mk: No such file or directory"
+exit_code: 512
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+include hello.mk
+hello.mk: ; echo 'FOO=bar' > $@
+.PHONY: hello.mk
+answer: "#MAKEFILE#:4: hello.mk: No such file or directory"
+exit_code: 512
+
+[case]
+makefile:
+
+include inc1
+all:;@echo $(FOO)
+answer: "#MAKEFILE#:2: inc1: Permission denied
+#MAKE#: *** No rule to make target 'inc1'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+include inc1
+all:;@echo $(FOO)
+options: -Ihellod
+answer: "#MAKEFILE#:2: inc1: Permission denied
+#MAKE#: *** No rule to make target 'inc1'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+all:;@echo $(FOO)
+include inc1
+inc1:; @rm -f $@ && echo FOO := bar > $@
+answer: "bar"
+
+[case]
+makefile:
+
+all:;@echo $(FOO)
+include inc1
+inc1:; @rm -f $@ && echo FOO := bar > $@
+options: -Ihellod
+answer: "bar"
+
+[case]
+makefile:
+
+-include i1 i2
+-include i3
+-include i4
+%:;@echo $@
+all:;
+answer: "i1
+i2
+i3
+i4
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+default:; @echo $(hello)
+-include hello.mk
+$(shell echo hello=world >hello.mk)
+include hello.mk
+answer: "world"
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+include hello.mk
+hello.mk:: ; echo 'FOO=bar' > $@
+answer: "FOO="
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+-include hello.mk
+hello.mk:: ; echo 'FOO=bar' > $@
+answer: "FOO="
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+include hello.mk
+hello.mk: ; echo 'FOO=bar' > $@
+.PHONY: hello.mk
+answer: "FOO="
+
+[case]
+makefile:
+
+.PHONY: default
+default:;@echo 'FOO=$(FOO)'
+-include hello.mk
+hello.mk: ; echo 'FOO=bar' > $@
+.PHONY: hello.mk
+answer: "FOO="
+
+[case]
+makefile:
+
+all:; @echo hello
+-include inc_a.mk
+include inc_b.mk
+%_a.mk %_b.mk:; exit 1
+answer: "exit 1
+#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'"
+exit_code: 512
+
+[case]
+options: -k
+answer: "exit 1
+#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'"
+exit_code: 512
+
+[case]
+makefile:
+
+all:; @echo hello
+include inc_a.mk
+-include inc_b.mk
+%_a.mk %_b.mk:; exit 1
+answer: "exit 1
+#MAKEFILE#:3: inc_a.mk: No such file or directory
+#MAKE#: *** [#MAKEFILE#:5: inc_a.mk] Error 1"
+exit_code: 512
+
+[case]
+options: -k
+answer: "exit 1
+#MAKEFILE#:3: inc_a.mk: No such file or directory
+#MAKE#: *** [#MAKEFILE#:5: inc_a.mk] Error 1
+#MAKEFILE#:3: failed to remake makefile 'inc_a.mk'"
+exit_code: 512
+
+[case]
+makefile:
+FOO := foo
+options: -E %:;@echo $@ -E all:; -E -include bizbaz -E -include bazbiz
+answer: "bizbaz
+bazbiz
+foobar
+barfoo
+GNUmakefile
+makefile
+Makefile
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+.PHONY: force
+include test.foo
+%.foo: force; @echo force $@
+%.x: %.foo; touch $@
+test: test.x; touch $@
+answer: "force test.foo
+#MAKE#: 'test' is up to date."
+
+[case]
+makefile:
+
+#TAB#include inc.mk
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: include lines cannot start with TAB
+hi"
+
+[case]
+makefile:
+
+#TAB#-include inc.mk
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: -include lines cannot start with TAB
+hi"
+
+[case]
+makefile:
+
+#TAB#sinclude inc.mk
+all:;@echo hi
+answer: "#MAKEFILE#:2: warning: sinclude lines cannot start with TAB
+hi"

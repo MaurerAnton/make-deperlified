@@ -1,0 +1,34 @@
+# Converted from MFILE_LIST
+description: "Test the MAKEFILE_LIST variable."
+
+[case]
+makefile:
+
+m1 := $(MAKEFILE_LIST)
+include incl2
+m3 := $(MAKEFILE_LIST)
+
+all:
+	@echo $(m1)
+	@echo $(m2)
+	@echo $(m3)
+answer: "#MAKEFILE#
+#MAKEFILE# incl2
+#MAKEFILE# incl2"
+
+[case]
+makefile:
+
+m1 := $(MAKEFILE_LIST)
+include foo$$bar
+m3 := $(MAKEFILE_LIST)
+
+all:
+	@echo '$(m1)'
+	@echo '$(m2)'
+	@echo '$(m3)'
+	@echo '$(value MAKEFILE_LIST)'
+answer: "#MAKEFILE#
+#MAKEFILE# foo$bar
+#MAKEFILE# foo$bar
+#MAKEFILE# foo$bar"

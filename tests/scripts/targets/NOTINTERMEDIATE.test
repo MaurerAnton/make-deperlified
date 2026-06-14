@@ -1,0 +1,116 @@
+# Converted from NOTINTERMEDIATE
+description: "Test the behaviour of the .NOTINTERMEDIATE target."
+details: "Test the behavior of the .NOTINTERMEDIATE special target."
+
+[setup]
+touch: hello.z
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE: %.q %.x
+answer: "touch hello.z"
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE: %.q
+answer: "#MAKE#: 'hello.z' is up to date."
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE: %.q hello.x
+answer: "touch hello.z"
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE:
+answer: "touch hello.z"
+
+[case]
+makefile:
+
+.INTERMEDIATE: hello.x
+.NOTINTERMEDIATE: hello.x
+answer: "#MAKE#: *** hello.x cannot be both .NOTINTERMEDIATE and .INTERMEDIATE.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.SECONDARY: hello.x
+.NOTINTERMEDIATE: hello.x
+answer: "#MAKE#: *** hello.x cannot be both .NOTINTERMEDIATE and .SECONDARY.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.SECONDARY:
+.NOTINTERMEDIATE:
+answer: "#MAKE#: *** .NOTINTERMEDIATE and .SECONDARY are mutually exclusive.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.INTERMEDIATE: hello.x
+.NOTINTERMEDIATE: %.q %.x
+answer: "#MAKE#: 'hello.z' is up to date."
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.INTERMEDIATE: hello.x
+.NOTINTERMEDIATE:
+answer: "#MAKE#: 'hello.z' is up to date."
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.SECONDARY: hello.x
+.NOTINTERMEDIATE:
+answer: "#MAKE#: 'hello.z' is up to date."
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE: %.q hello.x
+.SECONDARY:
+answer: "touch hello.z"
+
+[case]
+makefile:
+
+hello.z:
+%.z: %.x; touch $@
+%.x: ;
+.NOTINTERMEDIATE: %.q %.x
+.SECONDARY:
+answer: "touch hello.z"

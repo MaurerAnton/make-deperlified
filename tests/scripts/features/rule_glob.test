@@ -1,0 +1,32 @@
+# Converted from rule_glob
+description: "Test globbing in targets and prerequisites."
+
+[setup]
+touch: a.one a.two a.three
+
+[case]
+makefile:
+
+.PHONY: all a.one a.two a.three
+all: a.one* a.t[a-z0-9]o a.th[!q]ee
+a.o[Nn][Ee] a.t*: ; @echo $@
+answer: "a.one
+a.two
+a.three"
+
+[case]
+makefile:
+
+.PHONY: all
+all: a.four
+%.four : %.t* ; @echo $@: $(sort $^)
+answer: "a.four: a.three a.two"
+
+[case]
+makefile:
+
+.PHONY: all
+all: a.four
+.SECONDEXPANSION:
+%.four : $$(sort %.t*) ; @echo $@: $(sort $^)
+answer: "a.four: a.three a.two"

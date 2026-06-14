@@ -1,0 +1,19 @@
+# Converted from dash-C
+description: "Test the -C option to GNU Make."
+
+[case]
+options: -C src --no-print-directory
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+options: -C src/ --no-print-directory
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+options: -C inc -C .. -C src --no-print-directory
+answer: "#MAKE#: 'all' is up to date."
+
+[case]
+options: -C src -I ../inc --no-print-directory file=test
+answer: "included
+#MAKE#: 'all' is up to date."

@@ -1,0 +1,9 @@
+# Converted from dir
+description: "The following test creates a makefile to test the dir function."
+
+[case]
+makefile:
+string := $(dir src/foo.c hacks) 
+all: 
+	@echo $(string) 
+answer: "src/ ./"

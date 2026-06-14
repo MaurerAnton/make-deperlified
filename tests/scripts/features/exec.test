@@ -1,0 +1,126 @@
+
+[case]
+makefile:
+# shbang=#!/bin/sh
+# shell=
+all:; @$(CMD)
+options: CMD=./exec.cmd
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!/bin/sh
+# shell=SHELL=/bin/sh
+all:; @$(CMD)
+options: SHELL=/bin/sh CMD=./exec.cmd.1
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!/bin/sh
+# shell=SHELL=
+all:; @$(CMD)
+options: SHELL= CMD=./exec.cmd.2
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!#PERL#
+# shell=
+all:; @$(CMD)
+options: CMD=./exec.cmd.3
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!#PERL#
+# shell=SHELL=/bin/sh
+all:; @$(CMD)
+options: SHELL=/bin/sh CMD=./exec.cmd.4
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!#PERL#
+# shell=SHELL=
+all:; @$(CMD)
+options: SHELL= CMD=./exec.cmd.5
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=
+# shell=
+all:; @$(CMD)
+options: CMD=./exec.cmd.6
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=
+# shell=SHELL=/bin/sh
+all:; @$(CMD)
+options: SHELL=/bin/sh CMD=./exec.cmd.7
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=
+# shell=SHELL=
+all:; @$(CMD)
+options: SHELL= CMD=./exec.cmd.8
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!
+# shell=
+all:; @$(CMD)
+options: CMD=./exec.cmd.9
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!
+# shell=SHELL=/bin/sh
+all:; @$(CMD)
+options: SHELL=/bin/sh CMD=./exec.cmd.10
+answer: "hello, world"
+
+[case]
+makefile:
+# shbang=#!
+# shell=SHELL=
+all:; @$(CMD)
+options: SHELL= CMD=./exec.cmd.11
+answer: "hello, world"
+
+[case]
+makefile:
+
+all:; @#PERL# -e 'printf "$(ANSWER)\n"';
+options: ANSWER='hello, world'
+answer: "hello, world"
+
+[case]
+makefile:
+
+all:; @#PERL# -e 'printf "$(ANSWER)\n"';
+options: SHELL=/bin/sh ANSWER='hello, world'
+answer: "hello, world"
+
+[case]
+makefile:
+
+all:; @#PERL# -e 'printf "$(ANSWER)\n"';
+options: SHELL= ANSWER='hello, world'
+answer: "hello, world"
+
+[case]
+makefile:
+
+SHELL = #PERL#
+.SHELLFLAGS = -e
+all:; @printf "$(ANSWER)\n";
+options: ANSWER='hello, world'
+answer: "hello, world"

@@ -1,0 +1,227 @@
+# Converted from dash-r
+description: "Test removing default rules and variables"
+
+[setup]
+touch: xxx.c
+
+[case]
+options: -r COMPILE.c=echo xxx.o
+answer: "#MAKE#: *** No rule to make target 'xxx.o'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+COMPILE.c = echo
+MAKEFLAGS += -r
+options: xxx.o
+answer: "#MAKE#: *** No rule to make target 'xxx.o'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+all:;$(info CC='$(CC)')
+options: -sR
+answer: "CC=''"
+
+[case]
+makefile:
+
+MAKEFLAGS += -R
+all:;$(info CC='$(CC)')
+options: -s
+answer: "CC=''"
+
+[case]
+makefile:
+
+MAKEFLAGS := -R
+.PHONY: hello.c
+all: hello.o
+answer: "#MAKE#: *** No rule to make target 'hello.o', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS = -R
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS := -R
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS :::= -R
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS += -R
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=
+at build time TEX=
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+options: -R
+answer: "at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS = -R
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS := -R
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS :::= -R
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."
+
+[case]
+makefile:
+
+$(info at start time TEX=$(TEX))
+MAKEFLAGS += -R
+TEX ?= hello
+$(info at parse time TEX=$(TEX))
+all:; $(info at build time TEX=$(TEX))
+answer: "at start time TEX=tex
+at parse time TEX=hello
+at build time TEX=hello
+#MAKE#: 'all' is up to date."

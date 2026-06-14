@@ -1,0 +1,9 @@
+# Converted from addprefix
+description: "The following test creates a makefile to test the addprefix function."
+
+[case]
+makefile:
+string := $(addprefix src/,a.b.z.foo hacks) 
+all: 
+	@echo $(string) 
+answer: "src/a.b.z.foo src/hacks"

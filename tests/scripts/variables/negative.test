@@ -1,0 +1,54 @@
+# Converted from negative
+description: "Run some negative tests (things that should fail)."
+
+[case]
+makefile:
+
+foo = bar
+x = $(foo
+y = $x
+
+all: ; @echo $y
+answer: "#MAKEFILE#:3: *** unterminated variable reference.  Stop."
+exit_code: 512
+
+[case]
+options: x=$(other
+answer: "#MAKEFILE#:4: *** unterminated variable reference.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+foo = bar
+x = $(foo
+y = $x
+
+z := $y
+
+all: ; @echo $y
+answer: "#MAKEFILE#:3: *** unterminated variable reference.  Stop."
+exit_code: 512
+
+[case]
+options: x=$(other
+answer: "#MAKEFILE#:4: *** unterminated variable reference.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+x y =
+answer: "#MAKEFILE#:1: *** missing separator.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+x y=
+answer: "#MAKEFILE#:1: *** missing separator.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+x $X=
+answer: "#MAKEFILE#:1: *** missing separator.  Stop."
+exit_code: 512

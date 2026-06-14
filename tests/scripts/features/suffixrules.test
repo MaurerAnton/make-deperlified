@@ -1,0 +1,153 @@
+# Converted from suffixrules
+description: "Test suffix rules."
+
+[setup]
+touch: foo.c foo.baz foo.bar foo.biz hello.c
+
+[case]
+makefile:
+
+.SUFFIXES:
+all: foo.o ; @echo $@ $<
+answer: "#MAKE#: *** No rule to make target 'foo.o', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+.SUFFIXES: .biz .baz
+
+.baz.biz: ; @echo make $@
+options: foo.biz
+answer: "make foo.biz"
+
+[case]
+options: foo.o COMPILE.c=@echo OUTPUT_OPTION=
+answer: "foo.c"
+
+[case]
+makefile:
+
+.SUFFIXES:
+.SUFFIXES: .biz .baz
+
+.baz.biz: ; @echo make $@
+options: foo.biz
+answer: "make foo.biz"
+
+[case]
+makefile:
+
+.SUFFIXES:
+.SUFFIXES: .baz
+
+.baz: foo.bar ; @echo make $@ from $<
+
+$X.POSIX:
+options: X=1 .baz
+answer: "#MAKEFILE#:5: warning: ignoring prerequisites on suffix rule definition
+make .baz from foo.bar"
+
+[case]
+options: X= .baz
+answer: "make .baz from foo.bar"
+
+[case]
+makefile:
+
+.SUFFIXES:
+.SUFFIXES: .biz .baz
+
+$X.POSIX:
+
+.baz.biz: foo.bar ; @echo make $@ from $<
+options: X=1 .baz.biz
+answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+make .baz.biz from foo.bar"
+
+[case]
+options: X= .baz.biz
+answer: "make .baz.biz from foo.bar"
+
+[case]
+options: X= foo.biz
+answer: "#MAKE#: *** No rule to make target 'foo.biz'.  Stop."
+exit_code: 512
+
+[case]
+options: X=1 foo.biz
+answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+make foo.biz from foo.baz"
+
+[case]
+options: X=1 foo.biz
+answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+#MAKE#: 'foo.biz' is up to date."
+
+[case]
+makefile:
+all: hello.o
+options: COMPILE.c=@echo OUTPUT_OPTION=
+answer: "hello.c"
+
+[case]
+makefile:
+
+all: hello.o
+.c.o:; $(info $@ user defined .c.o rule)
+answer: "hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+all: hello.o
+.SUFFIXES:
+.c.o:; $(info $@ user defined .c.o rule)
+answer: "#MAKE#: *** No rule to make target 'hello.o', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+all: hello.o
+.SUFFIXES:
+.SUFFIXES: .c .o
+.c.o:; $(info $@ user defined .c.o rule)
+answer: "hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+.SUFFIXES: .c .o
+all: hello.o
+options: -r
+answer: "#MAKE#: *** No rule to make target 'hello.o', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+MAKEFLAGS += -r
+.SUFFIXES: .c .o
+all: hello.o
+answer: "#MAKE#: *** No rule to make target 'hello.o', needed by 'all'.  Stop."
+exit_code: 512
+
+[case]
+makefile:
+
+all: hello.o
+MAKEFLAGS += -r
+.SUFFIXES: .c .o
+.c.o:; $(info $@ user defined .c.o rule)
+answer: "hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'."
+
+[case]
+makefile:
+
+all:;
+options: -r MAKEFLAGS=
+answer: "#MAKE#: 'all' is up to date."
