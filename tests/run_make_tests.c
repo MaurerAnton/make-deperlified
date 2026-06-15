@@ -858,6 +858,7 @@ typedef struct test_script {
   char *details;
   char *setup_files;   /* Space-separated list of files to touch */
   char *setup_dirs;    /* Space-separated list of dirs to create */
+  char *cleanup_files; /* Files to delete between cases */
   test_case_t *cases;
   struct test_script *next;
 } test_script_t;
@@ -1015,6 +1016,8 @@ parse_test_file (const char *filename)
                     ts->setup_files = clean_value (vp);
                   else if (strcmp (kp, "mkdir") == 0)
                     ts->setup_dirs = clean_value (vp);
+                  else if (strcmp (kp, "cleanup") == 0)
+                    ts->cleanup_files = clean_value (vp);
                 }
                 free (orig);
                 continue;
@@ -1191,6 +1194,7 @@ free_test_script (test_script_t *ts)
   free (ts->details);
   free (ts->setup_files);
   free (ts->setup_dirs);
+  free (ts->cleanup_files);
   for (tc = ts->cases; tc; tc = next)
     {
       next = tc->next;
@@ -1763,6 +1767,19 @@ main (int argc, char *argv[])
       /* Run each test case */
       for (tc = ts->cases; tc; tc = tc->next)
         {
+          /* Cleanup files from previous case if requested */
+          if (tc != ts->cases && ts->cleanup_files)
+            {
+              char *s = xstrdup (ts->cleanup_files);
+              char *tok = strtok (s, " ");
+              while (tok)
+                {
+                  unlink (tok);
+                  tok = strtok (NULL, " ");
+                }
+              free (s);
+            }
+
           if (run_one_test_case (tc->makefile, tc->options,
                                   tc->answer, tc->exit_code))
             cases_passed++;

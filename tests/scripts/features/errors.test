@@ -3,6 +3,7 @@ description: "Test ignored failures in recipe command lines"
 
 [setup]
 touch: ./barfooblatboz
+mkdir: sd
 
 [case]
 makefile:
