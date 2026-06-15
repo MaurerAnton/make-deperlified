@@ -18,4 +18,4 @@ rem with this program.  If not, see <https://www.gnu.org/licenses/>.
 setlocal
 cd "%~dp0"
 
-perl -I. .\run_make_tests.pl %*
+run_make_tests.exe %*

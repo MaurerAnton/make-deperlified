@@ -73,7 +73,8 @@ $!
 $param_loop_end:
 $!
 $no_gnv = 1
-$no_perl = 1
+$! Perl detection removed - test suite is now pure C
+$ no_perl = 0
 $!
 $!  Find GNV 2.1.3 + manditory updates
 $!  If properly updated, the GNV$GNU logical name is present.
@@ -156,17 +157,10 @@ $   write sys$output "Could not find an up to date GNV installed!"
 $   help_flag = 1
 $endif
 $!
-$! Find perl 5.18.1 or later.
 $!
-$! look in perl_root:[000000]perl_setup.com
-$ perl_root = f$trnlnm("perl_root")
 $ ! This works with known perl installed from PCSI kits.
-$ if perl_root .nes. ""
 $ then
-$   perl_ver = f$element(1, ".", perl_root)
-$   if f$locate("-", perl_ver) .lt. f$length(perl_ver)
 $   then
-$       no_perl = 0
 $   endif
 $ endif
 $ if no_perl
@@ -263,9 +257,9 @@ $ if debug_flag .nes. "" then flags = flags + " " + debug_flag
 $ flags = f$edit(flags, "TRIM, COMPRESS")
 $ if testname .nes. ""
 $ then
-$   perl run_make_tests.pl "''testname'" 'flags'
+$   run_make_tests.exe "''testname'" 'flags'
 $ else
-$   perl run_make_tests.pl 'flags'
+$   run_make_tests.exe 'flags'
 $ endif
 $all_error:
 $ set default 'default'
