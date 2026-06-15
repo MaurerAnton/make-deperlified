@@ -56,24 +56,26 @@ bbb
 [case]
 options: foo
 answer:
-f1.h
 foo FIRST
 
 [case]
 options: -j10 foo
 answer:
-f1.h
 foo FIRST
 
 [case]
 options: foo
+clean: f2.h
 answer:
+foo FIRST
 f2.h
 foo SECOND
 
 [case]
 options: -j10 foo
+clean: f2.h
 answer:
+foo FIRST
 f2.h
 foo SECOND
 
@@ -81,7 +83,7 @@ foo SECOND
 options: d
 answer:
 ok
-#MAKE#: circular d <- d dependency dropped
+#MAKE#: Circular d <- d dependency dropped.
 oops
 
 [case]

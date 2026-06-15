@@ -849,6 +849,7 @@ typedef struct test_case {
   char *options;
   char *answer;
   int exit_code;
+  char *clean;         /* Files to delete before this case */
   struct test_case *next;
 } test_case_t;
 
@@ -1056,6 +1057,8 @@ parse_test_file (const char *filename)
                       last_case->answer = val;
                     else if (strcmp (current_key, "exit_code") == 0 && last_case)
                       last_case->exit_code = atoi (val);
+                    else if (strcmp (current_key, "clean") == 0 && last_case)
+                      last_case->clean = val;
                     else
                       free (val);
                   }
@@ -1136,6 +1139,8 @@ parse_test_file (const char *filename)
                                 last_case->answer = val2;
                               else if (strcmp (current_key, "exit_code") == 0 && last_case)
                                 last_case->exit_code = atoi (val2);
+                              else if (strcmp (current_key, "clean") == 0 && last_case)
+                                last_case->clean = val2;
                               else
                                 free (val2);
                             }
@@ -1201,6 +1206,7 @@ free_test_script (test_script_t *ts)
       free (tc->makefile);
       free (tc->options);
       free (tc->answer);
+      free (tc->clean);
       free (tc);
     }
   free (ts);
@@ -1771,6 +1777,19 @@ main (int argc, char *argv[])
           if (tc != ts->cases && ts->cleanup_files)
             {
               char *s = xstrdup (ts->cleanup_files);
+              char *tok = strtok (s, " ");
+              while (tok)
+                {
+                  unlink (tok);
+                  tok = strtok (NULL, " ");
+                }
+              free (s);
+            }
+
+          /* Per-case cleanup */
+          if (tc->clean)
+            {
+              char *s = xstrdup (tc->clean);
               char *tok = strtok (s, " ");
               while (tok)
                 {
