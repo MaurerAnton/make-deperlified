@@ -10,9 +10,10 @@ makefile:
 .PHONY: all a.one a.two a.three
 all: a.one* a.t[a-z0-9]o a.th[!q]ee
 a.o[Nn][Ee] a.t*: ; @echo $@
-answer: "a.one
+answer:
+a.one
 a.two
-a.three"
+a.three
 
 [case]
 makefile:

@@ -9,9 +9,10 @@ bar := $(foo:.o=.c)
 bar2:= $(foo:%.o=%.c)
 bar3:= $(patsubst %.c,%.o,x.c.c bar.c)
 all:;@echo $(bar); echo $(bar2); echo $(bar3)
-answer: "a.c b.c c.c
+answer:
 a.c b.c c.c
-x.c.o bar.o"
+a.c b.c c.c
+x.c.o bar.o
 
 [case]
 makefile:

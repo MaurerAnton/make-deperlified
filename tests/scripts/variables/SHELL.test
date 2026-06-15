@@ -35,8 +35,9 @@ one: two
 two: export SHELL := $altshell\n".'
 one two:;@echo "$@: $(SHELL) $$SHELL"
 '
-answer: "two: $altshell $altshell
-one: $altshell2 $mshell"
+answer:
+two: $altshell $altshell
+one: $altshell2 $mshell
 
 [case]
 makefile:

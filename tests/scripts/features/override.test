@@ -35,24 +35,27 @@ override define foo
 endef
 all: ; $(foo)
 options: foo=Hello
-answer: "First comes the definition.
-Then comes the override."
+answer:
+First comes the definition.
+Then comes the override.
 
 [case]
 makefile:
 
 #TAB#override FOO = bar
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi
 
 [case]
 makefile:
 
 #TAB#override#TAB#export FOO = bar
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi
 
 [case]
 makefile:

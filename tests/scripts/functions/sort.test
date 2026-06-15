@@ -25,9 +25,10 @@ all:
 #TAB#@echo $(sort $(bar2) $(foo)  $(addsuffix $(s1), $(bar) ) $(t2) $(bar2) $(bar3))
 #TAB#@echo $(sort $(blank) $(foo) $(bar2) $(t1) $(p1) )
 #TAB#@echo $(sort $(foo) $(bar2) $(t1) $(t4) $(t5) $(t7) $(t6) )
-answer: "A boy captured_by days end, has jazz_and_a midnight moon_light rise
+answer:
 A boy captured_by days end, has jazz_and_a midnight moon_light rise
-A boy captured_by days end, has jazz_and_a midnight moon_light rise"
+A boy captured_by days end, has jazz_and_a midnight moon_light rise
+A boy captured_by days end, has jazz_and_a midnight moon_light rise
 
 [case]
 makefile:

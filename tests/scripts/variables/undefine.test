@@ -22,8 +22,9 @@ $(info $(flavor a) $(flavor b) $(flavor c))
 
 
 all: ;@:
-answer: "recursive simple recursive
-undefined undefined undefined"
+answer:
+recursive simple recursive
+undefined undefined undefined
 
 [case]
 makefile:
@@ -83,5 +84,6 @@ makefile:
 
 #TAB#undefine FOO
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi

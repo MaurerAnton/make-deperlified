@@ -42,8 +42,9 @@ load ./testload.so
 POST := $(.LOADED)
 all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
 testload.so: testload.c ; @echo "rebuilding $@"; "cc"   -fPIC  -shared -o testload.so testload.c
-answer: "rebuilding testload.so
-pre= post=testload.so implicit"
+answer:
+rebuilding testload.so
+pre= post=testload.so implicit
 
 [case]
 makefile:
@@ -53,8 +54,9 @@ PRE := $(.LOADED)
 POST := $(.LOADED)
 all: ; @echo pre=$(PRE) post=$(POST) $(TESTLOAD)
 %.so: %.c ; @echo "rebuilding $@"; "cc"   -fPIC  -shared -o testload.so testload.c
-answer: "rebuilding testload.so
-pre= post=testload.so explicit"
+answer:
+rebuilding testload.so
+pre= post=testload.so explicit
 
 [case]
 makefile:
@@ -103,13 +105,15 @@ makefile:
 
 #TAB#load ./testload.so
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: load lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: load lines cannot start with TAB
+hi
 
 [case]
 makefile:
 
 #TAB#-load ./testload.so
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: -load lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: -load lines cannot start with TAB
+hi

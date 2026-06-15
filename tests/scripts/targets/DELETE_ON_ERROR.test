@@ -6,9 +6,10 @@ makefile:
 
 .DELETE_ON_ERROR:
 all: ; exit 1 > $@
-answer: "exit 1 > all
+answer:
+exit 1 > all
 #MAKE#: *** [#MAKEFILE#:3: all] Error 1
-#MAKE#: *** deleting file 'all'"
+#MAKE#: *** deleting file 'all'
 exit_code: 512
 
 [case]
@@ -18,7 +19,8 @@ makefile:
 all: foo.x ;
 %.x : %.q ; echo > $@
 %.q : ; exit 1 > $@
-answer: "exit 1 > foo.q
+answer:
+exit 1 > foo.q
 #MAKE#: *** [#MAKEFILE#:5: foo.q] Error 1
-#MAKE#: *** deleting file 'foo.q'"
+#MAKE#: *** deleting file 'foo.q'
 exit_code: 512

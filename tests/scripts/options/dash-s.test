@@ -7,60 +7,71 @@ makefile:
 all: one two
 one: ; @echo MAKEFLAGS=$$MAKEFLAGS
 two: ; echo two
-answer: "MAKEFLAGS=
+answer:
+MAKEFLAGS=
 echo two
-two"
+two
 
 [case]
 options: -s
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two
 
 [case]
 options: --silent
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two
 
 [case]
 options: --quiet
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two
 
 [case]
 options: --no-silent
-answer: "MAKEFLAGS= --no-silent
+answer:
+MAKEFLAGS= --no-silent
 echo two
-two"
+two
 
 [case]
 options: -s --no-silent
-answer: "MAKEFLAGS= --no-silent
+answer:
+MAKEFLAGS= --no-silent
 echo two
-two"
+two
 
 [case]
 options: --silent --no-silent
-answer: "MAKEFLAGS= --no-silent
+answer:
+MAKEFLAGS= --no-silent
 echo two
-two"
+two
 
 [case]
 options: --quiet --no-silent
-answer: "MAKEFLAGS= --no-silent
+answer:
+MAKEFLAGS= --no-silent
 echo two
-two"
+two
 
 [case]
 options: --no-silent -s
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two
 
 [case]
 options: --no-silent --silent
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two
 
 [case]
 options: --no-silent --quiet
-answer: "MAKEFLAGS=s
-two"
+answer:
+MAKEFLAGS=s
+two

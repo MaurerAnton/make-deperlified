@@ -13,7 +13,8 @@ all:
 	@echo $(sort $(suffix $(string4))) 
 	@echo $(suffix $(string) a.out) 
 	@echo $(sort $(suffix $(string3))) 
-answer: ".pl .pl1 .pl .pl3 .perl .c .c
+answer:
+.pl .pl1 .pl .pl3 .perl .c .c
 .c .perl .pl .pl1 .pl3
 .pl .pl1 .pl .pl3 .perl .c .c .out
-.c .perl .pl .pl1 .pl3"
+.c .perl .pl .pl1 .pl3

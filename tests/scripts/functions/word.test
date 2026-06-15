@@ -25,7 +25,8 @@ all:
 > @echo $(wordlist 100, 110, $(string))
 > @echo $(wordlist 7, 10, $(string2))
 > @echo $(wordlist 9223372036854775807, 0, $(string2))
-answer: "6
+answer:
+6
 2058
 word.pl
 
@@ -37,7 +38,7 @@ FORCE.pl word.pl
 word.pl general_test2.pl FORCE.pl word.pl generic_test.perl MAKEFILES_variable.pl
 generic_test.perl MAKEFILES_variable.pl
 
-word.pl general_test2.pl FORCE.pl word.pl"
+word.pl general_test2.pl FORCE.pl word.pl
 
 [case]
 makefile:

@@ -8,9 +8,10 @@ makefile:
 M: a b
 .SILENT : b
 a b: ; echo $@
-answer: "echo a
+answer:
+echo a
 a
-b"
+b
 
 [case]
 makefile:
@@ -19,8 +20,9 @@ makefile:
 M: a b
 .SILENT:
 a b: ; echo $@
-answer: "a
-b"
+answer:
+a
+b
 
 [case]
 makefile:
@@ -33,9 +35,10 @@ V =
 $V.SILENT:
 M: a b
 options: --no-print-directory
-answer: "a
+answer:
+a
 b
 echo a
 a
 echo b
-b"
+b

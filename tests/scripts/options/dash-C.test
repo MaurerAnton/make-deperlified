@@ -15,5 +15,6 @@ answer: "#MAKE#: 'all' is up to date."
 
 [case]
 options: -C src -I ../inc --no-print-directory file=test
-answer: "included
-#MAKE#: 'all' is up to date."
+answer:
+included
+#MAKE#: 'all' is up to date.

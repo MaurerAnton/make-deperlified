@@ -9,6 +9,7 @@ foo:; @echo Executing rule FOO
 
 .DEFAULT: ; @$(MAKE) -f defsub.mk $@
 options: bar
-answer: "#MAKE#[1]: Entering directory '#PWD#'
+answer:
+#MAKE#[1]: Entering directory '#PWD#'
 Executing rule BAR
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'

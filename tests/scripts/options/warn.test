@@ -7,8 +7,9 @@ makefile:
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
 options: --warn-undefined-variables
-answer: "MF= --warn=undefined-var
-MAKEFLAGS= --warn=undefined-var"
+answer:
+MF= --warn=undefined-var
+MAKEFLAGS= --warn=undefined-var
 
 [case]
 makefile:
@@ -16,74 +17,45 @@ makefile:
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
 options: -R --warn-undefined-variables
-answer: "MF=rR --warn=undefined-var
-MAKEFLAGS=rR --warn=undefined-var"
-
-[case]
-options: --warn=error --warn=warn
-answer: "MF= --warn
-MAKEFLAGS= --warn"
-
-[case]
-options: --warn=warn
-answer: "MF= --warn
-MAKEFLAGS= --warn"
-
-[case]
-options: --warn
-answer: "MF= --warn
-MAKEFLAGS= --warn"
-
-[case]
-options: --warn --warn=error
-answer: "MF= --warn=error
-MAKEFLAGS= --warn=error"
+answer:
+MF=rR --warn=undefined-var
+MAKEFLAGS=rR --warn=undefined-var
 
 [case]
 options: --warn=ignore --warn=error --warn=ignore --warn=invalid-ref,invalid-var,undefined-var
-answer: "MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
-MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var"
+answer:
+MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
+MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var
+
+[case]
+options: --warn
+answer:
+MF= --warn
+MAKEFLAGS= --warn
+
+[case]
+options: --warn=error --warn=warn
+answer:
+MF= --warn
+MAKEFLAGS= --warn
 
 [case]
 options: --warn=invalid-ref:ignore --warn=error --warn=invalid-var:warn,,,,,undefined-var:error,,,,,
-answer: "MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
-MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error"
+answer:
+MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
+MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
 
 [case]
-makefile:
-
-MAKEFLAGS += --warn=error --warn=warn
-$(info MF=$(MAKEFLAGS))
-all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn
-MAKEFLAGS= --warn"
+options: --warn --warn=error
+answer:
+MF= --warn=error
+MAKEFLAGS= --warn=error
 
 [case]
-makefile:
-
-MAKEFLAGS += --warn=warn
-$(info MF=$(MAKEFLAGS))
-all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn
-MAKEFLAGS= --warn"
-
-[case]
-makefile:
-
-MAKEFLAGS += --warn
-$(info MF=$(MAKEFLAGS))
-all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn
-MAKEFLAGS= --warn"
-
-[case]
-makefile:
-
-MAKEFLAGS += --warn --warn=error
-$(info MF=$(MAKEFLAGS))
-all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn=error
-MAKEFLAGS= --warn=error"
+options: --warn=warn
+answer:
+MF= --warn
+MAKEFLAGS= --warn
 
 [case]
 makefile:
@@ -91,8 +63,29 @@ makefile:
 MAKEFLAGS += --warn=ignore --warn=error --warn=ignore --warn=invalid-ref,invalid-var,undefined-var
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
-MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var"
+answer:
+MF= --warn=ignore,invalid-ref,invalid-var,undefined-var
+MAKEFLAGS= --warn=ignore,invalid-ref,invalid-var,undefined-var
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer:
+MF= --warn
+MAKEFLAGS= --warn
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=error --warn=warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer:
+MF= --warn
+MAKEFLAGS= --warn
 
 [case]
 makefile:
@@ -100,8 +93,29 @@ makefile:
 MAKEFLAGS += --warn=invalid-ref:ignore --warn=error --warn=invalid-var:warn,,,,,undefined-var:error,,,,,
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
-MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error"
+answer:
+MF= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
+MAKEFLAGS= --warn=error,invalid-ref:ignore,invalid-var,undefined-var:error
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn --warn=error
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer:
+MF= --warn=error
+MAKEFLAGS= --warn=error
+
+[case]
+makefile:
+
+MAKEFLAGS += --warn=warn
+$(info MF=$(MAKEFLAGS))
+all:; @#HELPER# env MAKEFLAGS
+answer:
+MF= --warn
+MAKEFLAGS= --warn
 
 [case]
 makefile:
@@ -123,8 +137,9 @@ makefile:
 all:;
 X := $(averyveryveryloooooooooooooooooooooooooooongvariablename)
 options: --warn=undefined-var
-answer: "#MAKEFILE#:3: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:3: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -145,9 +160,10 @@ answer: "ref"
 
 [case]
 options: --warn=undefined-var
-answer: "#MAKEFILE#:7: warning: reference to undefined variable 'UNDEFINED'
+answer:
+#MAKEFILE#:7: warning: reference to undefined variable 'UNDEFINED'
 #MAKEFILE#:9: warning: reference to undefined variable 'UNDEFINED'
-ref"
+ref
 
 [case]
 options: --warn=undefined-var:error
@@ -166,11 +182,12 @@ define nl
 endef
 
 all: ; @echo ref $(also$(nl)bad) $(IREF) $(SIREF)
-answer: "#MAKEFILE#:2: warning: invalid variable reference 'bad variable'
+answer:
+#MAKEFILE#:2: warning: invalid variable reference 'bad variable'
 #MAKEFILE#:10: warning: invalid variable reference 'also
 bad'
 #MAKEFILE#:2: warning: invalid variable reference 'bad variable'
-ref"
+ref
 
 [case]
 options: --warn=ignore
@@ -208,13 +225,14 @@ foo
 endef
 
 all: ; @echo ref
-answer: "#MAKEFILE#:4: warning: invalid variable name 'BAD VAR'
+answer:
+#MAKEFILE#:4: warning: invalid variable name 'BAD VAR'
 #MAKEFILE#:11: warning: invalid variable name 'NL
 VAR'
 #MAKEFILE#:13: warning: invalid variable name 'BAD DEF'
 #MAKEFILE#:17: warning: invalid variable name 'NL
 DEF'
-ref"
+ref
 
 [case]
 options: --warn=ignore

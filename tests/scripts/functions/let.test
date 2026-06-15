@@ -34,9 +34,10 @@ y = $(let y,,$ydef)
 z = $(let a b, ,+$a+$b+)
 
 all: ; @echo $v/$x/$y/$z
-answer: "blankvar
+answer:
+blankvar
 side-effect
-abc/abc/def/+++"
+abc/abc/def/+++
 
 [case]
 makefile:
@@ -74,8 +75,9 @@ all: auto target
 auto: ; @echo $(let $(auto_var),,$(av)) $(av)
 $(let AR foo,bar foo ,$(eval $(value mktarget)))
 options: -e WHITE=WHITE CFLAGS=
-answer: "automatic automatic automatic automatic automatic automatic automatic automatic automatic undefined default environment override default file command line override automatic automatic
-ar_foo _"
+answer:
+automatic automatic automatic automatic automatic automatic automatic automatic automatic undefined default environment override default file command line override automatic automatic
+ar_foo _
 
 [case]
 makefile:

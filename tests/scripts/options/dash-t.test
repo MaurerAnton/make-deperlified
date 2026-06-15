@@ -14,10 +14,11 @@ interm-a:: orig2-a ; echo >> $@
 interm-b:: orig1-b ; echo >> $@
 interm-b:: orig2-b ; echo >> $@
 options: -t final-a final-b
-answer: "touch interm-a
+answer:
+touch interm-a
 touch final-a
 touch interm-b
-touch final-b"
+touch final-b
 
 [case]
 makefile:

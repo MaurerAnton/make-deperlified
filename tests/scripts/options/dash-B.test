@@ -40,8 +40,9 @@ $(info MAKE_RESTARTS=$(MAKE_RESTARTS))
 include foo.x
 foo.x: ; @touch $@
 options: -B
-answer: "MAKE_RESTARTS=
-MAKE_RESTARTS=1"
+answer:
+MAKE_RESTARTS=
+MAKE_RESTARTS=1
 
 [case]
 makefile:
@@ -52,10 +53,11 @@ include foo.x
 foo.x: ; @touch $@
 blah.x: ; @echo $@
 options: -B
-answer: "MAKE_RESTARTS=
+answer:
+MAKE_RESTARTS=
 MAKE_RESTARTS=1
 blah.x
-all"
+all
 
 [case]
 makefile:

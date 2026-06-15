@@ -16,9 +16,10 @@ $(info FOO [$(origin FOO)]: $(value FOO))
 all: ;
 recurse: ; @$(MAKE) -f #MAKEFILE#
 options: -e --no-print-directory FOO=1 recurse
-answer: "FOO [command line]: 1
+answer:
 FOO [command line]: 1
-#MAKE#[1]: 'all' is up to date."
+FOO [command line]: 1
+#MAKE#[1]: 'all' is up to date.
 
 [case]
 makefile:
@@ -30,10 +31,11 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s
-answer: "value=world, origin=environment
+answer:
+value=world, origin=environment
 value=world, origin=environment
 in submake value=world, origin=environment
-value=world, origin=environment"
+value=world, origin=environment
 
 [case]
 makefile:
@@ -45,10 +47,11 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s -e
-answer: "value=world, origin=environment override
+answer:
+value=world, origin=environment override
 value=world, origin=environment override
 in submake value=world, origin=environment override
-value=world, origin=environment override"
+value=world, origin=environment override
 
 [case]
 makefile:
@@ -60,10 +63,11 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s --environment-overrides
-answer: "value=world, origin=environment override
+answer:
+value=world, origin=environment override
 value=world, origin=environment override
 in submake value=world, origin=environment override
-value=world, origin=environment override"
+value=world, origin=environment override
 
 [case]
 makefile:
@@ -75,10 +79,11 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s
-answer: "value=world, origin=environment override
+answer:
+value=world, origin=environment override
 value=world, origin=environment override
 in submake value=world, origin=environment override
-value=world, origin=environment override"
+value=world, origin=environment override
 
 [case]
 makefile:
@@ -90,10 +95,11 @@ all:
 > @$(MAKE) -e -C lib
 .PHONY: lib all
 options: -s
-answer: "value=world, origin=environment
+answer:
+value=world, origin=environment
 value=world, origin=environment
 in submake value=world, origin=environment override
-value=world, origin=environment override"
+value=world, origin=environment override
 
 [case]
 makefile:
@@ -105,10 +111,11 @@ all:
 > @$(MAKE) -C lib MAKEFLAGS=
 .PHONY: lib all
 options: -se
-answer: "value=world, origin=environment override
+answer:
+value=world, origin=environment override
 value=world, origin=environment override
 in submake value=world, origin=environment
-value=world, origin=environment"
+value=world, origin=environment
 
 [case]
 makefile:
@@ -120,10 +127,11 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s
-answer: "value=world, origin=environment
+answer:
+value=world, origin=environment
 value=world, origin=environment
 in submake value=world, origin=environment
-value=world, origin=environment"
+value=world, origin=environment
 
 [case]
 makefile:
@@ -135,7 +143,8 @@ all:
 > @$(MAKE) -C lib
 .PHONY: lib all
 options: -s
-answer: "value=world, origin=environment override
+answer:
+value=world, origin=environment override
 value=world, origin=environment override
 in submake value=world, origin=environment override
-value=world, origin=environment override"
+value=world, origin=environment override

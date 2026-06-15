@@ -29,51 +29,60 @@ f1.h f2.h: ; @echo $@
 d :: ; @echo ok
 d :: d ; @echo oops
 options: all
-answer: "aaa
-bbb"
+answer:
+aaa
+bbb
 
 [case]
 options: -j10 all
-answer: "aaa
-bbb"
+answer:
+aaa
+bbb
 
 [case]
 options: bar
-answer: "aaa
+answer:
+aaa
 aaa done
-bbb"
+bbb
 
 [case]
 options: -j10 bar
-answer: "aaa
+answer:
+aaa
 aaa done
-bbb"
+bbb
 
 [case]
 options: foo
-answer: "f1.h
-foo FIRST"
+answer:
+f1.h
+foo FIRST
 
 [case]
 options: -j10 foo
-answer: "f1.h
-foo FIRST"
+answer:
+f1.h
+foo FIRST
 
 [case]
 options: foo
-answer: "f2.h
-foo SECOND"
+answer:
+f2.h
+foo SECOND
 
 [case]
 options: -j10 foo
-answer: "f2.h
-foo SECOND"
+answer:
+f2.h
+foo SECOND
 
 [case]
 options: d
-answer: "ok
+answer:
+ok
 #MAKE#: circular d <- d dependency dropped
-oops"
+oops
 
 [case]
 makefile:
@@ -90,16 +99,18 @@ result:: two
 > @echo $^ >>$@
 > @echo $^
 
-answer: "one
-two"
+answer:
+one
+two
 
 [case]
 makefile:
 
 a\ xb :: ; @echo one
 a\ xb :: ; @echo two
-answer: "one
-two"
+answer:
+one
+two
 
 [case]
 makefile:
@@ -123,11 +134,12 @@ result :: 05
 01 02 03 04 05:
 > @touch 01 02 03 04 05
 options: -j10 result
-answer: "update
+answer:
 update
 update
 update
-update"
+update
+update
 
 [case]
 makefile:
@@ -137,9 +149,10 @@ all:: ; echo all_one
 all:: 3 ; echo all_two
 %: ; sleep $*
 options: -rs -j2 1 2 root
-answer: "all_one
+answer:
+all_one
 all_two
-root"
+root
 
 [case]
 makefile:
@@ -152,9 +165,10 @@ joe: FORCE ; touch joe-is-forced
 
 FORCE:
 options: -j5
-answer: "one
+answer:
+one
 touch joe-is-forced
-four"
+four
 
 [case]
 makefile:
@@ -188,6 +202,7 @@ makefile:
 hello.x::; @#HELPER# -q wait bye.x out $@
 bye.x::; @#HELPER# sleep 1 file $@
 options: -j2 hello.x bye.x
-answer: "sleep 1
+answer:
+sleep 1
 file bye.x
-hello.x"
+hello.x

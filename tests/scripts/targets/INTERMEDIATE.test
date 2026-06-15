@@ -19,9 +19,10 @@ foo.d: foo.e
 # Explicit rule test
 foo.c: foo.e bar.e; cat $^ > $@
 options: foo.d
-answer: "cp foo.f foo.e
+answer:
+cp foo.f foo.e
 cp foo.e foo.d
-rm foo.e"
+rm foo.e
 
 [case]
 options: foo.d
@@ -29,16 +30,18 @@ answer: "#MAKE#: 'foo.d' is up to date."
 
 [case]
 options: foo.d
-answer: "cp foo.f foo.e
+answer:
+cp foo.f foo.e
 cp foo.e foo.d
-rm foo.e"
+rm foo.e
 
 [case]
 options: foo.c
-answer: "cp foo.f foo.e
+answer:
+cp foo.f foo.e
 cp bar.f bar.e
 cat foo.e bar.e > foo.c
-rm foo.e bar.e"
+rm foo.e bar.e
 
 [case]
 options: foo.c
@@ -46,10 +49,11 @@ answer: "#MAKE#: 'foo.c' is up to date."
 
 [case]
 options: foo.c
-answer: "cp foo.f foo.e
+answer:
+cp foo.f foo.e
 cp bar.f bar.e
 cat foo.e bar.e > foo.c
-rm foo.e bar.e"
+rm foo.e bar.e
 
 [case]
 options: foo.e
@@ -63,9 +67,10 @@ foo.a: ; touch $@
 %: %.a ; touch $@
 .INTERMEDIATE: foo.a
 options: -R
-answer: "touch foo.a
+answer:
+touch foo.a
 touch foo
-rm foo.a"
+rm foo.a
 
 [case]
 makefile:
@@ -83,7 +88,8 @@ makefile:
 %.q: 1.r ; touch $@
 %.r: ; touch $@
 .INTERMEDIATE: 1.r
-answer: "touch 1.r
+answer:
+touch 1.r
 touch 1.q
 touch 1.all
-rm 1.r"
+rm 1.r

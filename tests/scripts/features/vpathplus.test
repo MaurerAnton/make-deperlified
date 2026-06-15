@@ -37,26 +37,30 @@ notarget.c: notarget.d ; -@echo "not creating $@ from $^"
 
 intermediate: inter.a
 options: general
-answer: "cat bar.d > bar.c
-cat work/foo.c bar.c > foo.b 2>/dev/null || exit 1"
+answer:
+cat bar.d > bar.c
+cat work/foo.c bar.c > foo.b 2>/dev/null || exit 1
 
 [case]
 options: notarget
-answer: "not creating notarget.c from notarget.d
+answer:
+not creating notarget.c from notarget.d
 cat notarget.c > notarget.b 2>/dev/null || exit 1
-#MAKE#: *** [#MAKEFILE#:11: notarget.b] Error 1"
+#MAKE#: *** [#MAKEFILE#:11: notarget.b] Error 1
 exit_code: 512
 
 [case]
 options: intermediate
-answer: "cat work/inter.d > inter.c
+answer:
+cat work/inter.d > inter.c
 cat inter.c > inter.b 2>/dev/null || exit 1
 cat inter.b > inter.a
-rm inter.b inter.c"
+rm inter.b inter.c
 
 [case]
 options: intermediate
-answer: "cat work/inter.d > inter.c
+answer:
+cat work/inter.d > inter.c
 cat inter.c > inter.b 2>/dev/null || exit 1
 cat inter.b > inter.a
-rm inter.c"
+rm inter.c

@@ -14,9 +14,10 @@ X2 := $(sort $(filter FOO BAR,$(.VARIABLES)))
 BAR := bar
 
 all: ; @echo X1 = $(X1); echo X2 = $(X2); echo LAST = $(sort $(filter FOO BAR,$(.VARIABLES)))
-answer: "X1 =
+answer:
+X1 =
 X2 = FOO
-LAST = BAR FOO"
+LAST = BAR FOO
 
 [case]
 makefile:
@@ -28,8 +29,9 @@ undefine BAR
 BAZ := baz
 $(info two: $(sort $(filter FOO BAR BAZ,$(.VARIABLES))))
 all:;@:
-answer: "one: BAR FOO
-two: BAZ FOO"
+answer:
+one: BAR FOO
+two: BAZ FOO
 
 [case]
 makefile:
@@ -67,7 +69,8 @@ reset-three \
 #TAB#: reset-six
 #TAB#$(foo)
 options: orig test reset
-answer: ": orig-one
+answer:
+: orig-one
 : orig-two \
 orig-three \
 orig-four \
@@ -93,4 +96,4 @@ reset-four \
 : reset-six
 : foo-one foo-two
 : foo-three
-: foo-four"
+: foo-four

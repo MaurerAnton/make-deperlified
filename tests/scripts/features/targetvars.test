@@ -54,15 +54,17 @@ foo.q : RVAR += rvar
 foo.r : RVAR += rvar
 foo.t : TVAR := $(QVAR)
 options: one two three
-answer: "one bar
+answer:
+one bar
 foo two
 BAR=1000
-foo bar"
+foo bar
 
 [case]
 options: one two FOO=1 BAR=2
-answer: "one 2
-1 2"
+answer:
+one 2
+1 2
 
 [case]
 options: four
@@ -70,8 +72,9 @@ answer: "x ok  ok"
 
 [case]
 options: seven
-answer: "eight: seven eight
-seven: seven seven"
+answer:
+eight: seven eight
+seven: seven seven
 
 [case]
 options: nine
@@ -83,21 +86,24 @@ answer: "baz"
 
 [case]
 options: ten
-answer: "one=two
+answer:
+one=two
 one bar
 =
 foo two
-ten"
+ten
 
 [case]
 options: foo.q bar.q
-answer: "qvar = rvar
-qvar ="
+answer:
+qvar = rvar
+qvar =
 
 [case]
 options: foo.t bar.s
-answer: "qvar = qvar
-qvar ="
+answer:
+qvar = qvar
+qvar =
 
 [case]
 makefile:
@@ -121,8 +127,9 @@ FOO = bar
 one: FOO += biz
 one: FOO += boz
 one: ; @echo $(FOO)
-answer: "bar baz biz boz
-bar baz"
+answer:
+bar baz biz boz
+bar baz
 
 [case]
 options: one
@@ -168,18 +175,21 @@ ifdef PATTERN
   fo% : Z = pat
 endif
 options: foo
-answer: "ok ok foo nopat
-ok ok foo nopat"
+answer:
+ok ok foo nopat
+ok ok foo nopat
 
 [case]
 options: bar
-answer: "ok ok bar nopat
-ok ok bar nopat"
+answer:
+ok ok bar nopat
+ok ok bar nopat
 
 [case]
 options: foo PATTERN=yes
-answer: "ok ok foo pat
-ok ok foo pat"
+answer:
+ok ok foo pat
+ok ok foo pat
 
 [case]
 makefile:
@@ -255,9 +265,10 @@ makefile:
 
 all: PATH := ..
 all: ; foobar
-answer: "foobar
+answer:
+foobar
 #MAKE#: foobar: No such file or directory
-#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127
 exit_code: 512
 
 [case]
@@ -282,8 +293,9 @@ unexport hello=sun
 all: base exp
 base exp: ; @echo hello=$$hello
 exp: export hello=world
-answer: "hello=
-hello=world"
+answer:
+hello=
+hello=world
 
 [case]
 makefile:
@@ -292,8 +304,9 @@ hello=sun
 all: base exp
 base exp: ; @echo hello=$$hello
 exp: unexport hello=world
-answer: "hello=sun
-hello="
+answer:
+hello=sun
+hello=
 
 [case]
 makefile:
@@ -334,83 +347,97 @@ base: hello=base
 endif
 
 all mid base:; @echo $@ make=$(hello) shell=$$hello
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=
-all make= shell="
+all make= shell=
 
 [case]
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=mid
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: baseexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=mid
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: baseexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=mid
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: midexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=mid
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: midexport=export baseexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=mid
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: midexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: midexport=unexport baseexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=
-all make=environ shell=environ"
+all make=environ shell=environ
 
 [case]
 options: baseexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=
-all make= shell="
+all make= shell=
 
 [case]
 options: baseexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=
-all make= shell="
+all make= shell=
 
 [case]
 options: midexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=mid
-all make= shell="
+all make= shell=
 
 [case]
 options: midexport=export baseexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=mid
-all make= shell="
+all make= shell=
 
 [case]
 options: midexport=unexport
-answer: "base make=base shell=
+answer:
+base make=base shell=
 mid make=mid shell=
-all make= shell="
+all make= shell=
 
 [case]
 options: midexport=unexport baseexport=export
-answer: "base make=base shell=base
+answer:
+base make=base shell=base
 mid make=mid shell=
-all make= shell="
+all make= shell=

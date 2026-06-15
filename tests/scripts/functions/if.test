@@ -19,7 +19,8 @@ all:
 	@echo 9 $(if z,true,fal,se) hi
 	@echo 10 $(if ,true,fal,se)there
 	@echo 11 $(if $(e) ,true,false)
-answer: "1 false
+answer:
+1 false
 2
 3
 4 true
@@ -29,4 +30,4 @@ answer: "1 false
 8 false
 9 true hi
 10 fal,sethere
-11 false"
+11 false

@@ -9,9 +9,10 @@ answer: "hi"
 
 [case]
 options: -w
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 hi
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 options: -w --no-print-directory
@@ -19,9 +20,10 @@ answer: "hi"
 
 [case]
 options: --no-print-directory --print-directory
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 hi
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -33,9 +35,10 @@ answer: "touch foo"
 
 [case]
 options: -w
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 touch foo
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 options: -w --no-print-directory
@@ -43,18 +46,20 @@ answer: "touch foo"
 
 [case]
 options: --no-print-directory --print-directory
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 touch foo
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
 
 all: ;@$(MAKE) -f #MAKEFILE# recurse
 recurse: ; @echo hi
-answer: "#MAKE#[1]: Entering directory '#PWD#'
+answer:
+#MAKE#[1]: Entering directory '#PWD#'
 hi
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'
 
 [case]
 options: --no-print-directory
@@ -62,11 +67,12 @@ answer: "hi"
 
 [case]
 options: --no-print-directory -w
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 #MAKE#[1]: Entering directory '#PWD#'
 hi
 #MAKE#[1]: Leaving directory '#PWD#'
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 options: -w --no-print-directory

@@ -23,11 +23,12 @@ foo: bar | baz
 
 bar baz:
 #TAB#touch $@
-answer: "touch bar
+answer:
+touch bar
 touch baz
 $^ = bar
 $| = baz
-touch foo"
+touch foo
 
 [case]
 answer: "touch baz"
@@ -46,17 +47,19 @@ foo: baz
 
 bar baz:
 #TAB#touch $@
-answer: "touch bar
+answer:
+touch bar
 touch baz
 $^ = bar baz
 $| = 
-touch foo"
+touch foo
 
 [case]
-answer: "touch baz
+answer:
+touch baz
 $^ = bar baz
 $| = 
-touch foo"
+touch foo
 
 [case]
 makefile:
@@ -70,10 +73,11 @@ foo:| baz
 
 baz:
 #TAB#touch $@
-answer: "touch baz
+answer:
+touch baz
 $^ = 
 $| = baz
-touch foo"
+touch foo
 
 [case]
 answer: "touch baz"
@@ -91,11 +95,12 @@ all: foo.w
 .PHONY: baz
 foo.x baz:
 #TAB#touch $@
-answer: "touch foo.x
+answer:
+touch foo.x
 touch baz
 $^ = foo.x
 $| = baz
-touch foo.w"
+touch foo.w
 
 [case]
 answer: "touch baz"

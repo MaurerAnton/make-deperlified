@@ -13,12 +13,14 @@ all: ; @echo running rules.
 #MAKEFILE# incl.mk: incl-1.mk ; @echo rebuilding $@; echo >> $@
 
 include incl.mk
-answer: "rebuilding incl.mk
-running rules."
+answer:
+rebuilding incl.mk
+running rules.
 
 [case]
-answer: "rebuilding #MAKEFILE#
-running rules."
+answer:
+rebuilding #MAKEFILE#
+running rules.
 
 [case]
 makefile:
@@ -33,13 +35,15 @@ c: ; echo >> $@
 
 include $(F)
 options: F=a
-answer: "test -f b || echo >> b
-hello"
+answer:
+test -f b || echo >> b
+hello
 
 [case]
 options: F=b
-answer: "test -f b || echo >> b
-hello"
+answer:
+test -f b || echo >> b
+hello
 
 [case]
 makefile:
@@ -64,8 +68,9 @@ m2.d: m1.d ; @test -f $< || { echo $@; touch $@; }
 
 include m1.d
 -include m2.d
-answer: "m1.d
-RESTARTS=1"
+answer:
+m1.d
+RESTARTS=1
 
 [case]
 makefile:
@@ -77,8 +82,9 @@ m1.d: ; @echo $@; touch $@
 m2.d: m1.d ; @test -f $< || { echo $@; touch $@; }
 
 include m1.d m2.d
-answer: "m1.d
-RESTARTS=1"
+answer:
+m1.d
+RESTARTS=1
 
 [case]
 makefile:
@@ -86,8 +92,9 @@ makefile:
 hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
 hello.d:
 include hello.d
-answer: "RESTARTS=
-#MAKE#: 'hello.o' is up to date."
+answer:
+RESTARTS=
+#MAKE#: 'hello.o' is up to date.
 
 [case]
 makefile:
@@ -95,9 +102,10 @@ makefile:
 hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
 hello.d:; $(info $@)
 include hello.d
-answer: "hello.d
+answer:
+hello.d
 RESTARTS=
-#MAKE#: 'hello.o' is up to date."
+#MAKE#: 'hello.o' is up to date.
 
 [case]
 makefile:
@@ -105,8 +113,9 @@ makefile:
 hello.o: hello.d; $(info RESTARTS=$(MAKE_RESTARTS))
 hello.d: hello.td
 include hello.d
-answer: "RESTARTS=
-#MAKE#: 'hello.o' is up to date."
+answer:
+RESTARTS=
+#MAKE#: 'hello.o' is up to date.
 
 [case]
 makefile:
@@ -114,6 +123,7 @@ makefile:
 hello.o: hello.d; $(info $@)
 hello.d: hello.td; $(info $@)
 include hello.d
-answer: "hello.d
+answer:
+hello.d
 hello.o
-#MAKE#: 'hello.o' is up to date."
+#MAKE#: 'hello.o' is up to date.

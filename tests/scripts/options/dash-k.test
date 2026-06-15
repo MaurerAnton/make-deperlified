@@ -23,11 +23,12 @@ commands.o : command.c defs.h command.h
 display.o : display.c defs.h buffer.h
 	@echo cc -c display.c
 options: -k
-answer: "cc -c main.c
+answer:
+cc -c main.c
 #MAKE#: *** No rule to make target 'kbd.c', needed by 'kbd.o'.
 cc -c commands.c
 cc -c display.c
-#MAKE#: Target 'edit' not remade because of errors."
+#MAKE#: Target 'edit' not remade because of errors.
 exit_code: 512
 
 [case]
@@ -42,9 +43,10 @@ lib: foo.o; @echo cp $^ $@
 
 foo.o: ; exit 1
 options: -k
-answer: "exit 1
+answer:
+exit 1
 #MAKE#: *** [t001.mk:9: foo.o] Error 1
-#MAKE#: Target 'all' not remade because of errors."
+#MAKE#: Target 'all' not remade because of errors.
 exit_code: 512
 
 [case]
@@ -53,7 +55,8 @@ all: ; @echo hi
 include ifile
 ifile: no-such-file; exit 1
 options: -k
-answer: "#MAKEFILE#:2: ifile: No such file or directory
+answer:
+#MAKEFILE#:2: ifile: No such file or directory
 #MAKE#: *** No rule to make target 'no-such-file', needed by 'ifile'.
-#MAKEFILE#:2: failed to remake makefile 'ifile'"
+#MAKEFILE#:2: failed to remake makefile 'ifile'
 exit_code: 512

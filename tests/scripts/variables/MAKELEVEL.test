@@ -6,6 +6,7 @@ makefile:
 all:
 	@echo MAKELEVEL is $(MAKELEVEL)
 	echo $$MAKELEVEL
-answer: "MAKELEVEL is 0
+answer:
+MAKELEVEL is 0
 echo $MAKELEVEL
-1"
+1

@@ -8,8 +8,9 @@ makefile:
 all:
 #TAB#a=$$$$
 #TAB#[ 0"$$a" -eq "$$$$" ] || echo fail
-answer: "a=$$
-[ 0\"$a\" -eq \"$$\" ] || echo fail"
+answer:
+a=$$
+[ 0\"$a\" -eq \"$$\" ] || echo fail
 
 [case]
 makefile:
@@ -18,8 +19,9 @@ makefile:
 all:
 #TAB#a=$$$$
 #TAB#@-+    [ 0"$$a" -eq "$$$$" ] || echo fail
-answer: "a=$$
-[ 0\"$a\" -eq \"$$\" ] || echo fail"
+answer:
+a=$$
+[ 0\"$a\" -eq \"$$\" ] || echo fail
 
 [case]
 makefile:
@@ -76,8 +78,9 @@ makefile:
 SHELL = #PERL#
 .SHELLFLAGS =
 all:; @print "it works"
-answer: "Can't open perl script \"print \"it works\"\": No such file or directory
-#MAKE#: *** [#MAKEFILE#:5: all] Error 2"
+answer:
+Can't open perl script \"print \"it works\"\": No such file or directory
+#MAKE#: *** [#MAKEFILE#:5: all] Error 2
 exit_code: 512
 
 [case]
@@ -86,8 +89,9 @@ makefile:
 .ONESHELL:
 SHELL = #PERL#
 all:; @print "it works"
-answer: "Can't open perl script \"print \"it works\"\": No such file or directory
-#MAKE#: *** [#MAKEFILE#:4: all] Error 2"
+answer:
+Can't open perl script \"print \"it works\"\": No such file or directory
+#MAKE#: *** [#MAKEFILE#:4: all] Error 2
 exit_code: 512
 
 [case]

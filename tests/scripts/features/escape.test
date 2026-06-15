@@ -50,10 +50,11 @@ makefile:
 
 foo: foo\:bar foo\\\:bar foo\\\\\:bar
 foo foo\:bar foo\\\:bar foo\\\\\:bar: ; : '$@'
-answer: ": 'foo:bar'
+answer:
+: 'foo:bar'
 : 'foo\:bar'
 : 'foo\\:bar'
-: 'foo'"
+: 'foo'
 
 [case]
 makefile:

@@ -13,16 +13,18 @@ bar$$baz: $$(PRE)
 baraz: $$(PRE)
 PRE = three four
 .DEFAULT: ; @echo '$@'
-answer: "$
+answer:
+$
 bar$biz
-foo$bar : bar$baz bar$biz"
+foo$bar : bar$baz bar$biz
 
 [case]
 options: SE=1
-answer: "three
+answer:
+three
 four
 bariz
-foo$bar : baraz bariz"
+foo$bar : baraz bariz
 
 [case]
 makefile:
@@ -41,7 +43,8 @@ foo: $$@.1 \
      $$|.5 \
      $$*.6
 
-answer: "bar
+answer:
+bar
 baz
 biz
 buz
@@ -54,7 +57,7 @@ bar.4
 baz.4
 biz.4
 buz.5
-.6"
+.6
 
 [case]
 makefile:
@@ -67,8 +70,9 @@ foo.x: $$a $$b
 foo.x: a := bar
 
 %.x: b := baz
-answer: "bar
-baz"
+answer:
+bar
+baz
 
 [case]
 makefile:
@@ -92,22 +96,24 @@ bar: bar.3
 baz: baz.1
 baz: baz.2
 baz: ; @:
-answer: "foo.1
+answer:
+foo.1
 foo.2
 foo.3
 bar.1
 bar.2
 bar.3
 baz.1
-baz.2"
+baz.2
 
 [case]
 makefile:
 
 .SECONDEXPANSION:
 all : $$(eval $$(info test))
-answer: "test
-#MAKE#: Nothing to be done for 'all'."
+answer:
+test
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -169,9 +175,10 @@ foo: $$@.o ;
 
 # Not creating libcat.a here prevents segfault,
 libcat.a: ; @touch $@
-answer: "#MAKEFILE#:16: recipe was specified for file '-lcat' at #MAKEFILE#:16,
+answer:
+#MAKEFILE#:16: recipe was specified for file '-lcat' at #MAKEFILE#:16,
 #MAKEFILE#:16: but '-lcat' is now considered the same file as 'libcat.a'
-#MAKEFILE#:16: recipe for '-lcat' will be ignored in favor of the one for 'libcat.a'"
+#MAKEFILE#:16: recipe for '-lcat' will be ignored in favor of the one for 'libcat.a'
 
 [case]
 makefile:
@@ -181,8 +188,9 @@ makefile:
 .PHONY: biz baz
 biz: baz ;
 biz: $$(info $$<)
-answer: "baz
-#MAKE#: Nothing to be done for 'biz'."
+answer:
+baz
+#MAKE#: Nothing to be done for 'biz'.
 
 [case]
 makefile:
@@ -191,8 +199,9 @@ makefile:
 all: 2.x
 2.x: 5.z 6.z 5.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=2.x,<=,^=,+=,|=,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+answer:
+@=2.x,<=,^=,+=,|=,?=,*=,%=
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -203,9 +212,10 @@ all: 15.x 1.x
 1.x: 1.z 2.z 2.z | 3.z 4.z
 15.x 1.x: 9.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=15.x,<=5.z,^=5.z 6.z,+=5.z 6.z 5.z,|=7.z 8.z,?=,*=,%=
+answer:
+@=15.x,<=5.z,^=5.z 6.z,+=5.z 6.z 5.z,|=7.z 8.z,?=,*=,%=
 @=1.x,<=1.z,^=1.z 2.z,+=1.z 2.z 2.z,|=3.z 4.z,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -214,9 +224,10 @@ makefile:
 all: 15.x
 15.x 1.x&: 5.z 6.z 5.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=15.x,<=,^=,+=,|=,?=,*=,%=
+answer:
+@=15.x,<=,^=,+=,|=,?=,*=,%=
 @=1.x,<=,^=,+=,|=,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -227,9 +238,10 @@ all: 15.x 1.x
 1.x: 1.z 2.z 2.z | 3.z 4.z
 15.x 1.x&: 9.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=15.x,<=5.z,^=5.z 6.z,+=5.z 6.z 5.z,|=7.z 8.z,?=,*=,%=
+answer:
+@=15.x,<=5.z,^=5.z 6.z,+=5.z 6.z 5.z,|=7.z 8.z,?=,*=,%=
 @=1.x,<=1.z,^=1.z 2.z,+=1.z 2.z 2.z,|=3.z 4.z,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -238,8 +250,9 @@ makefile:
 all: 2.x
 2.x:: 5.z 6.z 5.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=2.x,<=,^=,+=,|=,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+answer:
+@=2.x,<=,^=,+=,|=,?=,*=,%=
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -250,9 +263,10 @@ all: 15.x 1.x
 1.x:: 1.z 2.z 2.z | 3.z 4.z ;
 15.x 1.x:: 9.z $$(info @=$$@,<=$$<,^=$$^,+=$$+,|=$$|,?=$$?,*=$$*,%=$$%) ;
 %.z: ;
-answer: "@=15.x,<=,^=,+=,|=,?=,*=,%=
+answer:
+@=15.x,<=,^=,+=,|=,?=,*=,%=
 @=1.x,<=,^=,+=,|=,?=,*=,%=
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -272,11 +286,12 @@ bye.tsk: bye.o $$(info second expansion of $$@ prereqs); $(info $@ from $<)
 hello.o: $$(info second expansion of $$@ prereqs); $(info $@)
 bye.o: $$(info second expansion of $$@ prereqs); $(info $@)
 options: hello.tsk
-answer: "second expansion of hello.tsk prereqs
+answer:
+second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -291,10 +306,11 @@ hello.tsk: $$(dep2); $(info $@ from $^)
 hello.o:; $(info $@)
 hello.h:; $(info $@)
 options: hello.tsk
-answer: "hello.h
+answer:
+hello.h
 hello.o
 hello.tsk from hello.h hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -305,11 +321,12 @@ bye.tsk: bye.o $$(info second expansion of $$@ prereqs)
 hello.o: $$(info second expansion of $$@ prereqs); $(info $@)
 bye.o: $$(info second expansion of $$@ prereqs); $(info $@)
 options: hello.tsk
-answer: "second expansion of hello.tsk prereqs
+answer:
+second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -322,7 +339,8 @@ hello.o: $$(info second expansion of $$@ prereqs); $(info $@)
 world.o: $$(info second expansion of $$@ prereqs); $(info $@)
 bye.o: $$(info second expansion of $$@ prereqs); $(info $@)
 options: hello.tsk
-answer: "2 second expansion of hello.tsk prereqs
+answer:
+2 second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 2 second expansion of world.tsk prereqs
@@ -330,7 +348,7 @@ hello.o
 second expansion of world.o prereqs
 world.o
 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -341,11 +359,12 @@ bye.tsk:| bye.o $$(info second expansion of $$@ prereqs); $(info $@ from $|)
 hello.o:| $$(info second expansion of $$@ prereqs); $(info $@)
 bye.o:| $$(info second expansion of $$@ prereqs); $(info $@)
 options: hello.tsk
-answer: "second expansion of hello.tsk prereqs
+answer:
+second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -356,11 +375,12 @@ bye.tsk:: bye.o $$(info second expansion of $$@ prereqs); $(info $@ from $<)
 hello.o:: $$(info second expansion of $$@ prereqs); $(info $@)
 bye.o:: $$(info second expansion of $$@ prereqs); $(info $@)
 options: hello.tsk
-answer: "second expansion of hello.tsk prereqs
+answer:
+second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -375,7 +395,8 @@ hello.o:: $$(info 2 second expansion of $$@ prereqs); $(info 2 $@)
 bye.o:: $$(info 1 second expansion of $$@ prereqs); $(info 1 $@)
 bye.o:: $$(info 2 second expansion of $$@ prereqs); $(info 2 $@)
 options: hello.tsk
-answer: "1 second expansion of hello.tsk prereqs
+answer:
+1 second expansion of hello.tsk prereqs
 1 second expansion of hello.o prereqs
 1 hello.o
 2 second expansion of hello.o prereqs
@@ -383,7 +404,7 @@ answer: "1 second expansion of hello.tsk prereqs
 1 hello.tsk from hello.o
 2 second expansion of hello.tsk prereqs
 2 hello.tsk from hello.o
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -393,13 +414,14 @@ all: hello.tsk hello.q
 hello.tsk: hello.o $$(info second expansion of $$@ prereqs); $(info $@ from $^)
 hello.o: $$(info second expansion of $$@ prereqs); $(info $@)
 hello.q: hello.tsk $$(info second expansion of $$@ prereqs); $(info $@ from $^)
-answer: "second expansion of hello.tsk prereqs
+answer:
+second expansion of hello.tsk prereqs
 second expansion of hello.o prereqs
 hello.o
 hello.tsk from hello.o
 second expansion of hello.q prereqs
 hello.q from hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -409,14 +431,15 @@ vpath hello.c src
 all: hello.c; $(info $@ from $^)
 hello.c: $$(info second expansion of hello.c prereqs); $(info 1 $@)
 src/hello.c: $$(info second expansion of src/hello.c prereqs); $(info 2 $@)
-answer: "#MAKEFILE#:5: recipe was specified for file 'hello.c' at #MAKEFILE#:5,
+answer:
+#MAKEFILE#:5: recipe was specified for file 'hello.c' at #MAKEFILE#:5,
 #MAKEFILE#:5: but 'hello.c' is now considered the same file as 'src/hello.c'
 #MAKEFILE#:5: recipe for 'hello.c' will be ignored in favor of the one for 'src/hello.c'
 second expansion of src/hello.c prereqs
 second expansion of hello.c prereqs
 2 src/hello.c
 all from src/hello.c
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -425,8 +448,9 @@ makefile:
 bye:=bye.c
 all: hello.o
 .DEFAULT: $$(info second expansion of prereqs of default recipe @ = $$@) ; $(info default recipe $@)
-answer: "default recipe hello.o
-#MAKE#: Nothing to be done for 'all'."
+answer:
+default recipe hello.o
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -434,8 +458,9 @@ makefile:
 .SECONDEXPANSION:
 hello.tsk:; exit 1
 unrelated: $$(shell touch hello.1);
-answer: "exit 1
-#MAKE#: *** [#MAKEFILE#:3: hello.tsk] Error 1"
+answer:
+exit 1
+#MAKE#: *** [#MAKEFILE#:3: hello.tsk] Error 1
 exit_code: 512
 
 [case]
@@ -447,6 +472,7 @@ deps:=hello.h
 all: hello.x
 hello.x: $$(deps); $(info $@)
 hello.h:; $(info $@)
-answer: "hello.h
+answer:
+hello.h
 hello.x
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.

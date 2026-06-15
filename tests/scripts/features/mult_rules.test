@@ -35,9 +35,10 @@ vpath hello.c src
 all: hello.c; $(info $@ from $^)
 hello.c: ; $(info 1 $@)
 src/hello.c: ; $(info 2 $@)
-answer: "#MAKEFILE#:4: recipe was specified for file 'hello.c' at #MAKEFILE#:4,
+answer:
+#MAKEFILE#:4: recipe was specified for file 'hello.c' at #MAKEFILE#:4,
 #MAKEFILE#:4: but 'hello.c' is now considered the same file as 'src/hello.c'
 #MAKEFILE#:4: recipe for 'hello.c' will be ignored in favor of the one for 'src/hello.c'
 2 src/hello.c
 all from src/hello.c
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.

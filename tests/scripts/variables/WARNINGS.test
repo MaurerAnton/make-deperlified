@@ -7,8 +7,9 @@ makefile:
 .WARNINGS = error
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF=
-MAKEFLAGS="
+answer:
+MF=
+MAKEFLAGS=
 
 [case]
 makefile:
@@ -16,8 +17,9 @@ makefile:
 .WARNINGS = error
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF=
-MAKEFLAGS="
+answer:
+MF=
+MAKEFLAGS=
 
 [case]
 makefile:
@@ -25,8 +27,9 @@ makefile:
 .WARNINGS = error
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF=
-MAKEFLAGS="
+answer:
+MF=
+MAKEFLAGS=
 
 [case]
 makefile:
@@ -34,8 +37,9 @@ makefile:
 .WARNINGS = error
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF=
-MAKEFLAGS="
+answer:
+MF=
+MAKEFLAGS=
 
 [case]
 makefile:
@@ -43,8 +47,9 @@ makefile:
 .WARNINGS = error
 $(info MF=$(MAKEFLAGS))
 all:; @#HELPER# env MAKEFLAGS
-answer: "MF=
-MAKEFLAGS="
+answer:
+MF=
+MAKEFLAGS=
 
 [case]
 makefile:
@@ -66,8 +71,9 @@ makefile:
 .WARNINGS = undefined-var
 all:;
 X := $(averyveryveryloooooooooooooooooooooooooooongvariablename)
-answer: "#MAKEFILE#:4: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:4: warning: reference to undefined variable 'averyveryveryloooooooooooooooooooooooooooongvariablename'
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -89,9 +95,10 @@ answer: "ref"
 
 [case]
 options: warnval=undefined-var
-answer: "#MAKEFILE#:8: warning: reference to undefined variable 'UNDEFINED'
+answer:
+#MAKEFILE#:8: warning: reference to undefined variable 'UNDEFINED'
 #MAKEFILE#:10: warning: reference to undefined variable 'UNDEFINED'
-ref"
+ref
 
 [case]
 options: warnval=undefined-var:error
@@ -111,11 +118,12 @@ define nl
 endef
 
 all: ; @echo ref $(also$(nl)bad) $(IREF) $(SIREF)
-answer: "#MAKEFILE#:3: warning: invalid variable reference 'bad variable'
+answer:
+#MAKEFILE#:3: warning: invalid variable reference 'bad variable'
 #MAKEFILE#:11: warning: invalid variable reference 'also
 bad'
 #MAKEFILE#:3: warning: invalid variable reference 'bad variable'
-ref"
+ref
 
 [case]
 options: warnval=ignore
@@ -154,13 +162,14 @@ foo
 endef
 
 all: ; @echo ref
-answer: "#MAKEFILE#:5: warning: invalid variable name 'BAD VAR'
+answer:
+#MAKEFILE#:5: warning: invalid variable name 'BAD VAR'
 #MAKEFILE#:12: warning: invalid variable name 'NL
 VAR'
 #MAKEFILE#:14: warning: invalid variable name 'BAD DEF'
 #MAKEFILE#:18: warning: invalid variable name 'NL
 DEF'
-ref"
+ref
 
 [case]
 options: warnval=ignore
@@ -180,16 +189,18 @@ makefile:
 
 .WARNINGS = no-such-warn
 all:;
-answer: "#MAKEFILE#:2: unknown warning 'no-such-warn': ignored
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:2: unknown warning 'no-such-warn': ignored
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
 
 .WARNINGS = invalid-var:no-such-action
 all:;
-answer: "#MAKEFILE#:2: unknown warning action 'no-such-action': ignored
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:2: unknown warning action 'no-such-action': ignored
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:

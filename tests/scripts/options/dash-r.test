@@ -48,9 +48,10 @@ makefile:
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=
+answer:
+at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -58,9 +59,10 @@ makefile:
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=
+answer:
+at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -68,9 +70,10 @@ makefile:
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=
+answer:
+at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -78,9 +81,10 @@ makefile:
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=
+answer:
+at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -89,10 +93,11 @@ $(info at start time TEX=$(TEX))
 MAKEFLAGS = -R
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -101,10 +106,11 @@ $(info at start time TEX=$(TEX))
 MAKEFLAGS := -R
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -113,10 +119,11 @@ $(info at start time TEX=$(TEX))
 MAKEFLAGS :::= -R
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -125,10 +132,11 @@ $(info at start time TEX=$(TEX))
 MAKEFLAGS += -R
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=
 at build time TEX=
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -137,9 +145,10 @@ TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=hello
+answer:
+at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -148,9 +157,10 @@ TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=hello
+answer:
+at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -159,9 +169,10 @@ TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=hello
+answer:
+at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -170,9 +181,10 @@ TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
 options: -R
-answer: "at parse time TEX=hello
+answer:
+at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -182,10 +194,11 @@ MAKEFLAGS = -R
 TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -195,10 +208,11 @@ MAKEFLAGS := -R
 TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -208,10 +222,11 @@ MAKEFLAGS :::= -R
 TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -221,7 +236,8 @@ MAKEFLAGS += -R
 TEX ?= hello
 $(info at parse time TEX=$(TEX))
 all:; $(info at build time TEX=$(TEX))
-answer: "at start time TEX=tex
+answer:
+at start time TEX=tex
 at parse time TEX=hello
 at build time TEX=hello
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.

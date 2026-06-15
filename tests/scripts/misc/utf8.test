@@ -7,5 +7,6 @@ makefile:
 ▪ := hello
 $(info $(▪))
 all:
-answer: "hello
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello
+#MAKE#: Nothing to be done for 'all'.

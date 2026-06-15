@@ -11,9 +11,10 @@ answer: "erR"
 makefile:
 
 all: ; @echo $(MAKEFLAGS)
-answer: "#MAKEFILE#:2: update target 'all' due to: target does not exist
+answer:
+#MAKEFILE#:2: update target 'all' due to: target does not exist
 echo erR --trace --no-print-directory
-erR --trace --no-print-directory"
+erR --trace --no-print-directory
 
 [case]
 makefile:
@@ -22,7 +23,8 @@ recurse: ; @echo $@; echo MAKEFLAGS = $$MAKEFLAGS; echo GNUMAKEFLAGS = $$GNUMAKE
 all: ; @echo $@; echo MAKEFLAGS = $$MAKEFLAGS; echo GNUMAKEFLAGS = $$GNUMAKEFLAGS
 -include x.mk
 x.mk: ; @echo $@; echo MAKEFLAGS = $$MAKEFLAGS; echo GNUMAKEFLAGS = $$GNUMAKEFLAGS; echo > $@
-answer: "x.mk
+answer:
+x.mk
 MAKEFLAGS = -Itst/bad
 GNUMAKEFLAGS =
 recurse
@@ -32,7 +34,7 @@ GNUMAKEFLAGS =
 all
 MAKEFLAGS = -Itst/bad
 GNUMAKEFLAGS =
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'
 
 [case]
 makefile:

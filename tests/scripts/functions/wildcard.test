@@ -21,9 +21,10 @@ answer: "example.1 example.3 example._ example.for example.two"
 
 [case]
 options: print2
-answer: "example.1 example.3 example._
+answer:
+example.1 example.3 example._
 example.1 example.3
-example.1 example.3"
+example.1 example.3
 
 [case]
 options: clean

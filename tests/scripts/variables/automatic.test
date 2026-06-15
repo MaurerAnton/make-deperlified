@@ -20,14 +20,15 @@ $(dir)/foo.x : baz.z $(dir)/bar.y baz.z
 
 $(dir)/bar.y baz.z : ; touch $@
 options: dir=../tests
-answer: "touch ../tests/bar.y
+answer:
+touch ../tests/bar.y
 $@ = ../tests/foo.x, $(@D) = ../tests, $(@F) = foo.x
 $* = ../tests/foo, $(*D) = ../tests, $(*F) = foo
 $< = baz.z, $(<D) = ., $(<F) = baz.z
 $^ = baz.z ../tests/bar.y, $(^D) = . ../tests, $(^F) = baz.z bar.y
 $+ = baz.z ../tests/bar.y baz.z, $(+D) = . ../tests ., $(+F) = baz.z bar.y baz.z
 $? = ../tests/bar.y, $(?D) = ../tests, $(?F) = bar.y
-touch ../tests/foo.x"
+touch ../tests/foo.x
 
 [case]
 makefile:
@@ -42,18 +43,20 @@ $(dir)/x.z $(dir)/y.z: $(dir)/%.z : $@.% $$@.% $$$@.% $$$$@.% $$(@D).% $$(@F).%
 
 $(dir)/biz: $$(@).x $${@}.x $${@D}.x $${@F}.x
 options: dir=../tests ../tests/foo ../tests/bar
-answer: ".x
+answer:
+.x
 ../tests/foo.x
 x
 $@.x
 ../tests.x
 foo.x
 ../tests/bar.x
-bar.x"
+bar.x
 
 [case]
 options: dir=../tests ../tests/x.z ../tests/y.z
-answer: ".x
+answer:
+.x
 ../tests/x.z.x
 x
 $@.x
@@ -64,13 +67,14 @@ x.z.x
 y
 $@.y
 ../tests.y
-y.z.y"
+y.z.y
 
 [case]
 options: dir=../tests ../tests/biz
-answer: "../tests/biz.x
+answer:
+../tests/biz.x
 ../tests.x
-biz.x"
+biz.x
 
 [case]
 makefile:

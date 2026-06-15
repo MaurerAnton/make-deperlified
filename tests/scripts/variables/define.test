@@ -10,9 +10,10 @@ echo there
 endef
 
 all: ; $(multi)
-answer: "hi
+answer:
+hi
 echo there
-there"
+there
 
 [case]
 makefile:
@@ -54,14 +55,15 @@ all: ; $(multi)
 #TAB#$(posix)
 #TAB#$(append)
 #TAB#$(cond)
-answer: "echo hi
+answer:
+echo hi
 hi
 there
 foo
 foo
 a
 b
-first"
+first
 
 [case]
 makefile:
@@ -108,7 +110,8 @@ all: ; $(multi)
 #TAB#$(posixbsd)
 #TAB#$(append)
 #TAB#$(cond)
-answer: "echo hi
+answer:
+echo hi
 hi
 there
 foo
@@ -116,7 +119,7 @@ foo
 foo$bar
 a
 b
-first"
+first
 
 [case]
 makefile:
@@ -173,8 +176,9 @@ define NAME = $(NAME)
 ouch
 endef
 all: ; @echo ok
-answer: "#MAKEFILE#:3: extraneous text after 'define' directive
-ok"
+answer:
+#MAKEFILE#:3: extraneous text after 'define' directive
+ok
 
 [case]
 makefile:
@@ -184,8 +188,9 @@ define NAME =
 ouch
 endef $(NAME)
 all: ; @echo ok
-answer: "#MAKEFILE#:5: extraneous text after 'endef' directive
-ok"
+answer:
+#MAKEFILE#:5: extraneous text after 'endef' directive
+ok
 
 [case]
 makefile:
@@ -206,13 +211,15 @@ $(V1)echo hello
 $(V2)echo world
 endef
 all: ; @$(FOO)
-answer: "hello
-world"
+answer:
+hello
+world
 
 [case]
 options: V1=@ V2=@
-answer: "hello
-world"
+answer:
+hello
+world
 
 [case]
 makefile:
@@ -223,20 +230,23 @@ $(V2)echo world
 endef
 all: ; $(FOO)
 options: V1=@
-answer: "hello
+answer:
+hello
 echo world
-world"
+world
 
 [case]
 options: V2=@
-answer: "echo hello
+answer:
+echo hello
 hello
-world"
+world
 
 [case]
 options: V1=@ V2=@
-answer: "hello
-world"
+answer:
+hello
+world
 
 [case]
 makefile:
@@ -253,11 +263,12 @@ endef
 all: foo bar
 foo: ; $(FOO)
 bar: ; @$(BAR)
-answer: "hello
+answer:
+hello
 echo world
 world
 hello
-world"
+world
 
 [case]
 makefile:
@@ -283,8 +294,9 @@ makefile:
 endef
 
 all:;$(foo)
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-foo"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+foo
 
 [case]
 makefile:
@@ -314,8 +326,9 @@ endef
 $(eval $(bar))
 
 all:;@echo foo
-answer: "#MAKEFILE#:10: warning: directive lines cannot start with TAB
-#MAKEFILE#:10: *** missing 'endef', unterminated 'define'.  Stop."
+answer:
+#MAKEFILE#:10: warning: directive lines cannot start with TAB
+#MAKEFILE#:10: *** missing 'endef', unterminated 'define'.  Stop.
 exit_code: 512
 
 [case]

@@ -33,8 +33,9 @@ makefile:
 
 FOO := $(shell echo '#')
 foo: ; echo '$(FOO)'
-answer: "echo '#'
-#"
+answer:
+echo '#'
+#
 
 [case]
 makefile:
@@ -125,17 +126,19 @@ all:
 >@echo hi
 >$(shell ./basdfdfsed there)
 >@echo $(.SHELLSTATUS)
-answer: "#MAKE#: ./basdfdfsed: No such file or directory
+answer:
+#MAKE#: ./basdfdfsed: No such file or directory
 hi
-127"
+127
 
 [case]
 makefile:
 
 $(shell ./basdfdfsed where)
 all: ; @echo $(.SHELLSTATUS)
-answer: "#MAKE#: ./basdfdfsed: No such file or directory
-127"
+answer:
+#MAKE#: ./basdfdfsed: No such file or directory
+127
 
 [case]
 makefile:
@@ -166,9 +169,10 @@ else
 default:;: $(ELT)
 endif
 options: --no-print-directory -j2 --jobserver-style=pipe
-answer: "#MAKE#[2]: warning: jobserver unavailable: using -j1 (add '+' to parent make rule)
+answer:
+#MAKE#[2]: warning: jobserver unavailable: using -j1 (add '+' to parent make rule)
 : 2
-: 1"
+: 1
 
 [case]
 makefile:
@@ -177,8 +181,9 @@ export PATH = $(shell echo "tests:$$PATH")
 foo = $(shell echo yes)
 
 all:;echo $(foo)
-answer: "echo yes
-yes"
+answer:
+echo yes
+yes
 
 [case]
 makefile:

@@ -117,9 +117,10 @@ inc1:; echo > $@
 include inc1
 include inc2
 inc2:; echo > $@
-answer: "echo > inc1
+answer:
+echo > inc1
 echo > inc2
-DONE"
+DONE
 
 [case]
 makefile:
@@ -132,9 +133,10 @@ include inc1
 include inc2
 inc2:; echo > $@
 options: -Ihellod
-answer: "echo > inc1
+answer:
+echo > inc1
 echo > inc2
-DONE"
+DONE
 
 [case]
 makefile:
@@ -166,8 +168,9 @@ default:; @echo DEFAULT
 include inc1
 inc1:; echo > $@
 include inc1
-answer: "echo > inc1
-DEFAULT"
+answer:
+echo > inc1
+DEFAULT
 
 [case]
 makefile:
@@ -180,8 +183,9 @@ all:
 foo: baz
 bar: baz
 baz: end
-answer: "#MAKEFILE#:2: bar: No such file or directory
-#MAKE#: *** No rule to make target 'end', needed by 'baz'.  Stop."
+answer:
+#MAKEFILE#:2: bar: No such file or directory
+#MAKE#: *** No rule to make target 'end', needed by 'baz'.  Stop.
 exit_code: 512
 
 [case]
@@ -193,9 +197,10 @@ default:; @echo DONE
 inc1:; echo > $@
 include inc1
 include inc2
-answer: "echo > inc1
+answer:
+echo > inc1
 #MAKEFILE#:7: inc2: No such file or directory
-#MAKE#: *** No rule to make target 'inc2'.  Stop."
+#MAKE#: *** No rule to make target 'inc2'.  Stop.
 exit_code: 512
 
 [case]
@@ -205,9 +210,10 @@ default:; @echo DEFAULT
 include inc1
 inc1: foo; echo > $@
 foo:; exit 1
-answer: "exit 1
+answer:
+exit 1
 #MAKEFILE#:3: inc1: No such file or directory
-#MAKE#: *** [#MAKEFILE#:5: foo] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: foo] Error 1
 exit_code: 512
 
 [case]
@@ -216,8 +222,9 @@ makefile:
 default:; @echo DEFAULT
 include inc1
 inc1: foo; echo > $@
-answer: "#MAKEFILE#:3: inc1: No such file or directory
-#MAKE#: *** No rule to make target 'foo', needed by 'inc1'.  Stop."
+answer:
+#MAKEFILE#:3: inc1: No such file or directory
+#MAKE#: *** No rule to make target 'foo', needed by 'inc1'.  Stop.
 exit_code: 512
 
 [case]
@@ -246,8 +253,9 @@ makefile:
 
 include inc1
 all:;@echo $(FOO)
-answer: "#MAKEFILE#:2: inc1: Permission denied
-#MAKE#: *** No rule to make target 'inc1'.  Stop."
+answer:
+#MAKEFILE#:2: inc1: Permission denied
+#MAKE#: *** No rule to make target 'inc1'.  Stop.
 exit_code: 512
 
 [case]
@@ -256,8 +264,9 @@ makefile:
 include inc1
 all:;@echo $(FOO)
 options: -Ihellod
-answer: "#MAKEFILE#:2: inc1: Permission denied
-#MAKE#: *** No rule to make target 'inc1'.  Stop."
+answer:
+#MAKEFILE#:2: inc1: Permission denied
+#MAKE#: *** No rule to make target 'inc1'.  Stop.
 exit_code: 512
 
 [case]
@@ -285,11 +294,12 @@ makefile:
 -include i4
 %:;@echo $@
 all:;
-answer: "i1
+answer:
+i1
 i2
 i3
 i4
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -345,14 +355,16 @@ all:; @echo hello
 -include inc_a.mk
 include inc_b.mk
 %_a.mk %_b.mk:; exit 1
-answer: "exit 1
-#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'"
+answer:
+exit 1
+#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'
 exit_code: 512
 
 [case]
 options: -k
-answer: "exit 1
-#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'"
+answer:
+exit 1
+#MAKEFILE#:4: failed to remake makefile 'inc_b.mk'
 exit_code: 512
 
 [case]
@@ -362,31 +374,34 @@ all:; @echo hello
 include inc_a.mk
 -include inc_b.mk
 %_a.mk %_b.mk:; exit 1
-answer: "exit 1
+answer:
+exit 1
 #MAKEFILE#:3: inc_a.mk: No such file or directory
-#MAKE#: *** [#MAKEFILE#:5: inc_a.mk] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: inc_a.mk] Error 1
 exit_code: 512
 
 [case]
 options: -k
-answer: "exit 1
+answer:
+exit 1
 #MAKEFILE#:3: inc_a.mk: No such file or directory
 #MAKE#: *** [#MAKEFILE#:5: inc_a.mk] Error 1
-#MAKEFILE#:3: failed to remake makefile 'inc_a.mk'"
+#MAKEFILE#:3: failed to remake makefile 'inc_a.mk'
 exit_code: 512
 
 [case]
 makefile:
 FOO := foo
 options: -E %:;@echo $@ -E all:; -E -include bizbaz -E -include bazbiz
-answer: "bizbaz
+answer:
+bizbaz
 bazbiz
 foobar
 barfoo
 GNUmakefile
 makefile
 Makefile
-#MAKE#: 'all' is up to date."
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -396,29 +411,33 @@ include test.foo
 %.foo: force; @echo force $@
 %.x: %.foo; touch $@
 test: test.x; touch $@
-answer: "force test.foo
-#MAKE#: 'test' is up to date."
+answer:
+force test.foo
+#MAKE#: 'test' is up to date.
 
 [case]
 makefile:
 
 #TAB#include inc.mk
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: include lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: include lines cannot start with TAB
+hi
 
 [case]
 makefile:
 
 #TAB#-include inc.mk
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: -include lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: -include lines cannot start with TAB
+hi
 
 [case]
 makefile:
 
 #TAB#sinclude inc.mk
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: sinclude lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: sinclude lines cannot start with TAB
+hi

@@ -10,13 +10,15 @@ makefile:
 
 final: intermediate ; echo >> $@
 intermediate: orig ; echo >> $@
-answer: "echo >> intermediate
-echo >> final"
+answer:
+echo >> intermediate
+echo >> final
 
 [case]
 options: -Worig -n
-answer: "echo >> intermediate
-echo >> final"
+answer:
+echo >> intermediate
+echo >> final
 
 [case]
 makefile:
@@ -45,8 +47,9 @@ FOO = +$(BAR)
 a: b; echo > $@
 b: c; $(FOO)
 options: -t -n
-answer: "touch b
-touch a"
+answer:
+touch b
+touch a
 
 [case]
 makefile:
@@ -54,9 +57,10 @@ inc: ; touch $@
 -include inc
 bar: ; @echo $(strip $(MAKEFLAGS))
 options: -n --no-print-directory
-answer: "#MAKEPATH# -f \"t001.mk\" bar
+answer:
+#MAKEPATH# -f \"t001.mk\" bar
 touch inc
-echo n --no-print-directory"
+echo n --no-print-directory
 
 [case]
 makefile:
@@ -78,9 +82,10 @@ alpha.q: alpha.x alpha.y beta.y
 beta.q: beta.x beta.y alpha.y
 > touch $@
 options: -n
-answer: "touch alpha.x alpha.y
+answer:
+touch alpha.x alpha.y
 touch alpha.q
-touch beta.q"
+touch beta.q
 
 [case]
 makefile:
@@ -105,6 +110,7 @@ quark.q: quark.x quark.y meson.y
 meson.q: meson.x meson.y quark.y
 > touch $@
 options: -n
-answer: "touch quark.x quark.y
+answer:
+touch quark.x quark.y
 touch quark.q
-touch meson.q"
+touch meson.q

@@ -40,11 +40,12 @@ ifdef arg4
 else
 #TAB#@echo arg4 is NOT defined
 endif
-answer: "arg1 NOT equal arg2
+answer:
+arg1 NOT equal arg2
 arg2 equals arg5
 arg3 NOT equal arg4
 variable is undefined
-arg4 is defined"
+arg4 is defined
 
 [case]
 makefile:
@@ -154,8 +155,9 @@ blah=1
 #TAB#ifdef blah
 endif
 all:;
-answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -164,8 +166,9 @@ blah=1
 #TAB#ifndef blah
 endif
 all:;
-answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -174,8 +177,9 @@ blah=1
 #TAB#ifeq (a,b)
 endif
 all:;
-answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -184,8 +188,9 @@ blah=1
 #TAB#ifneq (a,b)
 endif
 all:;
-answer: "#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:3: warning: conditional directive lines cannot start with TAB
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -200,9 +205,10 @@ endif
 
 all:
 #TAB#@echo foo
-answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+answer:
+#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
 #MAKEFILE#:7: warning: conditional directive lines cannot start with TAB
-foo"
+foo
 
 [case]
 makefile:
@@ -215,9 +221,10 @@ junk:
 #TAB#else
 else
 endif
-answer: "hello
+answer:
+hello
 #MAKEFILE#:7: warning: conditional directive lines cannot start with TAB
-#MAKEFILE#:8: *** only one 'else' per conditional.  Stop."
+#MAKEFILE#:8: *** only one 'else' per conditional.  Stop.
 exit_code: 512
 
 [case]
@@ -229,8 +236,9 @@ else
 #TAB#else
 endif
 all:;
-answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
-#MAKEFILE#:5: *** only one 'else' per conditional.  Stop."
+answer:
+#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:5: *** only one 'else' per conditional.  Stop.
 exit_code: 512
 
 [case]
@@ -242,8 +250,9 @@ else
 #TAB#endif
 endif
 all:;
-answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
-#MAKEFILE#:6: *** extraneous 'endif'.  Stop."
+answer:
+#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:6: *** extraneous 'endif'.  Stop.
 exit_code: 512
 
 [case]
@@ -255,8 +264,9 @@ else
 #TAB#ifdef blah
 endif
 all:;
-answer: "#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
-#MAKEFILE#:8: *** missing 'endif'.  Stop."
+answer:
+#MAKEFILE#:5: warning: conditional directive lines cannot start with TAB
+#MAKEFILE#:8: *** missing 'endif'.  Stop.
 exit_code: 512
 
 [case]
@@ -320,8 +330,9 @@ ifeq ($,,)
 $(info ok)
 endif
 all:;
-answer: "ok
-#MAKE#: 'all' is up to date."
+answer:
+ok
+#MAKE#: 'all' is up to date.
 
 [case]
 makefile:
@@ -329,5 +340,6 @@ makefile:
 ifeq ((and a,b),)
 endif
 all:;
-answer: "#MAKEFILE#:2: extraneous text after 'ifeq' directive
-#MAKE#: 'all' is up to date."
+answer:
+#MAKEFILE#:2: extraneous text after 'ifeq' directive
+#MAKE#: 'all' is up to date.

@@ -8,10 +8,11 @@ makefile:
 %: ; @echo $@
 all: a b c
 options: --shuffle=reverse
-answer: "c
+answer:
+c
 b
 a
-all"
+all
 
 [case]
 makefile:
@@ -19,10 +20,11 @@ makefile:
 %: ; @echo $@
 all: a b c
 options: --shuffle=none
-answer: "a
+answer:
+a
 b
 c
-all"
+all
 
 [case]
 makefile:
@@ -30,10 +32,11 @@ makefile:
 %: ; @echo $@
 all: a b c
 options: --shuffle=identity
-answer: "a
+answer:
+a
 b
 c
-all"
+all
 
 [case]
 makefile:
@@ -44,12 +47,13 @@ foo.o : foo.c foo.h bar.h baz.h
 %.h: ; @echo $@
 %.c: ; @echo $@
 options: --shuffle=reverse
-answer: "baz.h
+answer:
+baz.h
 bar.h
 foo.h
 foo.c
 cc -c -o foo.o foo.c
-all"
+all
 
 [case]
 makefile:
@@ -59,12 +63,13 @@ foo%: arg%1 arg%2 arg%3 arg%4 ; @echo bld $@ $< $(word 3,$^) $(word 2,$^) $(word
 
 arg%: ; @echo $@
 options: --shuffle=reverse
-answer: "arg_4
+answer:
+arg_4
 arg_3
 arg_2
 arg_1
 bld foo_ arg_1 arg_3 arg_2 arg_4
-all"
+all
 
 [case]
 makefile:
@@ -75,10 +80,11 @@ all: a_ b_ ; @echo $@
 a_: b_
 b_: a_
 options: --shuffle=reverse
-answer: "#MAKE#: circular a_ <- b_ dependency dropped
+answer:
+#MAKE#: circular a_ <- b_ dependency dropped
 a_
 b_
-all"
+all
 
 [case]
 makefile:
@@ -87,21 +93,23 @@ all: a_ ; @echo $@
 %_: ; @echo $@
 a_: b_ c_ | d_ e_
 options: --shuffle=reverse
-answer: "e_
+answer:
+e_
 d_
 c_
 b_
 a_
-all"
+all
 
 [case]
 makefile:
 
 %_: ; @echo $@
 options: --shuffle=reverse a_ b_ c_
-answer: "c_
+answer:
+c_
 b_
-a_"
+a_
 
 [case]
 makefile:
@@ -110,9 +118,10 @@ makefile:
 # disable shuffling
 .NOTPARALLEL:
 options: --shuffle=reverse a_ b_ c_
-answer: "a_
+answer:
+a_
 b_
-c_"
+c_
 
 [case]
 makefile:
@@ -122,6 +131,7 @@ all: $$(var)
 %_: ; @echo $@
 var = a_ b_ c_
 options: --shuffle=reverse
-answer: "c_
+answer:
+c_
 b_
-a_"
+a_

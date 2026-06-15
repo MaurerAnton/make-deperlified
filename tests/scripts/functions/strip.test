@@ -25,9 +25,10 @@ all:
 #TAB#@echo '$(strip  $(TEST1) )'
 #TAB#@echo '$(strip  $(TEST2) )'
 #TAB#@echo '$(strip  $(TEST3) )'
-answer: "\"Is this TERMINAL fun? What makes you believe is this terminal fun? JAPAN is a WONDERFUL planet -- I wonder if we will ever reach their level of COMPARATIVE SHOPPING...\"
+answer:
+\"Is this TERMINAL fun? What makes you believe is this terminal fun? JAPAN is a WONDERFUL planet -- I wonder if we will ever reach their level of COMPARATIVE SHOPPING...\"
 try this and this
-and these test out some blank lines"
+and these test out some blank lines
 
 [case]
 makefile:

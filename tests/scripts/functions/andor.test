@@ -20,7 +20,8 @@ all:
 #TAB#@echo 8 $(and z,true,fal,se) hi
 #TAB#@echo 9 $(and ,true,fal,se)there
 #TAB#@echo 10 $(and   $(e) ,$t)
-answer: "1
+answer:
+1
 2 true
 3
 4
@@ -29,7 +30,7 @@ answer: "1
 7
 8 se hi
 9 there
-10"
+10
 
 [case]
 makefile:
@@ -50,7 +51,8 @@ all:
 #TAB#@echo 9 $(or z,true,fal,se) hi
 #TAB#@echo 10 $(or ,true,fal,se)there
 #TAB#@echo 11 $(or   $(e) ,$f)
-answer: "short-circuit
+answer:
+short-circuit
 1
 2 true
 3 true
@@ -61,4 +63,4 @@ answer: "short-circuit
 8 true
 9 z hi
 10 truethere
-11"
+11

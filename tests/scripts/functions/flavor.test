@@ -26,10 +26,11 @@ $(info r $(flavor r))
 
 .PHONY: all
 all:;@:
-answer: "u undefined
+answer:
+u undefined
 s simple
 r recursive
 ra recursive
 rc recursive
 s simple
-r recursive"
+r recursive

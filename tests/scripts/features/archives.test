@@ -9,23 +9,26 @@ touch: a1.o a2.o a3.o foo.vhd
 makefile:
 all: libxx.a(a1.o)
 options: AR="ar"
-answer: "ar -rv libxx.a a1.o
+answer:
+ar -rv libxx.a a1.o
 ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога"
+ar: a1.o: Нет такого файла или каталога
 
 [case]
 makefile:
 all: libxx.a(a1.o a2.o)
 options: AR="ar"
-answer: "ar -rv libxx.a a2.o
+answer:
+ar -rv libxx.a a2.o
 ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога"
+ar: a2.o: Нет такого файла или каталога
 
 [case]
 options: AR="ar"
-answer: "ar -rv libxx.a a1.o
+answer:
+ar -rv libxx.a a1.o
 ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога"
+ar: a1.o: Нет такого файла или каталога
 
 [case]
 makefile:
@@ -35,28 +38,31 @@ answer: "#MAKE#: Nothing to be done for 'all'."
 
 [case]
 options: AR="ar"
-answer: "ar -rv libxx.a a1.o
+answer:
+ar -rv libxx.a a1.o
 ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога"
+ar: a1.o: Нет такого файла или каталога
 
 [case]
 makefile:
 all: libxx.a(a3.o *.o)
 options: AR="ar"
-answer: "ar -rv libxx.a a3.o
+answer:
+ar -rv libxx.a a3.o
 ar: создаётся libxx.a
 ar: a3.o: Нет такого файла или каталога
 ar -rv libxx.a a2.o
 ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога"
+ar: a2.o: Нет такого файла или каталога
 
 [case]
 makefile:
 all: libxx.a(  a3.o    *.o     )
 options: AR="ar"
-answer: "ar -rv libxx.a a2.o
+answer:
+ar -rv libxx.a a2.o
 ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога"
+ar: a2.o: Нет такого файла или каталога
 
 [case]
 makefile:

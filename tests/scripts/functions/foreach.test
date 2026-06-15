@@ -16,8 +16,9 @@ all: auto for2
 auto : ; @echo $(av)
 for2: ; @echo $(fe)
 options: -e WHITE=WHITE CFLAGS=
-answer: "undefined file default file environment override default file command line override automatic automatic
-foo.o bletch.o null.o @.o garf.o .o    .o undefined.o file.o default.o file.o environment.o override.o default.o file.o command.o line.o override.o automatic.o automatic.o"
+answer:
+undefined file default file environment override default file command line override automatic automatic
+foo.o bletch.o null.o @.o garf.o .o    .o undefined.o file.o default.o file.o environment.o override.o default.o file.o command.o line.o override.o automatic.o automatic.o
 
 [case]
 makefile:
@@ -45,9 +46,10 @@ $(foreach \
 , b c d \
 , $(info $a))
 all:;@:
-answer: "b
+answer:
+b
 c
-d"
+d
 
 [case]
 makefile:

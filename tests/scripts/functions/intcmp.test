@@ -38,7 +38,8 @@ all:
 > @echo 4_2 $(intcmp $(huge),-$(huge),lt,eq,gt)
 > @echo 4_3 $(intcmp -$(huge),-$(huge),lt,eq,gt)
 > @echo 4_4 $(intcmp +$(huge),$(huge),lt,eq,gt)
-answer: "0_1 -10
+answer:
+0_1 -10
 0_2 0
 0_3 0
 0_4 888
@@ -61,7 +62,7 @@ answer: "0_1 -10
 4_1 lt
 4_2 gt
 4_3 eq
-4_4 eq"
+4_4 eq
 
 [case]
 makefile:

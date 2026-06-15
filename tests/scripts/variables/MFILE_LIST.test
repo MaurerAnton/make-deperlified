@@ -12,9 +12,10 @@ all:
 	@echo $(m1)
 	@echo $(m2)
 	@echo $(m3)
-answer: "#MAKEFILE#
+answer:
+#MAKEFILE#
 #MAKEFILE# incl2
-#MAKEFILE# incl2"
+#MAKEFILE# incl2
 
 [case]
 makefile:
@@ -28,7 +29,8 @@ all:
 	@echo '$(m2)'
 	@echo '$(m3)'
 	@echo '$(value MAKEFILE_LIST)'
-answer: "#MAKEFILE#
+answer:
+#MAKEFILE#
 #MAKEFILE# foo$bar
 #MAKEFILE# foo$bar
-#MAKEFILE# foo$bar"
+#MAKEFILE# foo$bar

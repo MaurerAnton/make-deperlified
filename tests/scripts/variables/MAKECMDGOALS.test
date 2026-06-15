@@ -14,7 +14,8 @@ answer: "all"
 
 [case]
 options: foo bar baz yaz
-answer: "foo bar baz yaz
+answer:
 foo bar baz yaz
 foo bar baz yaz
-foo bar baz yaz"
+foo bar baz yaz
+foo bar baz yaz

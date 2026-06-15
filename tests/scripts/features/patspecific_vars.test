@@ -24,25 +24,29 @@ a%: BBB += ddd
 %b: AAA += bbb
 .PHONY: ab
 ab: ; @echo $(AAA); echo $(BBB)
-answer: "one.x: one two baz
+answer:
+one.x: one two baz
 two.x: foo four baz
-three.x: foo four three"
+three.x: foo four three
 
 [case]
 options: BAZ=five
-answer: "one.x: one two five
+answer:
+one.x: one two five
 two.x: foo four five
-three.x: foo four three"
+three.x: foo four three
 
 [case]
 options: four.x
-answer: "baz: foo two baz
-four.x: foo two baz"
+answer:
+baz: foo two baz
+four.x: foo two baz
 
 [case]
 options: ab
-answer: "aaa bbb
-ccc ddd"
+answer:
+aaa bbb
+ccc ddd
 
 [case]
 makefile:
@@ -89,13 +93,15 @@ endif
 
 
 global := new $$t
-answer: "normal: global: original $t pattern:  inherit: ;
-pattern: global: original $t pattern:  inherit: ;"
+answer:
+normal: global: original $t pattern:  inherit: ;
+pattern: global: original $t pattern:  inherit: ;
 
 [case]
 options: rec=1
-answer: "normal: global: new $t pattern: good $t inherit: good $t;
-pattern: global: new $t pattern: good $t inherit: good $t;"
+answer:
+normal: global: new $t pattern: good $t inherit: good $t;
+pattern: global: new $t pattern: good $t inherit: good $t;
 
 [case]
 makefile:
@@ -119,5 +125,6 @@ all: foo.x foo-mt.x
 
 foo.x: ;@echo $x
 foo-mt.x: ;@echo $x
-answer: "one
-two"
+answer:
+one
+two

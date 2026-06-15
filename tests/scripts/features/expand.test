@@ -6,16 +6,18 @@ makefile:
 
 $(info x$(hello)y)
 all:
-answer: "xhello_world
+answer:
+xhello_world
 y
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
 
 $(info x$(hello)y)
 all:
-answer: "xhello_world
+answer:
+xhello_world
 hello_world
 hello_world
 hello_world
@@ -66,14 +68,15 @@ hello_world
 hello_world
 hello_world
 y
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
 
 $(info x$(hello)y)
 all:
-answer: "xhello_world
+answer:
+xhello_world
 hello_world
 hello_world
 hello_world
@@ -10074,4 +10077,4 @@ hello_world
 hello_world
 hello_world
 y
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.

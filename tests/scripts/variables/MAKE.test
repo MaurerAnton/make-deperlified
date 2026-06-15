@@ -13,8 +13,9 @@ all:
 
 foo:
 #TAB#@echo $(MAKE)
-answer: "#MAKEPATH#
+answer:
+#MAKEPATH#
 #MAKEPATH# -f #MAKEFILE# foo
 #MAKE#[1]: Entering directory '#PWD#'
 #MAKEPATH#
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'

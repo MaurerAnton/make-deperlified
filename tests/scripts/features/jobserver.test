@@ -9,8 +9,9 @@ SHOW = $(patsubst --jobserver-auth=%,--jobserver-auth=<auth>,$(MAKEFLAGS))
 recurse: ; @echo $@: "/$(SHOW)/"; $(MAKE) -f #MAKEFILE# all
 all:;@echo $@: "/$(SHOW)/"
 options: -j2 --no-print-directory
-answer: "recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
-all: /-j2 --jobserver-auth=<auth> --no-print-directory/"
+answer:
+recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
+all: /-j2 --jobserver-auth=<auth> --no-print-directory/
 
 [case]
 makefile:
@@ -18,8 +19,9 @@ makefile:
 SHOW = $(patsubst --jobserver-auth=%,--jobserver-auth=<auth>,$(MAKEFLAGS))
 recurse: ; @echo $@: "/$(SHOW)/"; $(MAKE) -f #MAKEFILE# all
 all:;@echo $@: "/$(SHOW)/"
-answer: "recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
-all: /-j2 --jobserver-auth=<auth> --no-print-directory/"
+answer:
+recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
+all: /-j2 --jobserver-auth=<auth> --no-print-directory/
 
 [case]
 makefile:
@@ -29,10 +31,11 @@ recurse: ; @echo $@: "/$(SHOW)/"; $(MAKE) -j3 -f #MAKEFILE# recurse2
 recurse2: ; @echo $@: "/$(SHOW)/"; $(MAKE) -f #MAKEFILE# all
 all:;@echo $@: "/$(SHOW)/"
 options: -j2 --no-print-directory
-answer: "recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
+answer:
+recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
 #MAKE#[1]: warning: -j3 forced in submake: resetting jobserver mode
 recurse2: /-j3 --jobserver-auth=<auth> --no-print-directory/
-all: /-j3 --jobserver-auth=<auth> --no-print-directory/"
+all: /-j3 --jobserver-auth=<auth> --no-print-directory/
 
 [case]
 makefile:
@@ -42,10 +45,11 @@ recurse: ; @echo $@: "/$(SHOW)/"; $(MAKE) -j -f #MAKEFILE# recurse2
 recurse2: ; @echo $@: "/$(SHOW)/"; $(MAKE) -f #MAKEFILE# all
 all:;@echo $@: "/$(SHOW)/"
 options: -j2 --no-print-directory
-answer: "recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
+answer:
+recurse: /-j2 --jobserver-auth=<auth> --no-print-directory/
 #MAKE#[1]: warning: -j0 forced in submake: resetting jobserver mode
 recurse2: /-j --no-print-directory/
-all: /-j --no-print-directory/"
+all: /-j --no-print-directory/
 
 [case]
 makefile:
@@ -63,16 +67,18 @@ inc.mk:
 #> @echo 'MAKEFLAGS = $(MAKEFLAGS)'
 > @echo 'FOO = bar' > $@
 options: --no-print-directory -j2
-answer: "#MAKE#[1]: warning: -j2 forced in submake: resetting jobserver mode
-all"
+answer:
+#MAKE#[1]: warning: -j2 forced in submake: resetting jobserver mode
+all
 
 [case]
 makefile:
 
 default: ; @ #MAKEPATH# -f Makefile2
 options: --jobserver-style=pipe -j2 --no-print-directory
-answer: "#MAKE#[1]: warning: jobserver unavailable: using -j1 (add '+' to parent make rule)
-#MAKE#[1]: Nothing to be done for 'foo'."
+answer:
+#MAKE#[1]: warning: jobserver unavailable: using -j1 (add '+' to parent make rule)
+#MAKE#[1]: Nothing to be done for 'foo'.
 
 [case]
 makefile:
@@ -80,11 +86,12 @@ makefile:
 all: ; @$(MAKE) -C . -f #MAKEFILE# recurse -j1
 recurse: ; @echo hi
 options: -w -j2
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 #MAKE#[1]: Entering directory '#PWD#'
 hi
 #MAKE#[1]: Leaving directory '#PWD#'
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -92,12 +99,13 @@ makefile:
 all: ; @$(MAKE) -C . -f #MAKEFILE# recurse -j10
 recurse: ; @echo hi
 options: -w -j2
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 #MAKE#[1]: Entering directory '#PWD#'
 #MAKE#[1]: warning: -j10 forced in submake: resetting jobserver mode
 hi
 #MAKE#[1]: Leaving directory '#PWD#'
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -119,15 +127,17 @@ all:
 
 recurse: ; @echo $@
 options: --no-print-directory -j8
-answer: "all 1
+answer:
+all 1
 all 2
-recurse"
+recurse
 
 [case]
 options: --no-print-directory --jobserver-style=pipe -j8
-answer: "all 1
+answer:
+all 1
 all 2
-recurse"
+recurse
 
 [case]
 makefile:
@@ -140,15 +150,17 @@ all:
 
 recurse: ; @echo $@
 options: --no-print-directory -j8
-answer: "all 1
+answer:
+all 1
 all 2
-recurse"
+recurse
 
 [case]
 options: --no-print-directory --jobserver-style=pipe -j8
-answer: "all 1
+answer:
+all 1
 all 2
-recurse"
+recurse
 
 [case]
 makefile:

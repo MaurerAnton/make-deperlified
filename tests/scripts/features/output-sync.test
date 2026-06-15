@@ -11,7 +11,8 @@ make-foo: ; $(MAKE) -C foo
 
 make-bar: ; #HELPER# -q sleep 1 ; $(MAKE) -C bar
 options: -j -Orecurse
-answer: "#MAKEPATH# -C foo
+answer:
+#MAKEPATH# -C foo
 #MAKE#[1]: Entering directory '#PWD#/foo'
 foo: start
 foo: end
@@ -22,7 +23,7 @@ bar: start
 bar: end
 baz: start
 baz: end
-#MAKE#[1]: Leaving directory '#PWD#/bar'"
+#MAKE#[1]: Leaving directory '#PWD#/bar'
 
 [case]
 makefile:
@@ -36,7 +37,8 @@ make-foo: ; $(MAKE) -C foo
 
 make-bar: ; #HELPER# -q sleep 1 ; $(MAKE) -C bar
 options: -j --output-sync=target
-answer: "#MAKEPATH# -C foo
+answer:
+#MAKEPATH# -C foo
 #HELPER# -q sleep 1 ; #MAKEPATH# -C bar
 #MAKE#[1]: Entering directory '#PWD#/bar'
 bar: start
@@ -49,18 +51,19 @@ foo: end
 #MAKE#[1]: Entering directory '#PWD#/bar'
 baz: start
 baz: end
-#MAKE#[1]: Leaving directory '#PWD#/bar'"
+#MAKE#[1]: Leaving directory '#PWD#/bar'
 
 [case]
 options: -j --output-sync=target x=
-answer: "#MAKEPATH# -C foo
+answer:
+#MAKEPATH# -C foo
 #HELPER# -q sleep 1 ; #MAKEPATH# -C bar
 bar: start
 bar: end
 foo: start
 foo: end
 baz: start
-baz: end"
+baz: end
 
 [case]
 makefile:
@@ -71,7 +74,8 @@ make-foo-fail: ; $(MAKE) -C foo foo-fail
 
 make-bar-bar: ; #HELPER# -q sleep 1 ; $(MAKE) -C bar bar
 options: -j -O
-answer: "#MAKEPATH# -C foo foo-fail
+answer:
+#MAKEPATH# -C foo foo-fail
 #HELPER# -q sleep 1 ; #MAKEPATH# -C bar bar
 #MAKE#[1]: Entering directory '#PWD#/bar'
 bar: start
@@ -82,7 +86,7 @@ foo-fail: start
 foo-fail: end
 #MAKE#[1]: *** [Makefile:23: foo-fail] Error 1
 #MAKE#[1]: Leaving directory '#PWD#/foo'
-#MAKE#: *** [#MAKEFILE#:4: make-foo-fail] Error 2"
+#MAKE#: *** [#MAKEFILE#:4: make-foo-fail] Error 2
 exit_code: 512
 
 [case]
@@ -94,7 +98,8 @@ make-foo: ; $(MAKE) -C foo foo-job
 
 make-bar: ; #HELPER# -q sleep 1 ; $(MAKE) -C bar bar-job
 options: -j --output-sync=line
-answer: "#MAKEPATH# -C foo foo-job
+answer:
+#MAKEPATH# -C foo foo-job
 #HELPER# -q sleep 1 ; #MAKEPATH# -C bar bar-job
 #MAKE#[1]: Entering directory '#PWD#/foo'
 foo: start
@@ -107,7 +112,7 @@ bar: end
 #MAKE#[1]: Leaving directory '#PWD#/bar'
 #MAKE#[1]: Entering directory '#PWD#/foo'
 foo: end
-#MAKE#[1]: Leaving directory '#PWD#/foo'"
+#MAKE#[1]: Leaving directory '#PWD#/foo'
 
 [case]
 makefile:
@@ -116,13 +121,15 @@ all:
 	@echo foo
 	@+echo bar
 options: -j -Oline
-answer: "foo
-bar"
+answer:
+foo
+bar
 
 [case]
 options: -j -Otarget
-answer: "foo
-bar"
+answer:
+foo
+bar
 
 [case]
 makefile:
@@ -131,22 +138,25 @@ all:
 	@echo foobar
 	true
 options: -j -Oline
-answer: "foobar
-true"
+answer:
+foobar
+true
 
 [case]
 options: -j -Otarget
-answer: "foobar
-true"
+answer:
+foobar
+true
 
 [case]
 makefile:
 
 all: ; @: $(shell echo foo 1>&2)
 options: -w -Oline
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 foo
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -154,12 +164,13 @@ makefile:
 $(shell echo foo 1>&2)
 all: ; echo bar
 options: -s -w -Otarget
-answer: "#MAKE#: Entering directory '#PWD#'
+answer:
+#MAKE#: Entering directory '#PWD#'
 foo
 #MAKE#: Leaving directory '#PWD#'
 #MAKE#: Entering directory '#PWD#'
 bar
-#MAKE#: Leaving directory '#PWD#'"
+#MAKE#: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -168,14 +179,15 @@ all: t1 t2
 t1: ; @$(MAKE) -f t001.mk
 t2: ; @$(MAKE) -f t001.mk
 options: -j -Oline
-answer: "#MAKE#[1]: Entering directory '#PWD#'
+answer:
+#MAKE#[1]: Entering directory '#PWD#'
 d1 stderr
 d1 stdout
 #MAKE#[1]: Leaving directory '#PWD#'
 #MAKE#[1]: Entering directory '#PWD#'
 d2 stderr
 d2 stdout
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'
 
 [case]
 makefile:
@@ -183,12 +195,13 @@ makefile:
 all: t1
 t1: ; -@$(MAKE) -f t001.mk
 options: -j -Oline
-answer: "#MAKE#[1]: Entering directory '#PWD#'
+answer:
+#MAKE#[1]: Entering directory '#PWD#'
 d1 stderr
 d1 stdout
 t001.mk:3: *** d1 failed.  Stop.
 #MAKE#[1]: Leaving directory '#PWD#'
-#MAKE#: [#MAKEFILE#:3: t1] Error 2 (ignored)"
+#MAKE#: [#MAKEFILE#:3: t1] Error 2 (ignored)
 
 [case]
 makefile:
@@ -203,6 +216,7 @@ makefile:
 
 all:: ; @./foo bar baz
 options: -O
-answer: "#MAKE#: ./foo: No such file or directory
-#MAKE#: *** [#MAKEFILE#:2: all] Error 127"
+answer:
+#MAKE#: ./foo: No such file or directory
+#MAKE#: *** [#MAKEFILE#:2: all] Error 127
 exit_code: 512

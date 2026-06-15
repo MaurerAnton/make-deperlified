@@ -12,14 +12,16 @@ b: private F = b
 a b c: ; @echo $@: F=$(F)
 a: b
 b: c
-answer: "c: F=a
+answer:
+c: F=a
 b: F=b
-a: F=a"
+a: F=a
 
 [case]
 options: b
-answer: "c: F=g
-b: F=b"
+answer:
+c: F=g
+b: F=b
 
 [case]
 makefile:
@@ -33,8 +35,9 @@ F2 = g
 
 t.a t.b: ; @echo $@: F1=$(F1) / F2=$(F2)
 t.a: t.b
-answer: "t.b: F1=g / F2=a
-t.a: F1=a / F2=a"
+answer:
+t.b: F1=g / F2=a
+t.a: F1=a / F2=a
 
 [case]
 makefile:
@@ -47,8 +50,9 @@ b: F = b
 
 a b: ; @echo $@: F=$(F) / G=$(G)
 a: b
-answer: "b: F=b / G=g
-a: F= / G=g"
+answer:
+b: F=b / G=g
+a: F= / G=g
 
 [case]
 makefile:
@@ -58,9 +62,10 @@ $(info $(shell #HELPER# env F))
 a: b
 b: export F=b
 a b: ; @#HELPER# raw $@ env F
-answer: "F=global
+answer:
+F=global
 bF=b
-aF=<unset>"
+aF=<unset>
 
 [case]
 makefile:
@@ -79,11 +84,12 @@ makefile:
 
 a: export override private foo bar
 foo bar export override private: ; @echo $@
-answer: "export
+answer:
+export
 override
 private
 foo
-bar"
+bar
 
 [case]
 makefile:
@@ -92,8 +98,9 @@ private = g
 a: private = a
 a: b
 a b: ; @echo $@=$(private)
-answer: "b=a
-a=a"
+answer:
+b=a
+a=a
 
 [case]
 makefile:
@@ -105,9 +112,10 @@ bar3: private DEFS += 3
 bar1: bar2
 bar2: bar3
 bar1 bar2 bar3: ; @echo '$@: $(DEFS)'
-answer: "bar3: FOO 3
+answer:
+bar3: FOO 3
 bar2: FOO
-bar1: FOO 1"
+bar1: FOO 1
 
 [case]
 makefile:
@@ -133,12 +141,13 @@ all: private PA += all
 all: private PS = all
 
 bar all: ; @echo '$@: IA=$(IA)'; echo '$@: PA=$(PA)'; echo '$@: PS=$(PS)'
-answer: "all: IA=global b% bar a% all
+answer:
+all: IA=global b% bar a% all
 all: PA=global a% all
 all: PS=all
 bar: IA=global b% bar
 bar: PA=global b% bar
-bar: PS=bar"
+bar: PS=bar
 
 [case]
 makefile:
@@ -192,16 +201,18 @@ makefile:
 
 #TAB#private FOO = bar
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi
 
 [case]
 makefile:
 
 #TAB#private#TAB#export FOO = bar
 all:;@echo hi
-answer: "#MAKEFILE#:2: warning: directive lines cannot start with TAB
-hi"
+answer:
+#MAKEFILE#:2: warning: directive lines cannot start with TAB
+hi
 
 [case]
 makefile:

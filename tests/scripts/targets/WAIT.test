@@ -44,9 +44,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 options: -j10 pre2
@@ -61,9 +62,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 pre1 .WAIT pre2
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -75,9 +77,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -89,9 +92,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -116,17 +120,19 @@ makefile:
 all: hello.tsk .WAIT hello.tsk
 hello.tsk:; $(info $@)
 options: -j10
-answer: "hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.tsk
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
 
 hello.tsk:; $(info $@)
 options: -j10 hello.tsk .WAIT hello.tsk
-answer: "hello.tsk
+answer:
+hello.tsk
 #MAKE#: 'hello.tsk' is up to date.
-#MAKE#: 'hello.tsk' is up to date."
+#MAKE#: 'hello.tsk' is up to date.
 
 [case]
 makefile:
@@ -139,11 +145,12 @@ pre3: ; @#HELPER# -q wait TWO out $@ file THREE
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
 start-pre2
 pre3
-end-pre2"
+end-pre2
 
 [case]
 makefile:
@@ -155,11 +162,12 @@ pre3: ; @#HELPER# -q wait TWO out $@ file THREE
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 pre1 .WAIT pre2 pre3
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
 start-pre2
 pre3
-end-pre2"
+end-pre2
 
 [case]
 makefile:
@@ -174,11 +182,12 @@ post2: ; @#HELPER# -q file POST2 wait POST1 out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 pre2
 end-pre1
 post1
-post2"
+post2
 
 [case]
 makefile:
@@ -192,11 +201,12 @@ post2: ; @#HELPER# -q file POST2 wait POST1 out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 pre1 pre2 .WAIT post1 post2
-answer: "start-pre1
+answer:
+start-pre1
 pre2
 end-pre1
 post1
-post2"
+post2
 
 [case]
 makefile:
@@ -211,9 +221,10 @@ pre2: ; @#HELPER# -q wait PRE1 out $@ file PRE2
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 pre2
-end-pre1"
+end-pre1
 
 [case]
 makefile:
@@ -226,9 +237,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -244,10 +256,11 @@ pre = .WAIT pre1 .WAIT pre2 | .WAIT pre3
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
 pre2
-pre3"
+pre3
 
 [case]
 makefile:
@@ -258,9 +271,10 @@ pre2: ; @#HELPER# -q out $@
 
 .NOTPARALLEL:
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -278,12 +292,13 @@ npre2: ; @#HELPER# -q out $@
 
 .NOTPARALLEL: np1
 options: -j10
-answer: "start-pre1
+answer:
+start-pre1
 pre2
 end-pre1
 start-npre1
 end-npre1
-npre2"
+npre2
 
 [case]
 makefile:
@@ -295,9 +310,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 --shuffle=reverse
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -308,9 +324,10 @@ pre2: ; @#HELPER# -q out $@
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 --shuffle=reverse pre1 .WAIT pre2
-answer: "start-pre1
+answer:
+start-pre1
 end-pre1
-pre2"
+pre2
 
 [case]
 makefile:
@@ -318,8 +335,9 @@ makefile:
 .WAIT: foo
 .WAIT: ; echo oops
 all:;@:
-answer: "#MAKEFILE#:2: .WAIT should not have prerequisites
-#MAKEFILE#:3: .WAIT should not have commands"
+answer:
+#MAKEFILE#:2: .WAIT should not have prerequisites
+#MAKEFILE#:3: .WAIT should not have commands
 
 [case]
 makefile:
@@ -335,7 +353,8 @@ B ::; @#HELPER# -q wait A-3-done out B-3 out B-3-done file B-3-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "A-1
+answer:
+A-1
 B-1
 B-1-done
 A-1-done
@@ -346,7 +365,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -362,7 +381,8 @@ B ::; @#HELPER# -q out $@-3 out $@-3-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "A-1
+answer:
+A-1
 A-1-done
 A-2
 A-2-done
@@ -373,7 +393,7 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done
 
 [case]
 makefile:
@@ -388,7 +408,8 @@ B ::; @#HELPER# -q wait A-3-done out B-3 out B-3-done file B-3-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 A B
-answer: "A-1
+answer:
+A-1
 B-1
 B-1-done
 A-1-done
@@ -399,7 +420,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -414,7 +435,8 @@ B ::; @#HELPER# -q out $@-3 out $@-3-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 A .WAIT B
-answer: "A-1
+answer:
+A-1
 A-1-done
 A-2
 A-2-done
@@ -425,7 +447,7 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done
 
 [case]
 makefile:
@@ -447,7 +469,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -462,7 +485,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -484,7 +507,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -499,7 +523,7 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done
 
 [case]
 makefile:
@@ -520,7 +544,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 C .WAIT A B
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -535,7 +560,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -556,7 +581,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 C .WAIT A .WAIT B
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -571,7 +597,7 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done
 
 [case]
 makefile:
@@ -592,7 +618,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -607,7 +634,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -628,7 +655,8 @@ E:; @#HELPER# -q out E out E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10
-answer: "D
+answer:
+D
 D-done
 A-1
 A-1-done
@@ -643,7 +671,7 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done
 
 [case]
 makefile:
@@ -663,7 +691,8 @@ E:; @#HELPER# -q wait D out E out E-done file E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 A B
-answer: "D
+answer:
+D
 E
 E-done
 D-done
@@ -678,7 +707,7 @@ A-2-done
 A-3
 B-3
 B-3-done
-A-3-done"
+A-3-done
 
 [case]
 makefile:
@@ -698,7 +727,8 @@ E:; @#HELPER# -q out E out E-done
 # This is just here so we don't fail with older versions of make
 .WAIT:
 options: -j10 A .WAIT B
-answer: "D
+answer:
+D
 D-done
 A-1
 A-1-done
@@ -713,4 +743,4 @@ B-1-done
 B-2
 B-2-done
 B-3
-B-3-done"
+B-3-done

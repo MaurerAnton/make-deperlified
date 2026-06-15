@@ -21,9 +21,10 @@ display.o : display.c defs.h buffer.h
 	@echo cc -c display.c
 insert.o : insert.c defs.h buffer.h
 	@echo cc -c insert.c
-answer: "cc -c main.c
+answer:
+cc -c main.c
 cc -c kbd.c
 cc -c commands.c
 cc -c display.c
 cc -c insert.c
-cc -o edit main.o kbd.o commands.o display.o insert.o"
+cc -o edit main.o kbd.o commands.o display.o insert.o

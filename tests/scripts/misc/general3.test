@@ -59,14 +59,15 @@ bar
     bar
 #TAB#@echo foo \
 #TAB#    bar
-answer: "foobar
+answer:
+foobar
 foobar
 foo bar
 foo bar
 foo bar
 foo bar
 foo bar
-foo bar"
+foo bar
 
 [case]
 makefile:
@@ -88,7 +89,8 @@ bar'
     bar'
 #TAB#@echo 'foo \
 #TAB#    bar'
-answer: "foo\
+answer:
+foo\
 bar
 foo\
 bar
@@ -103,7 +105,7 @@ bar
 foo \
     bar
 foo \
-    bar"
+    bar
 
 [case]
 makefile:
@@ -125,14 +127,15 @@ bar"
     bar"
 #TAB#@echo "foo \
 #TAB#    bar"
-answer: "foobar
+answer:
+foobar
 foobar
 foo    bar
 foo    bar
 foo bar
 foo bar
 foo     bar
-foo     bar"
+foo     bar
 
 [case]
 makefile:
@@ -154,12 +157,11 @@ bar
  bar
 #TAB#@echo hi; echo foo \
 #TAB# bar
-answer: "hi
-foobar
+answer:
 hi
 foobar
 hi
-foo bar
+foobar
 hi
 foo bar
 hi
@@ -169,7 +171,9 @@ foo bar
 hi
 foo bar
 hi
-foo bar"
+foo bar
+hi
+foo bar
 
 [case]
 makefile:
@@ -191,7 +195,8 @@ bar; echo hi
  bar; echo hi
 #TAB#@echo foo \
 #TAB# bar; echo hi
-answer: "foobar
+answer:
+foobar
 hi
 foobar
 hi
@@ -206,7 +211,7 @@ hi
 foo bar
 hi
 foo bar
-hi"
+hi
 
 [case]
 makefile:
@@ -228,7 +233,8 @@ bar'
     bar'
 #TAB#@echo hi; echo 'foo \
 #TAB#    bar'
-answer: "hi
+answer:
+hi
 foo\
 bar
 hi
@@ -251,7 +257,7 @@ foo \
     bar
 hi
 foo \
-    bar"
+    bar
 
 [case]
 makefile:
@@ -273,7 +279,8 @@ bar"
     bar"
 #TAB#@echo hi; echo "foo \
 #TAB#    bar"
-answer: "hi
+answer:
+hi
 foobar
 hi
 foobar
@@ -288,7 +295,7 @@ foo bar
 hi
 foo     bar
 hi
-foo     bar"
+foo     bar
 
 [case]
 makefile:

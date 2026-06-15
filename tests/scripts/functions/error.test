@@ -36,14 +36,16 @@ exit_code: 512
 
 [case]
 options: ERROR3=maybe
-answer: "Some stuff
-#MAKEFILE#:12: *** error is maybe.  Stop."
+answer:
+Some stuff
+#MAKEFILE#:12: *** error is maybe.  Stop.
 exit_code: 512
 
 [case]
 options: ERROR4=definitely
-answer: "Some stuff
-#MAKEFILE#:17: *** error is definitely.  Stop."
+answer:
+Some stuff
+#MAKEFILE#:17: *** error is definitely.  Stop.
 exit_code: 512
 
 [case]

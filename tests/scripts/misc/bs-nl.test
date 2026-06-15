@@ -23,8 +23,9 @@ answer: "dquote"
 makefile:
 squote:;@echo 'squ\
 ote'
-answer: "squ\
-ote"
+answer:
+squ\
+ote
 
 [case]
 makefile:
@@ -48,8 +49,9 @@ answer: "dquote"
 makefile:
 squote:;@echo 'squ\
 	ote'
-answer: "squ\
-ote"
+answer:
+squ\
+ote
 
 [case]
 makefile:
@@ -73,8 +75,9 @@ answer: "dqu    ote"
 makefile:
 squote:;@echo 'squ\
 		   ote'
-answer: "squ\
-	   ote"
+answer:
+squ\
+	   ote
 
 [case]
 makefile:
@@ -138,8 +141,9 @@ t:; @$(call f,"a \
             b"); \
         $(call f,"a \
             b")
-answer: "a b
-a b"
+answer:
+a b
+a b
 
 [case]
 makefile:
@@ -155,15 +159,17 @@ makefile:
 
 $(foreach  a 	 , b	  c  ,$(info    $a    )      )
 all:;@:
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
 
 all:;@:$(foreach  a 	 , b	  c  ,$(info    $a    )      )
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
@@ -175,8 +181,9 @@ $(foreach \
   $a    )  \
     )
 all:;@:
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
@@ -187,8 +194,9 @@ all:;@:$(foreach \
  c  ,$(info  \
   $a    )  \
     )
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
@@ -203,8 +211,9 @@ $(foreach
 endef
 $(FOO)
 all:;@:
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
@@ -218,8 +227,9 @@ $(foreach
     )
 endef
 all:;@:$(FOO)
-answer: "b    
-c"
+answer:
+b    
+c
 
 [case]
 makefile:
@@ -232,10 +242,11 @@ echo foo
 echo bar
 endef
 all:;$(var)
-answer: "echo foo
+answer:
+echo foo
 foo
 echo bar
-bar"
+bar
 
 [case]
 makefile:
@@ -249,7 +260,8 @@ echo foo
 echo bar
 endef
 all:;$(var)
-answer: "echo foo
+answer:
+echo foo
 foo
 echo bar
-bar"
+bar

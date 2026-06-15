@@ -42,5 +42,6 @@ override != echo abc > ,abc ; cat ,abc
 
 all: ; @echo "<$(override)>" ; cat ,abc
 options: override=xyz
-answer: "<xyz>
-abc"
+answer:
+<xyz>
+abc

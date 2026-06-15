@@ -22,7 +22,8 @@ all: auto
 auto :
 > @echo $(av)
 options: -e WHITE=WHITE CFLAGS=
-answer: "undefined default environment override default file command line override automatic
+answer:
+undefined default environment override default file command line override automatic
 undefined
 default
 environment override
@@ -30,4 +31,4 @@ default
 file
 command line
 override
-automatic"
+automatic

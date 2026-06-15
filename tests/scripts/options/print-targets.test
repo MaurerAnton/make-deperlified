@@ -27,8 +27,9 @@ submake: ; $(MAKE) all
 always: ; +echo always
 goodfile: ; touch goodfile
 options: --print-targets
-answer: "submake
+answer:
+submake
 .x.z
 always
 all
-goodfile"
+goodfile

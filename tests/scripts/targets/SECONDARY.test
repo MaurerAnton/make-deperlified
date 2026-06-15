@@ -19,8 +19,9 @@ foo.d: foo.e
 # Explicit rule test
 foo.c: foo.e ; cp $< $@
 options: foo.d
-answer: "cp foo.f foo.e
-cp foo.e foo.d"
+answer:
+cp foo.f foo.e
+cp foo.e foo.d
 
 [case]
 makefile:
@@ -52,8 +53,9 @@ foo.d: foo.e
 # Explicit rule test
 foo.c: foo.e ; cp $< $@
 options: foo.d
-answer: "cp foo.f foo.e
-cp foo.e foo.d"
+answer:
+cp foo.f foo.e
+cp foo.e foo.d
 
 [case]
 makefile:
@@ -101,8 +103,9 @@ foo.d: foo.e
 # Explicit rule test
 foo.c: foo.e ; cp $< $@
 options: foo.c
-answer: "cp foo.f foo.e
-cp foo.e foo.c"
+answer:
+cp foo.f foo.e
+cp foo.e foo.c
 
 [case]
 makefile:
@@ -132,11 +135,12 @@ makefile:
 all : 1.c 2.c
 2.a: 1.c
 options: -rR -j
-answer: "cp 1.a 1.b
+answer:
+cp 1.a 1.b
 cp 1.b 1.c
 cp 2.a 2.b
 cp 2.b 2.c
-rm 2.b 1.b"
+rm 2.b 1.b
 
 [case]
 makefile:
@@ -155,25 +159,28 @@ test : test.4
 
 %.1 : %.0 ; touch $@
 options: -rR -j 2
-answer: "touch test.1
+answer:
+touch test.1
 touch test.2
 touch test.3
 touch test.int
 touch test.4
-rm test.int"
+rm test.int
 
 [case]
 options: -rR -j 2
-answer: "touch test.1
+answer:
+touch test.1
 touch test.2
 touch test.int
 touch test.4
-rm test.int"
+rm test.int
 
 [case]
 options: -rR -j 2
-answer: "touch test.1
+answer:
+touch test.1
 touch test.2
 touch test.int
 touch test.4
-rm test.int"
+rm test.int

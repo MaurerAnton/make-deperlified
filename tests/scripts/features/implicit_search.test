@@ -11,8 +11,9 @@ all: hello
 %: %.c; $(info hello.c)
 %: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -32,8 +33,9 @@ all: hello
 %: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -44,8 +46,9 @@ all: hello
 %: %.f; $(info hello.f)
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -54,8 +57,9 @@ all: hello
 %: %.c hello.c; $(info hello.c)
 %: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -64,8 +68,9 @@ all: hello
 %: %.c; $(info hello.c)
 %: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -76,8 +81,9 @@ all: hello
 .DEFAULT:; $(info $@) true
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -88,9 +94,10 @@ all: hello
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 unrelated: hello.c
 options: -r
-answer: "hello.c
+answer:
+hello.c
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -101,9 +108,10 @@ all: hello
 %: %.f; $(info $<)
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 options: -r
-answer: "hello
+answer:
+hello
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello] Error 1
 exit_code: 512
 
 [case]
@@ -113,8 +121,9 @@ all: hello
 %:: %.c; $(info hello.c)
 %:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -134,8 +143,9 @@ all: hello
 %:: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -146,8 +156,9 @@ all: hello
 %:: %.f; $(info hello.f)
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -156,8 +167,9 @@ all: hello
 %:: %.c hello.c; $(info hello.c)
 %:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -166,8 +178,9 @@ all: hello
 %:: %.c; $(info hello.c)
 %:: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -178,8 +191,9 @@ all: hello
 .DEFAULT:; $(info $@) true
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -190,9 +204,10 @@ all: hello
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 unrelated: hello.c
 options: -r
-answer: "hello.c
+answer:
+hello.c
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -203,9 +218,10 @@ all: hello
 %:: %.f; $(info $<)
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 options: -r
-answer: "hello
+answer:
+hello
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello] Error 1
 exit_code: 512
 
 [case]
@@ -215,8 +231,9 @@ all: hello.o
 %.o: %.c; $(info hello.c)
 %.o: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -236,8 +253,9 @@ all: hello.o
 %.o: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -248,8 +266,9 @@ all: hello.o
 %.o: %.f; $(info hello.f)
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -258,8 +277,9 @@ all: hello.o
 %.o: %.c hello.c; $(info hello.c)
 %.o: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -268,8 +288,9 @@ all: hello.o
 %.o: %.c; $(info hello.c)
 %.o: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -280,8 +301,9 @@ all: hello.o
 .DEFAULT:; $(info $@) true
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -292,9 +314,10 @@ all: hello.o
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 unrelated: hello.c
 options: -r
-answer: "hello.c
+answer:
+hello.c
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -305,9 +328,10 @@ all: hello.o
 %.o: %.f; $(info $<)
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 options: -r
-answer: "hello.o
+answer:
+hello.o
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.o] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.o] Error 1
 exit_code: 512
 
 [case]
@@ -317,8 +341,9 @@ all: hello.o
 %.o:: %.c; $(info hello.c)
 %.o:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -338,8 +363,9 @@ all: hello.o
 %.o:: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -350,8 +376,9 @@ all: hello.o
 %.o:: %.f; $(info hello.f)
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -360,8 +387,9 @@ all: hello.o
 %.o:: %.c hello.c; $(info hello.c)
 %.o:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -370,8 +398,9 @@ all: hello.o
 %.o:: %.c; $(info hello.c)
 %.o:: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -382,8 +411,9 @@ all: hello.o
 .DEFAULT:; $(info $@) true
 unrelated: hello.c
 options: -r
-answer: "hello.f
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.f
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -394,9 +424,10 @@ all: hello.o
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 unrelated: hello.c
 options: -r
-answer: "hello.c
+answer:
+hello.c
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -407,9 +438,10 @@ all: hello.o
 %.o:: %.f; $(info $<)
 .DEFAULT:; @$(info $@) #HELPER# fail 1
 options: -r
-answer: "hello.o
+answer:
+hello.o
 fail 1
-#MAKE#: *** [#MAKEFILE#:5: hello.o] Error 1"
+#MAKE#: *** [#MAKEFILE#:5: hello.o] Error 1
 exit_code: 512
 
 [case]
@@ -453,9 +485,10 @@ all: hello.tsk
 %:: %.c; $(info hello.c)
 %:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -465,9 +498,10 @@ all: hello.tsk
 %:: %.c; $(info hello.c)
 %:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -477,9 +511,10 @@ all: hello.tsk
 %:: %.c hello; $(info hello.c)
 %:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -489,9 +524,10 @@ all: hello.tsk
 %.o: %.c; $(info hello.c)
 %.o: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -501,9 +537,10 @@ all: hello.tsk
 %.o: %.c; $(info hello.c)
 %.o: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -513,9 +550,10 @@ all: hello.tsk
 %.o: %.c hello.o; $(info hello.c)
 %.o: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -525,9 +563,10 @@ all: hello.tsk
 %.o:: %.c; $(info hello.c)
 %.o:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -537,9 +576,10 @@ all: hello.tsk
 %.o:: %.c; $(info hello.c)
 %.o:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -549,9 +589,10 @@ all: hello.tsk
 %.o:: %.c hello.o; $(info hello.c)
 %.o:: %.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -561,10 +602,11 @@ all: hello.tsk
 %.o: %.c; $(info hello.c)
 %.o: %.f %.tsk; $(info hello.f)
 options: -r
-answer: "#MAKE#: circular hello.o <- hello.tsk dependency dropped
+answer:
+#MAKE#: circular hello.o <- hello.tsk dependency dropped
 hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -574,10 +616,11 @@ all: hello.tsk
 %.o:: %.c; $(info hello.c)
 %.o:: %.f %.tsk; $(info hello.f)
 options: -r
-answer: "#MAKE#: circular hello.o <- hello.tsk dependency dropped
+answer:
+#MAKE#: circular hello.o <- hello.tsk dependency dropped
 hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -648,8 +691,9 @@ all: hello.tsk
 %:: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -661,8 +705,9 @@ all: hello.tsk
 %.o: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -674,8 +719,9 @@ all: hello.tsk
 %.o:: %.f; $(info hello.f)
 hello.c:; @#HELPER# fail 1
 options: -r
-answer: "fail 1
-#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1"
+answer:
+fail 1
+#MAKE#: *** [#MAKEFILE#:6: hello.c] Error 1
 exit_code: 512
 
 [case]
@@ -687,9 +733,10 @@ all: hello.tsk
 %: %.f; $(info hello.f)
 unrelated: hello
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -700,9 +747,10 @@ all: hello.tsk
 %:: %.f; $(info hello.f)
 unrelated: hello
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -713,9 +761,10 @@ all: hello.tsk
 %.o: %.f; $(info hello.f)
 unrelated: hello.o
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -726,9 +775,10 @@ all: hello.tsk
 %.o:: %.f; $(info hello.f)
 unrelated: hello.o
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -749,9 +799,10 @@ all: hello.tsk
 %:: %.c; $(info hello.c)
 %:: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -761,9 +812,10 @@ all: hello.tsk
 %.o: %.c; $(info hello.c)
 %.o: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -773,9 +825,10 @@ all: hello.tsk
 %.o:: %.c; $(info hello.c)
 %.o:: %.f hello.f; $(info hello.f)
 options: -r
-answer: "hello.f
+answer:
+hello.f
 hello.tsk
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -901,8 +954,9 @@ all: hello.tsk
 %.tsk: %; $(info $@ from $<)
 unrelated: hello
 options: FC="@echo f77" OUTPUT_OPTION=
-answer: "f77 hello.f -o hello
-hello.tsk from hello"
+answer:
+f77 hello.f -o hello
+hello.tsk from hello
 
 [case]
 makefile:
@@ -921,9 +975,10 @@ all: hello.tsk
 unrelated: hello
 %.x: %.xx; $(info $@ from $<)
 options: FC="@echo f77" OUTPUT_OPTION=
-answer: "f77 hello.f -o hello
+answer:
+f77 hello.f -o hello
 hello.x from hello.xx
-hello.tsk from hello hello.x"
+hello.tsk from hello hello.x
 
 [case]
 makefile:
@@ -933,9 +988,10 @@ all: bye.tsk
 .DEFAULT:; $(info bye.o)
 unrelated: bye.o
 options: -r
-answer: "bye.o
+answer:
+bye.o
 bye.tsk from bye.o
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -946,10 +1002,11 @@ all: bye.tsk
 unrelated: bye.o
 %.x: %.xx; $(info $@ from $<)
 options: -r
-answer: "bye.o
+answer:
+bye.o
 bye.x from bye.xx
 bye.tsk from bye.o bye.x
-#MAKE#: Nothing to be done for 'all'."
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -959,8 +1016,9 @@ all: hello.tsk
 %.x:; $(flags)
 hello.x: flags:=true
 options: -r
-answer: "true
-hello.tsk"
+answer:
+true
+hello.tsk
 
 [case]
 makefile:
@@ -970,8 +1028,9 @@ all: hello.tsk
 %.x:; $(flags)
 hello.x: flags:=true
 options: -r
-answer: "true
-hello.tsk"
+answer:
+true
+hello.tsk
 
 [case]
 makefile:
@@ -982,8 +1041,9 @@ all: hello.tsk
 hello.x: flags:=true
 unrelated: hello.x
 options: -r
-answer: "true
-hello.tsk"
+answer:
+true
+hello.tsk
 
 [case]
 makefile:
@@ -993,8 +1053,9 @@ all: hello.tsk
 %.x:; $(flags)
 %.x: flags:=true
 options: -r
-answer: "true
-hello.tsk"
+answer:
+true
+hello.tsk
 
 [case]
 makefile:
@@ -1005,8 +1066,9 @@ all: hello.tsk
 hello.x: flags+=good
 %.x: flags:=true
 options: -r
-answer: "true good
-hello.tsk"
+answer:
+true good
+hello.tsk
 
 [case]
 makefile:
@@ -1018,6 +1080,7 @@ big_%.tsk: %.x; $(info $@)
 hello.x: flags+=good
 %.x: flags:=true
 options: -r
-answer: "true good
+answer:
+true good
 hello.tsk
-big_hello.tsk"
+big_hello.tsk

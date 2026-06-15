@@ -33,32 +33,38 @@ endif
 all:
 > @echo "FOO=$(FOO) BAR=$(BAR) BAZ=$(BAZ) BOZ=$(BOZ) BITZ=$(BITZ) BOTZ=$(BOTZ)"
 > @echo "FOO=$$FOO BAR=$$BAR BAZ=$$BAZ BOZ=$$BOZ BITZ=$$BITZ BOTZ=$$BOTZ"
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO=foo BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO=foo BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
 options: EXPORT_ALL=1
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
 options: UNEXPORT_ALL=1
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
 options: EXPORT_ALL=1 UNEXPORT_ALL=1
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO= BAR= BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
 options: EXPORT_ALL_PSEUDO=1
-answer: "FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
-FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ="
+answer:
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=botz
+FOO=foo BAR=bar BAZ=baz BOZ=boz BITZ=bitz BOTZ=
 
 [case]
 makefile:
@@ -79,8 +85,9 @@ export $(B)ar
 all:
 > @echo foo=$(foo) bar=$(bar)
 > @echo foo=$$foo bar=$$bar
-answer: "foo=f-ok bar=b-ok
-foo=f-ok bar=b-ok"
+answer:
+foo=f-ok bar=b-ok
+foo=f-ok bar=b-ok
 
 [case]
 makefile:
@@ -103,8 +110,9 @@ unexport $(B)ar
 all:
 > @echo foo=$(foo) bar=$(bar)
 > @echo foo=$$foo bar=$$bar
-answer: "foo=f-ok bar=b-ok
-foo= bar="
+answer:
+foo=f-ok bar=b-ok
+foo= bar=
 
 [case]
 makefile:

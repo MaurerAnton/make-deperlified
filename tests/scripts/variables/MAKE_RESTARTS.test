@@ -8,8 +8,9 @@ all: ; @:
 $(info MAKE_RESTARTS=$(MAKE_RESTARTS))
 include foo.x
 foo.x: ; @touch $@
-answer: "MAKE_RESTARTS=
-MAKE_RESTARTS=1"
+answer:
+MAKE_RESTARTS=
+MAKE_RESTARTS=1
 
 [case]
 makefile:
@@ -19,9 +20,10 @@ $(info MAKE_RESTARTS=$(MAKE_RESTARTS))
 include foo.x
 foo.x: ; @echo "include bar.x" > $@
 bar.x: ; @touch $@
-answer: "MAKE_RESTARTS=
+answer:
+MAKE_RESTARTS=
 MAKE_RESTARTS=1
-MAKE_RESTARTS=2"
+MAKE_RESTARTS=2
 
 [case]
 makefile:
@@ -35,11 +37,12 @@ $(info MAKE_RESTARTS=$(MAKE_RESTARTS))
 include foo.x
 foo.x: ; @echo "include bar.x" > $@
 bar.x: ; @touch $@
-answer: "MAKE_RESTARTS=
+answer:
+MAKE_RESTARTS=
 MAKE_RESTARTS=1
 MAKE_RESTARTS=2
 recurse MAKE_RESTARTS=
 #MAKE#[1]: Entering directory '#PWD#'
 MAKE_RESTARTS=
 all MAKE_RESTARTS=
-#MAKE#[1]: Leaving directory '#PWD#'"
+#MAKE#[1]: Leaving directory '#PWD#'

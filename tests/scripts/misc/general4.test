@@ -17,16 +17,18 @@ dir/subdir: ; @echo mkdir -p dir/subdir
 dir/subdir/file.b: dir/subdir ; @echo touch dir/subdir/file.b
 
 dir/subdir/%.a: dir/subdir/%.b ; @echo cp $< $@
-answer: "mkdir -p dir/subdir
+answer:
+mkdir -p dir/subdir
 touch dir/subdir/file.b
-cp dir/subdir/file.b dir/subdir/file.a"
+cp dir/subdir/file.b dir/subdir/file.a
 
 [case]
 makefile:
 foo: foo.o
 options: CC="@echo cc" OUTPUT_OPTION=
-answer: "cc -c foo.c
-cc foo.o -o foo"
+answer:
+cc -c foo.c
+cc foo.o -o foo
 
 [case]
 makefile:
@@ -35,8 +37,9 @@ makefile:
 %.foo : bar$$baz ; @echo 'done $<'
 test.foo:
 baz$$bar bar$$baz: ; @echo '$@'
-answer: "baz$bar
-done baz$bar"
+answer:
+baz$bar
+done baz$bar
 
 [case]
 makefile:
@@ -44,8 +47,9 @@ makefile:
 %.foo : %$$bar ; @echo 'done $<'
 test.foo:
 test$$bar: ; @echo '$@'
-answer: "test$bar
-done test$bar"
+answer:
+test$bar
+done test$bar
 
 [case]
 makefile:
@@ -58,9 +62,10 @@ dir/subdir: ; @echo mkdir -p '$@'
 dir/subdir/file.$$b: dir/subdir ; @echo touch '$@'
 
 dir/subdir/%.$$a: dir/subdir/%.$$b ; @echo 'cp $< $@'
-answer: "mkdir -p dir/subdir
+answer:
+mkdir -p dir/subdir
 touch dir/subdir/file.$b
-cp dir/subdir/file.$b dir/subdir/file.$a"
+cp dir/subdir/file.$b dir/subdir/file.$a
 
 [case]
 makefile:
@@ -86,9 +91,10 @@ makefile:
 
 PATH := ..
 all: ; foobar
-answer: "foobar
+answer:
+foobar
 #MAKE#: foobar: No such file or directory
-#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127
 exit_code: 512
 
 [case]
@@ -96,9 +102,10 @@ makefile:
 
 PATH := ..
 all: ; foobar
-answer: "foobar
+answer:
+foobar
 #MAKE#: foobar: No such file or directory
-#MAKE#: *** [#MAKEFILE#:3: all] Error 127"
+#MAKE#: *** [#MAKEFILE#:3: all] Error 127
 exit_code: 512
 
 [case]

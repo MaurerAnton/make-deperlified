@@ -45,8 +45,9 @@ makefile:
 
 $X.POSIX:
 options: X=1 .baz
-answer: "#MAKEFILE#:5: warning: ignoring prerequisites on suffix rule definition
-make .baz from foo.bar"
+answer:
+#MAKEFILE#:5: warning: ignoring prerequisites on suffix rule definition
+make .baz from foo.bar
 
 [case]
 options: X= .baz
@@ -62,8 +63,9 @@ $X.POSIX:
 
 .baz.biz: foo.bar ; @echo make $@ from $<
 options: X=1 .baz.biz
-answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
-make .baz.biz from foo.bar"
+answer:
+#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+make .baz.biz from foo.bar
 
 [case]
 options: X= .baz.biz
@@ -76,13 +78,15 @@ exit_code: 512
 
 [case]
 options: X=1 foo.biz
-answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
-make foo.biz from foo.baz"
+answer:
+#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+make foo.biz from foo.baz
 
 [case]
 options: X=1 foo.biz
-answer: "#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
-#MAKE#: 'foo.biz' is up to date."
+answer:
+#MAKEFILE#:7: warning: ignoring prerequisites on suffix rule definition
+#MAKE#: 'foo.biz' is up to date.
 
 [case]
 makefile:
@@ -95,8 +99,9 @@ makefile:
 
 all: hello.o
 .c.o:; $(info $@ user defined .c.o rule)
-answer: "hello.o user defined .c.o rule
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -114,8 +119,9 @@ all: hello.o
 .SUFFIXES:
 .SUFFIXES: .c .o
 .c.o:; $(info $@ user defined .c.o rule)
-answer: "hello.o user defined .c.o rule
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:
@@ -142,8 +148,9 @@ all: hello.o
 MAKEFLAGS += -r
 .SUFFIXES: .c .o
 .c.o:; $(info $@ user defined .c.o rule)
-answer: "hello.o user defined .c.o rule
-#MAKE#: Nothing to be done for 'all'."
+answer:
+hello.o user defined .c.o rule
+#MAKE#: Nothing to be done for 'all'.
 
 [case]
 makefile:

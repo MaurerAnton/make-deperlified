@@ -12,13 +12,14 @@ x:;@echo '$(guile #f)'; \
     echo '$(guile "bar")'; \
     echo '$(guile (cons 'a 'b))'; \
     echo '$(guile '(a b (c . d) 1 (2) 3))'
-answer: "#t
+answer:
+#t
 c
 1234
 foo
 bar
 a b
-a b c d 1 2 3"
+a b c d 1 2 3
 
 [case]
 makefile:
