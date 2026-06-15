@@ -46,6 +46,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.  */
 #include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <regex.h>
 
 #ifndef PATH_MAX
 # define PATH_MAX 4096
@@ -619,16 +620,39 @@ compare_output (const char *expected, const char *logfile)
     result = 1;
   else
     {
-      /* Also try with backslash normalization */
-      char *a2 = xstrdup (norm_actual);
-      char *e2 = xstrdup (norm_expected);
-      char *p;
-      for (p = a2; *p; p++) if (*p == '\\') *p = '/';
-      for (p = e2; *p; p++) if (*p == '\\') *p = '/';
-      if (strcmp (a2, e2) == 0)
-        result = 1;
-      free (a2);
-      free (e2);
+      /* Check if expected is a regex pattern: /pattern/ */
+      {
+        size_t elen = strlen (norm_expected);
+        if (elen >= 2 && norm_expected[0] == '/' && norm_expected[elen-1] == '/')
+          {
+            char *pat = xstrdup (norm_expected + 1);
+            pat[elen - 2] = '\0';
+            {
+              regex_t re;
+              if (regcomp (&re, pat, REG_EXTENDED | REG_NOSUB) == 0)
+                {
+                  if (regexec (&re, norm_actual, 0, NULL, 0) == 0)
+                    result = 1;
+                  regfree (&re);
+                }
+            }
+            free (pat);
+          }
+      }
+
+      if (!result)
+        {
+          /* Also try with backslash normalization */
+          char *a2 = xstrdup (norm_actual);
+          char *e2 = xstrdup (norm_expected);
+          char *p;
+          for (p = a2; *p; p++) if (*p == '\\') *p = '/';
+          for (p = e2; *p; p++) if (*p == '\\') *p = '/';
+          if (strcmp (a2, e2) == 0)
+            result = 1;
+          free (a2);
+          free (e2);
+        }
     }
 
   if (result)

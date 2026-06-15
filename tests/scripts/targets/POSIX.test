@@ -78,7 +78,7 @@ makefile:
 .SHELLFLAGS = -xc
 .POSIX:
 all: ; @#HELPER# -q fail 1; true
-answer: "sh: строка 1: : command not found"
+answer: "sh: line 1: : command not found"
 
 [case]
 makefile:

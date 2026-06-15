@@ -11,8 +11,8 @@ all: libxx.a(a1.o)
 options: AR="ar"
 answer:
 ar -rv libxx.a a1.o
-ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a1.o: No such file or directory
 
 [case]
 makefile:
@@ -20,15 +20,15 @@ all: libxx.a(a1.o a2.o)
 options: AR="ar"
 answer:
 ar -rv libxx.a a2.o
-ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a2.o: No such file or directory
 
 [case]
 options: AR="ar"
 answer:
 ar -rv libxx.a a1.o
-ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a1.o: No such file or directory
 
 [case]
 makefile:
@@ -40,8 +40,8 @@ answer: "#MAKE#: Nothing to be done for 'all'."
 options: AR="ar"
 answer:
 ar -rv libxx.a a1.o
-ar: создаётся libxx.a
-ar: a1.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a1.o: No such file or directory
 
 [case]
 makefile:
@@ -49,11 +49,11 @@ all: libxx.a(a3.o *.o)
 options: AR="ar"
 answer:
 ar -rv libxx.a a3.o
-ar: создаётся libxx.a
-ar: a3.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a3.o: No such file or directory
 ar -rv libxx.a a2.o
-ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a2.o: No such file or directory
 
 [case]
 makefile:
@@ -61,8 +61,8 @@ all: libxx.a(  a3.o    *.o     )
 options: AR="ar"
 answer:
 ar -rv libxx.a a2.o
-ar: создаётся libxx.a
-ar: a2.o: Нет такого файла или каталога
+ar: creating libxx.a
+ar: a2.o: No such file or directory
 
 [case]
 makefile:
