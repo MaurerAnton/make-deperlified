@@ -1627,6 +1627,17 @@ main (int argc, char *argv[])
               }
           }
       }
+
+  /* Resolve helper_tool to absolute path */
+  if (helper_tool && strcmp (helper_tool, "thelp") != 0)
+    {
+      char resolved[PATH_MAX];
+      if (realpath (helper_tool, resolved))
+        {
+          free (helper_tool);
+          helper_tool = xstrdup (resolved);
+        }
+    }
   }
 
   /* Determine make version and path */
