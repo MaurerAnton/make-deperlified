@@ -620,9 +620,11 @@ compare_output (const char *expected, const char *logfile)
     result = 1;
   else
     {
-      /* Check if expected is a regex pattern: /pattern/ */
+      /* Check if expected is a regex pattern: /pattern/.
+         Also check line-by-line for multiline answers. */
       {
         size_t elen = strlen (norm_expected);
+        /* Single-line regex: entire answer is /pattern/ */
         if (elen >= 2 && norm_expected[0] == '/' && norm_expected[elen-1] == '/')
           {
             char *pat = xstrdup (norm_expected + 1);
@@ -637,6 +639,45 @@ compare_output (const char *expected, const char *logfile)
                 }
             }
             free (pat);
+          }
+        /* Multi-line: check each line for /pattern/ format */
+        if (!result && strchr (norm_expected, '\n'))
+          {
+            char *ex_copy = xstrdup (norm_expected);
+            char *line = strtok (ex_copy, "\n");
+            char *act_copy = xstrdup (norm_actual);
+            char *aline = strtok (act_copy, "\n");
+            int all_match = 1;
+            while (line && aline && all_match)
+              {
+                size_t llen = strlen (line);
+                if (llen >= 2 && line[0] == '/' && line[llen-1] == '/')
+                  {
+                    char *pat = xstrdup (line + 1);
+                    pat[llen - 2] = '\0';
+                    regex_t re;
+                    if (regcomp (&re, pat, REG_EXTENDED | REG_NOSUB) == 0)
+                      {
+                        if (regexec (&re, aline, 0, NULL, 0) != 0)
+                          all_match = 0;
+                        regfree (&re);
+                      }
+                    else
+                      all_match = 0;
+                    free (pat);
+                  }
+                else
+                  {
+                    if (strcmp (line, aline) != 0)
+                      all_match = 0;
+                  }
+                line = strtok (NULL, "\n");
+                aline = strtok (NULL, "\n");
+              }
+            if (all_match && !line && !aline)
+              result = 1;
+            free (ex_copy);
+            free (act_copy);
           }
       }
 
@@ -1647,6 +1688,12 @@ main (int argc, char *argv[])
   }
 
   make_name = path_basename (make_path);
+  /* Resolve to absolute path so it works from test subdirectories */
+  {
+    char resolved[PATH_MAX];
+    if (realpath (make_path, resolved))
+      make_path = xstrdup (resolved);
+  }
   mkpath = xstrdup (make_path);
 
   /* Print banner */

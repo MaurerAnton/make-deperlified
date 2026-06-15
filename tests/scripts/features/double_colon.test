@@ -83,7 +83,7 @@ foo SECOND
 options: d
 answer:
 ok
-#MAKE#: Circular d <- d dependency dropped.
+make: circular d <- d dependency dropped
 oops
 
 [case]
